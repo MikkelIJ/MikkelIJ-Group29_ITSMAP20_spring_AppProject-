@@ -5,4 +5,5 @@
     <string name="weathermessage">It is 20C! Great for a walk</string>
     <string name="age">Age: XY</string>
     <string name="user_name">User: Name</string>
+    <string name="weather_forecast">Weather forecast</string>
 </resources>

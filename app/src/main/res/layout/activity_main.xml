@@ -29,7 +29,7 @@
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:text="@string/user_name"
-        android:textSize="16sp"
+        android:textSize="24sp"
          />
 
     <TextView
@@ -44,32 +44,58 @@
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:text="@string/age"
-        android:textSize="16sp"
+        android:textSize="24sp"
         />
 
     <TextView
-        android:id="@+id/tv_WeatherMessage"
+        android:id="@+id/tv_WeatherTemp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:text="Temp: XY"
+        android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_userAge"
-        android:paddingTop="8dp"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:text="@string/weathermessage"
-        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@+id/tv_userAge" />
 
-        />
+    <TextView
+        android:id="@+id/tv_Weather"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginLeft="0dp"
+        android:text="Weather message"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toStartOf="@+id/iv_weatherIcon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_WeatherTemp" />
 
     <ImageView
         android:id="@+id/iv_profilePic"
-        android:layout_width="100dp"
-        android:layout_height="150dp"
-
+        android:layout_width="150dp"
+        android:layout_height="200dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:contentDescription="@string/todo" />
 
+    <ImageView
+        android:id="@+id/iv_weatherIcon"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_profilePic"
+        android:layout_marginTop="32dp"
+        android:contentDescription="@string/todo"
+         />
+
+    <TextView
+        android:id="@+id/tv_weatherHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/weather_forecast"
+        app:layout_constraintBottom_toTopOf="@+id/tv_WeatherTemp"
+        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="24sp"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>
