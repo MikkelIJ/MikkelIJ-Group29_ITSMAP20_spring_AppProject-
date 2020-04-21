@@ -11,91 +11,218 @@
         android:id="@+id/tv_profileHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         android:text="@string/profileHeader"
         android:textSize="32sp"
-        />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tv_userName"
+        android:id="@+id/tv_userName_desc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_profileHeader"
-        android:paddingTop="16dp"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
+        android:layout_marginTop="8dp"
         android:text="@string/user_name"
-        android:textSize="24sp"
-         />
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/iv_profilePic"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_profileHeader" />
 
     <TextView
-        android:id="@+id/tv_userAge"
+        android:id="@+id/tv_userAge_desc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_userName"
-        android:paddingTop="8dp"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
         android:text="@string/age"
-        android:textSize="24sp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/tv_userAge_value"
+        app:layout_constraintTop_toBottomOf="@+id/tv_userName_desc"
         />
 
     <TextView
         android:id="@+id/tv_WeatherTemp"
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_marginTop="100dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
-        android:text="Temp: XY"
-        android:textSize="24sp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:text="@string/temp_xy"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/iv_weatherIcon"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_userAge" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_weatherHeader" />
 
     <TextView
         android:id="@+id/tv_Weather"
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_marginStart="0dp"
-        android:layout_marginLeft="0dp"
-        android:text="Weather message"
-        android:textSize="24sp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:text="@string/weather_message"
+        android:textSize="18sp"
         app:layout_constraintEnd_toStartOf="@+id/iv_weatherIcon"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_WeatherTemp" />
 
     <ImageView
         android:id="@+id/iv_profilePic"
-        android:layout_width="150dp"
-        android:layout_height="200dp"
+        android:layout_width="182dp"
+        android:layout_height="190dp"
+        android:background="#D83B3B"
+        android:contentDescription="@string/todo"
+        android:scaleType="fitCenter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:contentDescription="@string/todo" />
+        tools:src="@tools:sample/avatars[9]" />
+
 
     <ImageView
         android:id="@+id/iv_weatherIcon"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iv_profilePic"
-        android:layout_marginTop="32dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="44dp"
+        android:layout_marginRight="44dp"
         android:contentDescription="@string/todo"
-         />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText"
+        tools:src="@drawable/PartlyCloudyDay" />
 
     <TextView
         android:id="@+id/tv_weatherHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
         android:text="@string/weather_forecast"
-        app:layout_constraintBottom_toTopOf="@+id/tv_WeatherTemp"
+        android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        android:textSize="24sp"
-        />
+        app:layout_constraintTop_toTopOf="@+id/iv_weatherIcon" />
+
+    <Button
+        android:id="@+id/btn_leaderboard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:text="@string/btn_leaderboard"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_StepsToday_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/steps_today"
+        android:textSize="40sp"
+        app:autoSizeMaxTextSize="40sp"
+        app:autoSizeMinTextSize="24sp"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_Weather" />
+
+    <TextView
+        android:id="@+id/tv_steps_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:text="@string/_10_000"
+        android:textSize="72sp"
+        app:autoSizeMaxTextSize="72sp"
+        app:autoSizeMinTextSize="28sp"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_StepsToday_header" />
+
+    <TextView
+        android:id="@+id/tv_userCity_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/city_aarhus"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/tv_userCity_value"
+        app:layout_constraintTop_toBottomOf="@+id/tv_userAge_desc" />
+
+    <TextView
+        android:id="@+id/tv_dailyGoal_desc"
+        android:layout_width="192dp"
+        android:layout_height="42dp"
+        android:gravity="center_vertical|end"
+        android:text="@string/daily_goal"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/editText"
+        app:layout_constraintEnd_toStartOf="@+id/editText" />
+
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="187dp"
+        android:layout_height="42dp"
+        android:layout_marginTop="8dp"
+        android:autofillHints=""
+        android:ems="0"
+        android:gravity="center_horizontal"
+        android:hint="@string/press_me"
+        android:inputType="number"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_profilePic" />
+
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:contentDescription="@string/todo"
+        android:src="@android:drawable/ic_menu_edit"
+        app:layout_constraintStart_toEndOf="@+id/tv_profileHeader"
+        app:layout_constraintTop_toTopOf="@+id/tv_profileHeader" />
+
+    <TextView
+        android:id="@+id/tv_totalSteps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/total_steps_1_000_000_000_000_000"
+        app:layout_constraintBottom_toTopOf="@+id/btn_leaderboard"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_steps_amount" />
+
+    <TextView
+        android:id="@+id/tv_userName_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="4dp"
+        android:text="Bobby"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@+id/tv_userName_desc"
+        app:layout_constraintTop_toTopOf="@+id/tv_userName_desc" />
+
+    <TextView
+        android:id="@+id/tv_userAge_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="4dp"
+        android:text="32"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@+id/tv_userName_desc"
+        app:layout_constraintTop_toBottomOf="@+id/tv_userName_value" />
+
+    <TextView
+        android:id="@+id/tv_userCity_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="4dp"
+        android:text="Aarhus"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@+id/tv_userName_desc"
+        app:layout_constraintTop_toBottomOf="@+id/tv_userAge_value" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
