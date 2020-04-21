@@ -35,4 +35,12 @@ dependencies {
     implementation "androidx.cardview:cardview:1.0.0"
 
 
+
+    // Gson lib for handling json from https://openweathermap.org/
+    implementation 'com.google.code.gson:gson:2.8.2'
+
+    // Volley for rest calls to https://openweathermap.org/
+    implementation 'com.android.volley:volley:1.1.1'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+
 }
