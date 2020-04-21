@@ -28,8 +28,6 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline"
         android:hint="@string/email"
         android:layout_marginBottom="4dp"
-
-
         />
 
     <EditText
@@ -44,6 +42,7 @@
         />
 
     <TextView
+        android:clickable="true"
         android:id="@+id/tv_login"
         android:text="@string/login"
         android:textColor="@color/colorBlue"
@@ -56,6 +55,7 @@
         />
 
     <TextView
+        android:clickable="true"
         android:id="@+id/tv_createUser"
         android:text="@string/newUser"
         android:textColor="@color/colorBlue"
@@ -65,21 +65,7 @@
         app:layout_constraintTop_toBottomOf="@id/tv_login"
         app:layout_constraintStart_toStartOf="@id/tv_login"
         android:layout_marginTop="4dp"
-
         />
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
