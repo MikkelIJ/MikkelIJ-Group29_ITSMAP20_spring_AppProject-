@@ -12,13 +12,13 @@
     <string name="getmovingLeaderboard">GetMoving Leaderboard</string>
     <string name="bt_back">Back</string>
     <string name="weather_forecast">Weather forecast</string>
-    <string name="temp_xy">Temp: XY</string>
-    <string name="weather_message">Weather message</string>
+    <string name="temp_xy">Temp: 21C</string>
+    <string name="weather_message">Clear sky</string>
     <string name="btn_leaderboard">LeaderBoards</string>
     <string name="city">City: Aarhus</string>
     <string name="steps_today">Steps today</string>
     <string name="total_steps_1_000_000_000_000_000">Total steps: 1.000.000.000.000.000</string>
-    <string name="daily_goal">Daily goal:</string>
+    <string name="daily_goal">My daily goal:</string>
     <string name="_10_000">10.000</string>
     <string name="add_photo">Add photo</string>
     <string name="daily_steps">Daily steps</string>
