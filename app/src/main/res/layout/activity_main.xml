@@ -87,7 +87,7 @@
         android:layout_marginRight="44dp"
         android:contentDescription="@string/todo"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText"
+        app:layout_constraintTop_toBottomOf="@+id/et_dailygoal"
         tools:src="@drawable/PartlyCloudyDay" />
 
     <TextView
@@ -144,7 +144,7 @@
         android:id="@+id/tv_userCity_desc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/city_aarhus"
+        android:text="@string/city"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/tv_userCity_value"
@@ -157,11 +157,11 @@
         android:gravity="center_vertical|end"
         android:text="@string/daily_goal"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/editText"
-        app:layout_constraintEnd_toStartOf="@+id/editText" />
+        app:layout_constraintBottom_toBottomOf="@+id/et_dailygoal"
+        app:layout_constraintEnd_toStartOf="@+id/et_dailygoal" />
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/et_dailygoal"
         android:layout_width="187dp"
         android:layout_height="42dp"
         android:layout_marginTop="8dp"
@@ -200,29 +200,32 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingLeft="4dp"
-        android:text="Bobby"
+        android:text="@string/hint_bobby"
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@+id/tv_userName_desc"
-        app:layout_constraintTop_toTopOf="@+id/tv_userName_desc" />
+        app:layout_constraintTop_toTopOf="@+id/tv_userName_desc"
+        android:paddingStart="4dp" />
 
     <TextView
         android:id="@+id/tv_userAge_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingLeft="4dp"
-        android:text="32"
+        android:text="@string/_32"
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@+id/tv_userName_desc"
-        app:layout_constraintTop_toBottomOf="@+id/tv_userName_value" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_userName_value"
+        android:paddingStart="4dp" />
 
     <TextView
         android:id="@+id/tv_userCity_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingLeft="4dp"
-        android:text="Aarhus"
+        android:text="@string/hint_aarhus"
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@+id/tv_userName_desc"
-        app:layout_constraintTop_toBottomOf="@+id/tv_userAge_value" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_userAge_value"
+        android:paddingStart="4dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
