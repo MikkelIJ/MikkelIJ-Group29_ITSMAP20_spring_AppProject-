@@ -3,8 +3,8 @@
     <string name="profileHeader">Profile</string>
     <string name="todo">TODO</string>
     <string name="weathermessage">It is 20C! Great for a walk</string>
-    <string name="age">Age:</string>
-    <string name="user_name">Name:</string>
+    <string name="age">Age: 26</string>
+    <string name="user_name">Name: Bobby</string>
     <string name="email"> Email </string>
     <string name="password"> Password</string>
     <string name="login">Login</string>
@@ -15,9 +15,8 @@
     <string name="temp_xy">Temp: XY</string>
     <string name="weather_message">Weather message</string>
     <string name="btn_leaderboard">LeaderBoards</string>
-    <string name="city">City:</string>
+    <string name="city">City: Aarhus</string>
     <string name="steps_today">Steps today</string>
-    <string name="press_me">Press me</string>
     <string name="total_steps_1_000_000_000_000_000">Total steps: 1.000.000.000.000.000</string>
     <string name="daily_goal">Daily goal:</string>
     <string name="_10_000">10.000</string>
