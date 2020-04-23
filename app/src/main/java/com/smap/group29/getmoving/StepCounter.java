@@ -28,7 +28,9 @@ public class StepCounter extends AppCompatActivity implements SensorEventListene
     }
 
     @Override
-    public void onSensorChanged(SensorEvent sensorEvent) {
+    protected void onPause() {
+        super.onPause();
+        running = true;
         Sensor stepSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
         if(stepSensor != null){
             sensorManager.registerListener(this, stepSensor, SensorManager.SENSOR_DELAY_UI);
@@ -39,12 +41,21 @@ public class StepCounter extends AppCompatActivity implements SensorEventListene
 
         }
 
+
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent sensorEvent) {
+
+
+        //   txtCountedSteps.setText(String.valueOf(sensorEvent.values[0]));
+
     }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int i) {
 
-     //   txtCountedSteps.setText(String.valueOf(sensorEvent.values[0]));
+
 
     }
 
