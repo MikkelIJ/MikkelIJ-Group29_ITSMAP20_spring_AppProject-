@@ -29,7 +29,7 @@ public class StepCounter extends AppCompatActivity implements SensorEventListene
 
     @Override
     protected void onPause() {
-        super.onPause();
+        super.onPause(); ///
         running = true;
         Sensor stepSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
         if(stepSensor != null){

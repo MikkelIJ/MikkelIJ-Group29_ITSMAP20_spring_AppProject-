@@ -12,6 +12,6 @@ public class UserActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // mikkel test
+        // mikkel test 25 april
     }
 }
