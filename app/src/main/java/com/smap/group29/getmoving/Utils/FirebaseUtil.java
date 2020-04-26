@@ -35,7 +35,8 @@ public class FirebaseUtil {
             mAuthStateListener = new FirebaseAuth.AuthStateListener() {
                 @Override
                 public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                    FirebaseUtil.signIn();
+                    // check if the user is logged in else don't need to
+                    if (firebaseAuth.getInstance() == null ){ FirebaseUtil.signIn(); }
                     Toast.makeText(callerActivity.getBaseContext(), "Welcome back!", Toast.LENGTH_LONG).show();
                 }
             };
@@ -49,7 +50,7 @@ public class FirebaseUtil {
                 new AuthUI.IdpConfig.EmailBuilder().build(),
                 new AuthUI.IdpConfig.GoogleBuilder().build());
 
-// Create and launch sign-in intent
+        // Create and launch sign-in intent
         caller.startActivityForResult(
                 AuthUI.getInstance()
                         .createSignInIntentBuilder()
