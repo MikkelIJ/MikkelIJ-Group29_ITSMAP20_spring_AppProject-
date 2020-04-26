@@ -11,7 +11,7 @@
         android:layout_margin="4dp">
 
         <TextView
-            android:id="@+id/tv_userName_desc"
+            android:id="@+id/tv_userName"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:text="User 1"

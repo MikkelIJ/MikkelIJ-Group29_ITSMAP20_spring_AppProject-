@@ -55,12 +55,5 @@ public class StepCounter extends AppCompatActivity implements SensorEventListene
     @Override
     public void onAccuracyChanged(Sensor sensor, int i) {
 
-
-
     }
-
-
-
-
-
 }

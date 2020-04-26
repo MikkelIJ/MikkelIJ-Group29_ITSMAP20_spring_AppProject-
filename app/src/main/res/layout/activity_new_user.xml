@@ -54,7 +54,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
-        android:id="@+id/iv_createnewuser"
+        android:id="@+id/iv_newUserPicture"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"

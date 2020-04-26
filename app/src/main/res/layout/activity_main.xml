@@ -21,7 +21,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tv_userName_desc"
+        android:id="@+id/tv_userName"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
@@ -35,7 +35,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_profileHeader" />
 
     <TextView
-        android:id="@+id/tv_userAge_desc"
+        android:id="@+id/tv_userAge"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:text="@string/age"
@@ -45,7 +45,7 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_userName_desc" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_userName" />
 
     <TextView
         android:id="@+id/tv_WeatherTemp"
@@ -61,11 +61,11 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_weatherHeader" />
 
     <TextView
-        android:id="@+id/tv_Weather"
+        android:id="@+id/tv_WeatherMessage"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:inputType="text"
-        android:text="Great weather today!"
+        android:text="@string/great_weather_today"
         android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline5"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
@@ -75,7 +75,7 @@
 
 
     <ImageView
-        android:id="@+id/iv_profilePic"
+        android:id="@+id/iv_userProfilePic"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:contentDescription="@string/user_profile_picture"
@@ -95,7 +95,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
         app:layout_constraintTop_toBottomOf="@+id/et_dailygoal"
-        tools:src="@drawable/PartlyCloudyDay" />
+        tools:src="@drawable/partlycloudyday" />
 
     <TextView
         android:id="@+id/tv_weatherHeader"
@@ -112,7 +112,7 @@
         app:layout_constraintTop_toTopOf="@+id/guideline4" />
 
     <Button
-        android:id="@+id/btn_leaderboard"
+        android:id="@+id/btn_user_leaderboard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
@@ -137,11 +137,11 @@
         app:layout_constraintTop_toTopOf="@+id/guideline5" />
 
     <TextView
-        android:id="@+id/tv_steps_amount"
+        android:id="@+id/tv_steps_today"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:gravity="center"
-        android:text="1000000"
+        android:text="@string/_1000000"
         app:autoSizeMaxTextSize="100sp"
         app:autoSizeMinTextSize="14sp"
         app:autoSizeTextType="uniform"
@@ -151,7 +151,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_StepsToday_header" />
 
     <TextView
-        android:id="@+id/tv_userCity_desc"
+        android:id="@+id/tv_userCity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/city"
@@ -162,7 +162,7 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_userAge_desc"
+        app:layout_constraintTop_toBottomOf="@+id/tv_userAge"
         app:layout_constraintVertical_bias="0.0" />
 
     <EditText
@@ -172,7 +172,7 @@
         android:autofillHints=""
         android:ems="0"
         android:gravity="center"
-        android:hint="10.000"
+        android:hint="@string/_10_000"
         android:inputType="number"
         android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline4"
@@ -180,9 +180,10 @@
         app:layout_constraintStart_toStartOf="@+id/guideline3" />
 
     <ImageButton
-        android:id="@+id/imageButton"
+        android:id="@+id/btn_userEdit"
         android:layout_width="31dp"
         android:layout_height="36dp"
+        android:contentDescription="@string/edit_user_profil"
         android:scaleType="center"
         android:src="@android:drawable/ic_menu_edit"
         app:layout_constraintBottom_toTopOf="@+id/guideline7"
@@ -190,15 +191,15 @@
         app:layout_constraintTop_toTopOf="@+id/tv_profileHeader" />
 
     <TextView
-        android:id="@+id/tv_totalSteps"
+        android:id="@+id/tv_stepsTotal"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:gravity="center"
         android:text="@string/total_steps_1_000_000_000_000_000"
-        app:layout_constraintBottom_toTopOf="@+id/btn_leaderboard"
+        app:layout_constraintBottom_toTopOf="@+id/btn_user_leaderboard"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_steps_amount" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_steps_today" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline3"
@@ -248,7 +249,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/daily_goal"
-        android:textSize="8sp"
+        android:textSize="12sp"
         app:layout_constraintBottom_toTopOf="@+id/et_dailygoal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline3" />
