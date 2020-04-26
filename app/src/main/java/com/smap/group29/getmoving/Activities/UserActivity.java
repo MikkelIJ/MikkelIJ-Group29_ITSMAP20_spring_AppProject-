@@ -1,9 +1,10 @@
-package com.smap.group29.getmoving;
+package com.smap.group29.getmoving.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
+import com.smap.group29.getmoving.R;
 import com.smap.group29.getmoving.Utils.FirebaseUtil;
 
 
@@ -14,7 +15,7 @@ public class UserActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        FirebaseUtil.openFirebaseReference("TheNewRealDeal",this);
+       FirebaseUtil.openFirebaseReference("TheNewRealDeal",this);
     }
 
 
