@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
+import com.smap.group29.getmoving.Utils.FirebaseUtil;
+
 public class NewUserActivity extends AppCompatActivity {
 
     @Override

@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
+import com.smap.group29.getmoving.Utils.FirebaseUtil;
+
 
 public class UserActivity extends AppCompatActivity {
 
@@ -12,6 +14,19 @@ public class UserActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // mikkel test 25 april
+        FirebaseUtil.openFirebaseReference("TheNewRealDeal",this);
+    }
+
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        FirebaseUtil.detachListener();
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        FirebaseUtil.attachListener();
     }
 }
