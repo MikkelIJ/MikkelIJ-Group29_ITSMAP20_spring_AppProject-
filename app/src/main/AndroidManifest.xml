@@ -10,8 +10,6 @@
         android:name="android.hardware.sensor.stepcounter"
         android:required="true" />
 
-    <!-- Permission Required for Starting the Step Counter at Boot -->
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="true"
