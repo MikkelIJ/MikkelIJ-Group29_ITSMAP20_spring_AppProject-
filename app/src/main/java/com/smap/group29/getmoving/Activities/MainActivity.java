@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toolbar;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -23,8 +24,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Toolbar toolbar = findViewById(R.id.logout_menu);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.logout_menu, menu);
+        return true;
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
@@ -37,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
                                             FirebaseUtil.attachListener();
                                         }
                                     });
-                FirebaseUtil.detachListener();
+//                FirebaseUtil.detachListener();
                 return true;
         }
         return super.onOptionsItemSelected(item);

@@ -41,7 +41,7 @@ public class FirebaseUtil {
                 @Override
                 public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                     // check if the user is logged in else don't need to
-                    if (firebaseAuth.getInstance() == null ){ FirebaseUtil.signIn(); }
+                    if (firebaseAuth.getInstance().getCurrentUser() == null ){ FirebaseUtil.signIn(); }
                     Toast.makeText(callerActivity.getBaseContext(), "Welcome back!", Toast.LENGTH_LONG).show();
                 }
             };
