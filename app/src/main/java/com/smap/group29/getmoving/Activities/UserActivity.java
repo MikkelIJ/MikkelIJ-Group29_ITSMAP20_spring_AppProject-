@@ -1,10 +1,15 @@
 package com.smap.group29.getmoving.Activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -12,6 +17,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.smap.group29.getmoving.R;
 import com.smap.group29.getmoving.Utils.FirebaseUtil;
 
@@ -37,7 +45,40 @@ public class UserActivity extends AppCompatActivity {
 
         findWeather();
 
+        Toolbar toolbar = findViewById(R.id.logout_menu);
+
+
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.logout_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            case R.id.logout_menu:
+                AuthUI.getInstance().signOut(this)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                Log.d("Logout", "User logged Out!");
+                                FirebaseUtil.attachListener();
+                            }
+                        });
+//                FirebaseUtil.detachListener();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+
+
+
 
     private void findWeather() {
         String url = "http://api.openweathermap.org/data/2.5/weather?id=2624652&appid=a1b9c2c209a84cd50be4c25fbcd02a88&units=metric";
@@ -90,5 +131,8 @@ public class UserActivity extends AppCompatActivity {
         FirebaseUtil.attachListener();
     }
 
+    public void showMenu() {
+        invalidateOptionsMenu();
+    }
 
 }
