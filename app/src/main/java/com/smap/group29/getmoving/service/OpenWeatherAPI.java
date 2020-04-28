@@ -10,6 +10,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.smap.group29.getmoving.model.weather.Main;
+import com.smap.group29.getmoving.utils.WeatherJsonParser;
 
 public class OpenWeatherAPI {
 
@@ -38,7 +40,9 @@ public class OpenWeatherAPI {
                     @Override
                     public void onResponse(String response) {
 
-                        Log.v("OnResponse",response);
+
+                        String weather = WeatherJsonParser.parseCityWeatherJsonWithGson(response);
+                        Log.v("OnResponse",weather);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -49,4 +53,5 @@ public class OpenWeatherAPI {
 
         queue.add(stringRequest);
     }
+
 }

@@ -121,12 +121,9 @@ public class UserActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             int stepsCounted = intent.getIntExtra("counted_steps",0);
-            int stepsDetected = intent.getIntExtra("detected_steps",0);
             Log.v("updateViews","steps counted" + stepsCounted);
-            Log.v("updateViews","steps detected" + stepsDetected);
 
             tv_stepsToday.setText(String.valueOf(stepsCounted));
-            //tv_stepsToday.setText(stepsDetected);
         }
     };
 }

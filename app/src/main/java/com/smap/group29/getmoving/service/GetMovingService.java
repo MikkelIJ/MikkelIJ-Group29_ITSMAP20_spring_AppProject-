@@ -96,4 +96,11 @@ public class GetMovingService extends Service {
         sendBroadcast(stepIntent);
     }
 
+    private void broadcastWeather(){
+        Log.d(LOGD, "broadcasting weather temp");
+        mOpenWeatherAPI.sendRequest();
+        stepIntent.putExtra("counted_steps",mStepCounter.getSteps());
+        sendBroadcast(stepIntent);
+    }
+
 }
