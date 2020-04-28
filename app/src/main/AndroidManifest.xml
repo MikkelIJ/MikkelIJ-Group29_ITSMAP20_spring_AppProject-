@@ -4,7 +4,7 @@
 
     <!-- sets permissions-->
     <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION"/>
-
+    <uses-permission android:name="android.permission.INTERNET" />
     <!-- Hardware Feature Required for Step Counter to function -->
     <uses-feature
         android:name="android.hardware.sensor.stepcounter"

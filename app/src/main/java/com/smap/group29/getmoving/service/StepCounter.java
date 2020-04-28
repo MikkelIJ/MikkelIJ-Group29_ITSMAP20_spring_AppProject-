@@ -1,6 +1,5 @@
 package com.smap.group29.getmoving.service;
 
-import android.app.Activity;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -10,7 +9,7 @@ import android.util.Log;
 
 public class StepCounter implements SensorEventListener {
 
-    GetMovingService mActivity;
+    private GetMovingService mGetMovingService;
     private final SensorManager mSensorManager;
     private final Sensor mStepCounterSensor;
     private final Sensor mAccelerometerSensor;
@@ -18,8 +17,8 @@ public class StepCounter implements SensorEventListener {
     private int accelerometer = 0;
 
     public StepCounter(GetMovingService activity) {
-        this.mActivity = activity;
-        mSensorManager = (SensorManager)this.mActivity.getSystemService(Context.SENSOR_SERVICE);
+        this.mGetMovingService = activity;
+        mSensorManager = (SensorManager)this.mGetMovingService.getSystemService(Context.SENSOR_SERVICE);
         mStepCounterSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
         mAccelerometerSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mSensorManager.registerListener(this,mStepCounterSensor,mSensorManager.SENSOR_DELAY_UI);
