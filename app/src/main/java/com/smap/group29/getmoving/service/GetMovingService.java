@@ -13,7 +13,7 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
-public class GetMovingService extends Service{
+public class GetMovingService extends Service {
 
     // inspired by https://github.com/SenSaa/Pedometer/blob/master/app/src/main/java/com/example/yusuf/pedometer/StepCountingService.java
 
@@ -21,6 +21,7 @@ public class GetMovingService extends Service{
     public static final String BROADCAST_ACTION = "com.smap.group29.getmoving.service.getmovingservice_broadcast";
 
     private StepCounter mStepCounter;
+    private OpenWeatherAPI mOpenWeatherAPI;
 
     // check service running
      boolean mBound = false;
@@ -54,7 +55,7 @@ public class GetMovingService extends Service{
         stepIntent = new Intent(BROADCAST_ACTION);
 
         mStepCounter = new StepCounter(this);
-
+        mOpenWeatherAPI = new OpenWeatherAPI(this);
         mHandler.removeCallbacks(updateBroadcastData);
         mHandler.post(updateBroadcastData);
 
@@ -86,6 +87,7 @@ public class GetMovingService extends Service{
 
     private void broadcastSteps(){
         Log.d(LOGD, "broadcasting step values");
+        mOpenWeatherAPI.sendRequest();
         stepIntent.putExtra("counted_steps",mStepCounter.getSteps());
         sendBroadcast(stepIntent);
     }
