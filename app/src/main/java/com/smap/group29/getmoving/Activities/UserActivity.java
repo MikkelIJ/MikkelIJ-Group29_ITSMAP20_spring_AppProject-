@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,8 +53,8 @@ public class UserActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
-        getMenuInflater().inflate(R.menu.logout_menu, menu);
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.logout_menu, menu);
         return true;
     }
 
@@ -69,7 +70,7 @@ public class UserActivity extends AppCompatActivity {
                                 FirebaseUtil.attachListener();
                             }
                         });
-//                FirebaseUtil.detachListener();
+                FirebaseUtil.detachListener();
                 return true;
         }
         return super.onOptionsItemSelected(item);
