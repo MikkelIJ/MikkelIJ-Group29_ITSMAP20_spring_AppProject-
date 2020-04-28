@@ -20,10 +20,13 @@ import android.widget.TextView;
 
 import com.smap.group29.getmoving.service.GetMovingService;
 import com.smap.group29.getmoving.service.GetMovingService.LocalBinder;
+import com.smap.group29.getmoving.service.OpenWeatherAPI;
+import com.squareup.picasso.Picasso;
 
-import java.sql.Connection;
+import java.util.ArrayList;
 
-import static com.smap.group29.getmoving.service.GetMovingService.BROADCAST_ACTION;
+import static com.smap.group29.getmoving.service.GetMovingService.BROADCAST_ACTION_STEPS;
+import static com.smap.group29.getmoving.service.OpenWeatherAPI.BROADCAST_ACTION_WEATHER;
 
 
 public class UserActivity extends AppCompatActivity {
@@ -41,11 +44,16 @@ public class UserActivity extends AppCompatActivity {
     private GetMovingService mService;
     private boolean mBound = false;
 
+    private OpenWeatherAPI mOpenWeatherAPI;
+    private static UserActivity mCurrentInstance;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        mCurrentInstance = this;
+        mOpenWeatherAPI = new OpenWeatherAPI(this,2624652);
+        mOpenWeatherAPI.sendRequest();
         initUI();
         initService();
         registerIntentFilters();
@@ -74,8 +82,12 @@ public class UserActivity extends AppCompatActivity {
 
     private void registerIntentFilters(){
         IntentFilter getCurrentStepsFilter = new IntentFilter();
-        getCurrentStepsFilter.addAction(BROADCAST_ACTION);
-        registerReceiver(broadcastReceiver,getCurrentStepsFilter);
+        getCurrentStepsFilter.addAction(BROADCAST_ACTION_STEPS);
+        registerReceiver(broadcastReceiverSteps,getCurrentStepsFilter);
+
+        IntentFilter getCurrentWeatherFilter = new IntentFilter();
+        getCurrentWeatherFilter.addAction(BROADCAST_ACTION_WEATHER);
+        registerReceiver(broadcastReceiverWeather,getCurrentWeatherFilter);
     }
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
@@ -117,13 +129,24 @@ public class UserActivity extends AppCompatActivity {
     }
 
 
-    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+    private BroadcastReceiver broadcastReceiverSteps = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             int stepsCounted = intent.getIntExtra("counted_steps",0);
-            Log.v("updateViews","steps counted" + stepsCounted);
-
+            Log.v("bcSteps","steps counted:" + stepsCounted);
             tv_stepsToday.setText(String.valueOf(stepsCounted));
+        }
+    };
+
+    private BroadcastReceiver broadcastReceiverWeather = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            ArrayList<String> weatherMessage = intent.getStringArrayListExtra("temp");
+            Log.v("bcWeather","weathermessage:" + weatherMessage);
+
+            tv_weatherTemp.setText(weatherMessage.get(0) + " | " + weatherMessage.get(1));
+            tv_weatherMessage.setText(weatherMessage.get(2));
+            Picasso.with(context).load("http://openweathermap.org/img/wn/10d@2x.png").error(R.drawable.noimage).into(iv_weatherIcon);
         }
     };
 }

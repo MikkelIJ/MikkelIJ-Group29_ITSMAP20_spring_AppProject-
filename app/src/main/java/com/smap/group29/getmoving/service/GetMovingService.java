@@ -1,24 +1,18 @@
 package com.smap.group29.getmoving.service;
 
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 
 public class GetMovingService extends Service {
 
     // inspired by https://github.com/SenSaa/Pedometer/blob/master/app/src/main/java/com/example/yusuf/pedometer/StepCountingService.java
 
     private static final String LOGD = "getmovingservice";
-    public static final String BROADCAST_ACTION = "com.smap.group29.getmoving.service.getmovingservice_broadcast";
+    public static final String BROADCAST_ACTION_STEPS = "com.smap.group29.getmoving.service.getmovingservice_broadcast";
 
     private StepCounter mStepCounter;
     private OpenWeatherAPI mOpenWeatherAPI;
@@ -52,7 +46,7 @@ public class GetMovingService extends Service {
         super.onCreate();
 
         // declares global broadcast
-        stepIntent = new Intent(BROADCAST_ACTION);
+        stepIntent = new Intent(BROADCAST_ACTION_STEPS);
 
 
         mStepCounter = new StepCounter(this);
@@ -96,11 +90,6 @@ public class GetMovingService extends Service {
         sendBroadcast(stepIntent);
     }
 
-    private void broadcastWeather(){
-        Log.d(LOGD, "broadcasting weather temp and city");
-        mOpenWeatherAPI.sendRequest();
-        stepIntent.putExtra("counted_steps",mStepCounter.getSteps());
-        sendBroadcast(stepIntent);
-    }
+
 
 }

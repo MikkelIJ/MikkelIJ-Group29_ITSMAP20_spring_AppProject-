@@ -1,8 +1,7 @@
 package com.smap.group29.getmoving.service;
 
+import android.content.Intent;
 import android.util.Log;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -10,31 +9,44 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.smap.group29.getmoving.model.weather.Main;
+//import com.firebase.ui.auth.data.model.User;
+import com.smap.group29.getmoving.UserActivity;
 import com.smap.group29.getmoving.utils.WeatherJsonParser;
 
+import java.util.ArrayList;
+
 public class OpenWeatherAPI {
+
+    private static final String LOGD = "openweatherapi";
+
+    public static final String BROADCAST_ACTION_WEATHER = "com.smap.group29.getmoving.service.openweatherapi_broadcast";
+
 
     //for Volley
     RequestQueue queue;
     private static final String API_KEY = "08839120feb837b758b4cbc96d482977";
-    public static final long CITY_ID_AARHUS = 2624652;
-    public static final String WEATHER_API_CALL = "https://api.openweathermap.org/data/2.5/weather?id=" + CITY_ID_AARHUS + "&APPID=" + API_KEY +"&units=metric";
-
+    public static long CITY_ID = 2624652; // aarhus 2624652
+    public static String WEATHER_API_CALL = "https://api.openweathermap.org/data/2.5/weather?id=" + CITY_ID + "&APPID=" + API_KEY +"&units=metric";
+    private Intent weatherIntent;
 
     GetMovingService mGetMovingService;
-
-    OpenWeatherAPI mOpenWeatherAPI;
+    UserActivity mUserActivity;
 
     public OpenWeatherAPI(GetMovingService getMovingService) {
         this.mGetMovingService = getMovingService;
     }
 
+    public OpenWeatherAPI(UserActivity userActivity, long cityID){
+        this.mUserActivity = userActivity;
+        this.CITY_ID = cityID;
+    }
+
     public void sendRequest(){
         //send request using Volley
         if(queue==null){
-            queue = Volley.newRequestQueue(this.mGetMovingService);
+            queue = Volley.newRequestQueue(this.mUserActivity);
         }
+        weatherIntent = new Intent(BROADCAST_ACTION_WEATHER);
         String url = WEATHER_API_CALL;
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
@@ -43,8 +55,10 @@ public class OpenWeatherAPI {
                     public void onResponse(String response) {
 
                         //Log.v("OnResponse",response);
-                        String weather = WeatherJsonParser.parseCityWeatherJsonWithGson(response);
-                        Log.v("OnResponse",weather);
+                        ArrayList<String> weather = WeatherJsonParser.parseWeather(response);
+                        Log.v("OnResponse", String.valueOf(weather));
+
+                        broadcastWeather(weather);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -55,4 +69,9 @@ public class OpenWeatherAPI {
         queue.add(stringRequest);
     }
 
+    private void broadcastWeather(ArrayList<String> weather){
+        Log.d(LOGD, "broadcasting weather temp and city");
+        weatherIntent.putExtra("temp",weather);
+        mUserActivity.sendBroadcast(weatherIntent);
+    }
 }
