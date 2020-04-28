@@ -47,8 +47,6 @@ public class UserActivity extends AppCompatActivity {
         findWeather();
 
         Toolbar toolbar = findViewById(R.id.logout_menu);
-
-
     }
 
     @Override
@@ -75,11 +73,6 @@ public class UserActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-
-
-
-
 
     private void findWeather() {
         String url = "http://api.openweathermap.org/data/2.5/weather?id=2624652&appid=a1b9c2c209a84cd50be4c25fbcd02a88&units=metric";
@@ -119,7 +112,6 @@ public class UserActivity extends AppCompatActivity {
 
     }
 
-
     @Override
     protected void onPause(){
         super.onPause();
@@ -130,10 +122,6 @@ public class UserActivity extends AppCompatActivity {
     protected void onResume(){
         super.onResume();
         FirebaseUtil.attachListener();
-    }
-
-    public void showMenu() {
-        invalidateOptionsMenu();
     }
 
 }
