@@ -31,7 +31,7 @@ public class StepCounter implements SensorEventListener {
         Log.v("event",String.valueOf(event.values[0]));
 
         if (event.sensor.getType() == Sensor.TYPE_STEP_COUNTER){
-            stepsCounted = stepsCounted + (int) event.values[0];
+            stepsCounted = (int) event.values[0];
         }
 
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER){
