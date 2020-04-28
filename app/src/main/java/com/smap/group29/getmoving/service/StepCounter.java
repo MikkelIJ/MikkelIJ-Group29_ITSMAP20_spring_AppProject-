@@ -34,9 +34,14 @@ public class StepCounter implements SensorEventListener {
             stepsCounted = (int) event.values[0];
         }
 
+
+/*
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER){
             accelerometer = (int) event.values[0];
         }
+
+ */
+
     }
 
     @Override

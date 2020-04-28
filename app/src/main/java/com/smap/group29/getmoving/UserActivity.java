@@ -49,7 +49,6 @@ public class UserActivity extends AppCompatActivity {
         initUI();
         initService();
         registerIntentFilters();
-
     }
 
 
@@ -60,10 +59,16 @@ public class UserActivity extends AppCompatActivity {
         mBound = false;
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        bindService(stepIntent,serviceConnection,Context.BIND_AUTO_CREATE);
+        mBound = true;
+    }
+
     private void initService(){
         // Binds ListActivity to the WordlearnerService.
         stepIntent = new Intent(this,GetMovingService.class);
-        startService(stepIntent);
         bindService(stepIntent,serviceConnection,Context.BIND_AUTO_CREATE);
     }
 
