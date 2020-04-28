@@ -19,10 +19,12 @@ public class OpenWeatherAPI {
     RequestQueue queue;
     private static final String API_KEY = "08839120feb837b758b4cbc96d482977";
     public static final long CITY_ID_AARHUS = 2624652;
-    public static final String WEATHER_API_CALL = "https://api.openweathermap.org/data/2.5/weather?id=" + CITY_ID_AARHUS + "&APPID=" + API_KEY;
+    public static final String WEATHER_API_CALL = "https://api.openweathermap.org/data/2.5/weather?id=" + CITY_ID_AARHUS + "&APPID=" + API_KEY +"&units=metric";
 
 
     GetMovingService mGetMovingService;
+
+    OpenWeatherAPI mOpenWeatherAPI;
 
     public OpenWeatherAPI(GetMovingService getMovingService) {
         this.mGetMovingService = getMovingService;
@@ -40,7 +42,7 @@ public class OpenWeatherAPI {
                     @Override
                     public void onResponse(String response) {
 
-
+                        //Log.v("OnResponse",response);
                         String weather = WeatherJsonParser.parseCityWeatherJsonWithGson(response);
                         Log.v("OnResponse",weather);
                     }
@@ -50,7 +52,6 @@ public class OpenWeatherAPI {
                 Log.v("onErrorResponse",String.valueOf(error));
             }
         });
-
         queue.add(stringRequest);
     }
 

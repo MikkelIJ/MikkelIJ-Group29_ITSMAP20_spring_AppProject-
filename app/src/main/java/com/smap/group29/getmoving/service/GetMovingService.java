@@ -26,7 +26,7 @@ public class GetMovingService extends Service {
     // check service running
      boolean mBound = false;
 
-     Intent stepIntent;
+     Intent stepIntent, weatherIntent;
 
     // handler for broadcasting data at x intervals
     private final Handler mHandler = new Handler();
@@ -53,6 +53,7 @@ public class GetMovingService extends Service {
 
         // declares global broadcast
         stepIntent = new Intent(BROADCAST_ACTION);
+
 
         mStepCounter = new StepCounter(this);
         mOpenWeatherAPI = new OpenWeatherAPI(this);
@@ -91,13 +92,12 @@ public class GetMovingService extends Service {
 
     private void broadcastSteps(){
         Log.d(LOGD, "broadcasting step values");
-        mOpenWeatherAPI.sendRequest();
         stepIntent.putExtra("counted_steps",mStepCounter.getSteps());
         sendBroadcast(stepIntent);
     }
 
     private void broadcastWeather(){
-        Log.d(LOGD, "broadcasting weather temp");
+        Log.d(LOGD, "broadcasting weather temp and city");
         mOpenWeatherAPI.sendRequest();
         stepIntent.putExtra("counted_steps",mStepCounter.getSteps());
         sendBroadcast(stepIntent);
