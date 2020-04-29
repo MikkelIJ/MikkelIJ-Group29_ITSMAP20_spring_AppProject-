@@ -9,6 +9,8 @@ import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.Arrays;
 import java.util.List;
@@ -20,6 +22,8 @@ public class FirebaseUtil {
     private static DatabaseReference mDatabaseReference;
     public static FirebaseAuth mFirebaseAuth;
     public static FirebaseAuth.AuthStateListener mAuthStateListener;
+    public static FirebaseStorage mFirebaseStorage;
+    public static StorageReference mStorageReference;
 
     private static Activity caller;
 
@@ -40,6 +44,7 @@ public class FirebaseUtil {
                     Toast.makeText(callerActivity.getBaseContext(), "Welcome back!", Toast.LENGTH_LONG).show();
                 }
             };
+            connectToStorage();
         }
         mDatabaseReference = mFirebaseDatabase.getReference().child(ref);
     }
@@ -65,5 +70,10 @@ public class FirebaseUtil {
 
     public static void detachListener(){
         mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
+    }
+
+    public static void connectToStorage(){
+        mFirebaseStorage = FirebaseStorage.getInstance();
+        mStorageReference = mFirebaseStorage.getReference().child("users_images");
     }
 }
