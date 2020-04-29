@@ -2,7 +2,7 @@
     <string name="app_name">GetMoving</string>
     <string name="profileHeader">Profile</string>
     <string name="todo">TODO</string>
-    <string name="weathermessage">It is 20C! Great for a walk</string>
+    <string name="weathermessage">Description</string>
     <string name="age">Age: 26</string>
     <string name="user_name">Name: Bobby</string>
     <string name="email"> Email </string>
@@ -27,7 +27,7 @@
     <string name="_32">32</string>
     <string name="hint_aarhus">Aarhus</string>
     <string name="hint_bobby">Bobby</string>
-    <string name="great_weather_today">Great weather today!</string>
+    <string name="great_weather_today">Cloudy</string>
     <string name="_1000000">1000000</string>
     <string name="edit_user_profil">edit user profil</string>
 </resources>

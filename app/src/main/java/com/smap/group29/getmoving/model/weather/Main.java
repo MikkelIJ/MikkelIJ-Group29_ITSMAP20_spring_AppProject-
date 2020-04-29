@@ -10,7 +10,7 @@ public class Main
     @Expose
     public Double temp;
     @Expose
-    public Double feelsLike;
+    public Double feels_like;
     @Expose
     public Double tempMin;
     @Expose

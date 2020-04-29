@@ -36,7 +36,7 @@ public class UserActivity extends AppCompatActivity {
     private Button btn_leaderboard;
     private ImageButton btn_edit;
     private EditText et_dailyGoal;
-    private TextView tv_name, tv_age, tv_city, tv_weatherTemp, tv_weatherMessage, tv_stepsToday, tv_stepsTotal;
+    private TextView tv_name, tv_age, tv_city, tv_weatherTemp,tv_weatherFeelsLike, tv_weatherHumid, tv_weatherDescription, tv_stepsToday, tv_stepsTotal;
     private ImageView iv_userPicture, iv_weatherIcon;
 
     private Intent stepIntent;
@@ -51,12 +51,12 @@ public class UserActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mCurrentInstance = this;
-        mOpenWeatherAPI = new OpenWeatherAPI(this,2624652);
-        mOpenWeatherAPI.sendRequest();
         initUI();
         initService();
         registerIntentFilters();
+        mOpenWeatherAPI = new OpenWeatherAPI(this,2624652);
+
+
     }
 
 
@@ -98,6 +98,8 @@ public class UserActivity extends AppCompatActivity {
             mBound = true;
 
             mService.updateBroadcastData.run();
+            mOpenWeatherAPI.sendRequest();
+
         }
 
         @Override
@@ -107,18 +109,20 @@ public class UserActivity extends AppCompatActivity {
     };
 
     private void initUI(){
-        tv_name             = findViewById(R.id.tv_userName);
-        tv_age              = findViewById(R.id.tv_userAge);
-        tv_city             = findViewById(R.id.tv_userCity);
-        tv_weatherTemp      = findViewById(R.id.tv_WeatherTemp);
-        tv_weatherMessage   = findViewById(R.id.tv_WeatherMessage);
-        tv_stepsToday       = findViewById(R.id.tv_steps_today);
-        tv_stepsTotal       = findViewById(R.id.tv_stepsTotal);
-        et_dailyGoal        = findViewById(R.id.et_dailygoal);
-        iv_userPicture      = findViewById(R.id.iv_userProfilePic);
-        iv_weatherIcon      = findViewById(R.id.iv_weatherIcon);
-        btn_edit            = findViewById(R.id.btn_userEdit);
-        btn_leaderboard     = findViewById(R.id.btn_user_leaderboard);
+        tv_name               = findViewById(R.id.tv_userName);
+        tv_age                = findViewById(R.id.tv_userAge);
+        tv_city               = findViewById(R.id.tv_userCity);
+        tv_weatherTemp        = findViewById(R.id.tv_WeatherTemp);
+        tv_weatherFeelsLike   = findViewById(R.id.tv_WeatherFeelsLike);
+        tv_weatherHumid       = findViewById(R.id.tv_weatherHumid);
+        tv_weatherDescription = findViewById(R.id.tv_weatherDescription);
+        tv_stepsToday         = findViewById(R.id.tv_steps_today);
+        tv_stepsTotal         = findViewById(R.id.tv_stepsTotal);
+        et_dailyGoal          = findViewById(R.id.et_dailygoal);
+        iv_userPicture        = findViewById(R.id.iv_userProfilePic);
+        iv_weatherIcon        = findViewById(R.id.iv_weatherIcon);
+        btn_edit              = findViewById(R.id.btn_userEdit);
+        btn_leaderboard       = findViewById(R.id.btn_user_leaderboard);
 
         btn_edit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,9 +148,11 @@ public class UserActivity extends AppCompatActivity {
             ArrayList<String> weatherMessage = intent.getStringArrayListExtra("temp");
             Log.v("bcWeather","weathermessage:" + weatherMessage);
 
-            tv_weatherTemp.setText(weatherMessage.get(0) + " | " + weatherMessage.get(1));
-            tv_weatherMessage.setText(weatherMessage.get(2));
-            Picasso.with(context).load("http://openweathermap.org/img/wn/10d@2x.png").error(R.drawable.noimage).into(iv_weatherIcon);
+            tv_weatherTemp.setText(weatherMessage.get(0));
+            tv_weatherFeelsLike.setText(weatherMessage.get(1));
+            tv_weatherHumid.setText(weatherMessage.get(2));
+            tv_weatherDescription.setText(weatherMessage.get(3));
+            Picasso.with(context).load(weatherMessage.get(4)).error(R.drawable.noimage).into(iv_weatherIcon);
         }
     };
 }

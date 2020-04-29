@@ -49,30 +49,29 @@
 
     <TextView
         android:id="@+id/tv_WeatherTemp"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:text="@string/temp_xy"
         android:textSize="14sp"
         app:autoSizeMinTextSize="14sp"
         app:autoSizeTextType="none"
-        app:layout_constraintEnd_toStartOf="@+id/guideline3"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/tv_weatherHeader"
         app:layout_constraintTop_toBottomOf="@+id/tv_weatherHeader" />
 
+
     <TextView
-        android:id="@+id/tv_WeatherMessage"
+        android:id="@+id/tv_WeatherFeelsLike"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:inputType="text"
-        android:text="@string/great_weather_today"
+        android:text="Feels like"
         android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline5"
-        app:layout_constraintEnd_toStartOf="@+id/guideline3"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_WeatherTemp" />
-
 
     <ImageView
         android:id="@+id/iv_userProfilePic"
@@ -93,7 +92,7 @@
         android:contentDescription="@string/todo"
         app:layout_constraintBottom_toTopOf="@+id/guideline5"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guideline3"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toBottomOf="@+id/et_dailygoal"
         tools:src="@drawable/partlycloudyday" />
 
@@ -107,7 +106,7 @@
         android:textStyle="bold"
         app:autoSizeMinTextSize="14sp"
         app:autoSizeTextType="uniform"
-        app:layout_constraintEnd_toStartOf="@+id/guideline3"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline4" />
 
@@ -220,14 +219,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.59" />
+        app:layout_constraintGuide_percent="0.55" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.68" />
+        app:layout_constraintGuide_percent="0.62" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline7"
@@ -253,5 +252,34 @@
         app:layout_constraintBottom_toTopOf="@+id/et_dailygoal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline3" />
+
+    <TextView
+        android:id="@+id/tv_weatherHumid"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Humid"
+        app:layout_constraintEnd_toStartOf="@+id/iv_weatherIcon"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_WeatherFeelsLike" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.69" />
+
+    <TextView
+        android:id="@+id/tv_weatherDescription"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/weathermessage"
+        app:layout_constraintBottom_toTopOf="@+id/tv_StepsToday_header"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_weatherHumid"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
