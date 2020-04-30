@@ -54,6 +54,7 @@ public class NewUserActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_user);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference = mFirebaseDatabase.getReference().child("NewUser");
@@ -119,6 +120,7 @@ public class NewUserActivity extends AppCompatActivity {
                 saveNewUser();
                 Toast.makeText(this, "New User Saved!", Toast.LENGTH_LONG).show();
                 cleanAll(); // clearing the edit texts
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

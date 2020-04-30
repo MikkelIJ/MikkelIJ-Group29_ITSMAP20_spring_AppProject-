@@ -39,6 +39,7 @@ public class UserActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
        FirebaseUtil.openFirebaseReference("TheNewRealDeal",this);
 
         tv_weatherTemp = findViewById(R.id.tv_WeatherTemp);
