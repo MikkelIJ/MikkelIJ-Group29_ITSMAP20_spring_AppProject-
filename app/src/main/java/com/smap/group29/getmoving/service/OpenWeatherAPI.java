@@ -11,7 +11,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 //import com.firebase.ui.auth.data.model.User;
 import com.smap.group29.getmoving.UserActivity;
-import com.smap.group29.getmoving.utils.WeatherJsonParser;
+import com.smap.group29.getmoving.utils.JsonParser;
 
 import java.util.ArrayList;
 
@@ -55,7 +55,7 @@ public class OpenWeatherAPI {
                     public void onResponse(String response) {
 
                         //Log.v("OnResponse",response);
-                        ArrayList<String> weather = WeatherJsonParser.parseWeather(response);
+                        ArrayList<String> weather = JsonParser.parseWeather(response);
                         Log.v("OnResponse", String.valueOf(weather));
 
                         broadcastWeather(weather);

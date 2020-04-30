@@ -21,6 +21,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.smap.group29.getmoving.model.User;
 
+import static com.smap.group29.getmoving.NewUserActivity.USER;
+
 public class LoginActivity extends AppCompatActivity{
 
     private static final String TAG = "LoginActivity";
@@ -36,7 +38,6 @@ public class LoginActivity extends AppCompatActivity{
     private User newUser;
 
     // new user in db inspired by https://www.youtube.com/watch?v=0gNPX52o_7I
-    public static final String USER = "user";
 
 
     @Override
@@ -101,7 +102,8 @@ public class LoginActivity extends AppCompatActivity{
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
                             Intent intent = new Intent(LoginActivity.this,UserActivity.class);
-                            intent.putExtra("email",email);
+                            String keyId = myDBRef.push().getKey();
+                            intent.putExtra("keyID",keyId);
                             startActivity(intent);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -135,13 +137,13 @@ public class LoginActivity extends AppCompatActivity{
         tv_createUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!et_email.getText().toString().isEmpty() && !et_password.getText().toString().isEmpty()){
+                /*if (!et_email.getText().toString().isEmpty() && !et_password.getText().toString().isEmpty()){
                     newUser = new User(et_email.getText().toString(),et_password.getText().toString());
                     RegisterUser(et_email.getText().toString(),et_password.getText().toString());
                 }else {
                     Toast.makeText(LoginActivity.this,"Fill out Email and Password",Toast.LENGTH_LONG).show();
                 }
-
+*/              startActivity(new Intent(LoginActivity.this,NewUserActivity.class));
             }
         });
     }

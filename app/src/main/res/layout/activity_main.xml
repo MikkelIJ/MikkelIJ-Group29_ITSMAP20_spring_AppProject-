@@ -21,7 +21,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tv_userName"
+        android:id="@+id/tv_userActivetyName"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
@@ -35,7 +35,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_profileHeader" />
 
     <TextView
-        android:id="@+id/tv_userAge"
+        android:id="@+id/tv_userActivityAge"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:text="@string/age"
@@ -45,7 +45,7 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_userName" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_userActivetyName" />
 
     <TextView
         android:id="@+id/tv_WeatherTemp"
@@ -93,7 +93,7 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toBottomOf="@+id/et_dailygoal"
+        app:layout_constraintTop_toBottomOf="@+id/userActivityDailySteps"
         tools:src="@drawable/partlycloudyday" />
 
     <TextView
@@ -150,7 +150,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_StepsToday_header" />
 
     <TextView
-        android:id="@+id/tv_userCity"
+        android:id="@+id/tv_userActivityCity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/city"
@@ -161,11 +161,11 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_userAge"
+        app:layout_constraintTop_toBottomOf="@+id/tv_userActivityAge"
         app:layout_constraintVertical_bias="0.0" />
 
     <EditText
-        android:id="@+id/et_dailygoal"
+        android:id="@+id/userActivityDailySteps"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:autofillHints=""
@@ -249,7 +249,7 @@
         android:gravity="center"
         android:text="@string/daily_goal"
         android:textSize="12sp"
-        app:layout_constraintBottom_toTopOf="@+id/et_dailygoal"
+        app:layout_constraintBottom_toTopOf="@+id/userActivityDailySteps"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline3" />
 

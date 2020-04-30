@@ -21,66 +21,66 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/et_name"
-        android:layout_width="379dp"
+        android:id="@+id/et_newUserName"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="@string/user_name"
         android:importantForAutofill="no"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/et_age"
+        app:layout_constraintBottom_toTopOf="@+id/et_newUserAge"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
-        android:id="@+id/et_age"
-        android:layout_width="379dp"
+        android:id="@+id/et_newUserAge"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="@string/age"
         android:importantForAutofill="no"
         android:inputType="number"
-        app:layout_constraintBottom_toTopOf="@+id/et_city"
+        app:layout_constraintBottom_toTopOf="@+id/et_newUserCity"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
 
     <Button
-        android:id="@+id/btn_addPhoto"
+        android:id="@+id/btn_newUserAddPhoto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="96dp"
+        android:layout_marginBottom="8dp"
         android:text="@string/add_photo"
-        app:layout_constraintBottom_toTopOf="@+id/et_name"
+        app:layout_constraintBottom_toTopOf="@+id/et_newUserEmail"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
         android:id="@+id/iv_newUserImage"
-        android:layout_width="365dp"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:contentDescription="@string/user_profile_picture"
         android:scaleType="fitCenter"
-        app:layout_constraintBottom_toTopOf="@+id/btn_addPhoto"
+        app:layout_constraintBottom_toTopOf="@+id/btn_newUserAddPhoto"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_createUser"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_bias="0.48000002"
         tools:srcCompat="@tools:sample/avatars" />
 
     <EditText
-        android:id="@+id/et_city"
-        android:layout_width="379dp"
+        android:id="@+id/et_newUserCity"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="@string/city"
         android:importantForAutofill="no"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/et_dailygoal"
+        app:layout_constraintBottom_toTopOf="@+id/userActivityDailySteps"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/btn_save"
+        android:id="@+id/btn_newUserSave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/save"
@@ -88,7 +88,7 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
-        android:id="@+id/btn_cancel"
+        android:id="@+id/btn_newUserCancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@android:string/cancel"
@@ -96,15 +96,38 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
-        android:id="@+id/et_dailygoal"
-        android:layout_width="379dp"
+        android:id="@+id/userActivityDailySteps"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:ems="10"
         android:hint="@string/daily_steps"
         android:importantForAutofill="no"
         android:inputType="number"
-        app:layout_constraintBottom_toTopOf="@+id/btn_save"
+        app:layout_constraintBottom_toTopOf="@+id/btn_newUserSave"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/et_newUserEmail"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/email"
+        android:inputType="textEmailAddress"
+        app:layout_constraintBottom_toTopOf="@+id/et_newUserPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/et_newUserPassword"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/password"
+        android:inputType="textPassword"
+        app:layout_constraintBottom_toTopOf="@+id/et_newUserName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

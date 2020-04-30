@@ -2,13 +2,14 @@ package com.smap.group29.getmoving.utils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.smap.group29.getmoving.model.UserJson;
 import com.smap.group29.getmoving.model.weather.OpenWeather;
 import com.smap.group29.getmoving.model.weather.Weather;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class WeatherJsonParser {
+public class JsonParser {
 
 
     //example of parsing with Gson - note that the Gson parser uses the model object CityWeather, Clouds, Coord, Main, Sys, Weather and Wind extracted with http://www.jsonschema2pojo.org/
@@ -28,5 +29,11 @@ public class WeatherJsonParser {
         } else {
             return null; // needs to be changed
         }
+    }
+
+    public static UserJson parseUser(String jsonString){
+        Gson gson = new GsonBuilder().create();
+        UserJson mUserJson = gson.fromJson(jsonString,UserJson.class);
+        return mUserJson;
     }
 }

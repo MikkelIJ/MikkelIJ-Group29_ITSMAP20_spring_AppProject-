@@ -11,12 +11,7 @@ public class User {
     public User() {
     }
 
-    public User(String email, String password) {
-        this.email = email;
-        this.password = password;
-    }
-
-    public User(String name, String age, String city, String steps) {
+    public User(String email, String password, String name, String age, String city, String steps) {
         this.email = email;
         this.password = password;
         this.name = name;
