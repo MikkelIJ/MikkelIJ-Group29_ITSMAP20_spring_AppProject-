@@ -11,6 +11,8 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,6 +32,7 @@ import static com.smap.group29.getmoving.service.OpenWeatherAPI.BROADCAST_ACTION
 
 
 public class UserActivity extends AppCompatActivity {
+
 
     private static final String LOGD = "userActivity";
 
@@ -59,6 +62,12 @@ public class UserActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        //inflater.inflate();
+        return true;
+    }
 
     @Override
     protected void onStop() {
@@ -152,7 +161,7 @@ public class UserActivity extends AppCompatActivity {
             tv_weatherFeelsLike.setText(weatherMessage.get(1));
             tv_weatherHumid.setText(weatherMessage.get(2));
             tv_weatherDescription.setText(weatherMessage.get(3));
-            Picasso.with(context).load(weatherMessage.get(4)).error(R.drawable.noimage).into(iv_weatherIcon);
+           // Picasso.with(context).load(weatherMessage.get(4)).error(R.drawable.noimage).into(iv_weatherIcon);
         }
     };
 }
