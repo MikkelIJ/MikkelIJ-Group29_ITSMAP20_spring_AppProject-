@@ -26,6 +26,7 @@
         android:exported="false"
         />
         <activity android:name=".NewUserActivity"/>
+        <activity android:name=".LeaderboardActivity"/>
         <activity android:name=".UserActivity"/>
     <activity android:name=".LoginActivity">
         <intent-filter>

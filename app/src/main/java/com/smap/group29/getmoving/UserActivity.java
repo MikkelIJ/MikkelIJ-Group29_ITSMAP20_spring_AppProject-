@@ -12,8 +12,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,7 +21,6 @@ import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -37,7 +34,6 @@ import com.smap.group29.getmoving.service.OpenWeatherAPI;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import android.view.Menu;
 
 import javax.annotation.Nullable;
 
@@ -107,8 +103,6 @@ public class UserActivity extends AppCompatActivity {
             public void onSuccess(Uri uri) {
                 Picasso.get().load(uri).into(iv_userPicture);
 
-
-
             }
 
         });
@@ -121,13 +115,32 @@ public class UserActivity extends AppCompatActivity {
         btn_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-          //      onStop();
                 logout();
-
             }
         });
 
+        btn_leaderboard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(UserActivity.this,LeaderboardActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        uploadUserID();
+    }
+
+    private void uploadUserID(){
+        //upload userId to storage for gloabel access to fetch users for leaderboard
+        StorageReference fileRef = storageReference.child("userlist/");
+        Intent userIntent = new Intent();
+        userIntent.putExtra("userUri",mAuth.getCurrentUser().getUid().toString());
+        Uri userUri =  userIntent.getData();
+        fileRef.putFile(userUri);
     }
 
     public void logout(){
@@ -195,7 +208,7 @@ public class UserActivity extends AppCompatActivity {
     };
 
     private void initUI(){
-        tv_name               = findViewById(R.id.tv_userName);
+        tv_name               = findViewById(R.id.tv_leaderBoardPosition);
         tv_age                = findViewById(R.id.tv_userAge);
         tv_city               = findViewById(R.id.tv_userCity);
         tv_weatherTemp        = findViewById(R.id.tv_WeatherTemp);

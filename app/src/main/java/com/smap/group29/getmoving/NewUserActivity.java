@@ -55,6 +55,7 @@ public class NewUserActivity extends AppCompatActivity {
     String userID;
 
     Uri imageUri;
+    Uri userUri;
 
     private ImageView iv_userImage;
     private EditText et_email,et_password,et_name, et_age, et_city, et_dailySteps;
@@ -70,10 +71,6 @@ public class NewUserActivity extends AppCompatActivity {
         mStore = FirebaseFirestore.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference();
 
-
-
-
-
         btn_addPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,7 +78,8 @@ public class NewUserActivity extends AppCompatActivity {
                 Intent openCamararollIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(openCamararollIntent, 101);
 
-
+                //Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                //startActivityForResult(takePicture, 0);
             }
         });
 
@@ -144,8 +142,6 @@ public class NewUserActivity extends AppCompatActivity {
                                 }
                             });
 
-
-
                             startActivity(new Intent(getApplicationContext(), UserActivity.class));
                             finish();
                         }else{
@@ -154,7 +150,6 @@ public class NewUserActivity extends AppCompatActivity {
                         }
                     }
                 });
-
                 uploadImgToFirebase(imageUri);
             }
         });
@@ -163,11 +158,17 @@ public class NewUserActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == 101){
-            if(resultCode == Activity.RESULT_OK);{
+        if (requestCode == 101) {
+            if (resultCode == Activity.RESULT_OK) ;
+            {
                 imageUri = data.getData();
                 iv_userImage.setImageURI(imageUri);
             }
+        }
+        if (resultCode == 0) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            iv_userImage.setImageBitmap(imageBitmap);
         }
     }
 
@@ -184,12 +185,11 @@ public class NewUserActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Toast.makeText(NewUserActivity.this, "Failed to upload image", Toast.LENGTH_SHORT);
-
             }
         });
-
-
     }
+
+
 
     private void initUI(){
         iv_userImage    = findViewById(R.id.iv_newUserImage);
@@ -202,7 +202,7 @@ public class NewUserActivity extends AppCompatActivity {
         et_dailySteps   = findViewById(R.id.et_dailygoal);
         btn_save        = findViewById(R.id.btn_save);
         btn_cancel      = findViewById(R.id.btn_cancel);
-        progressBar = findViewById(R.id.progressBar);
+        progressBar     = findViewById(R.id.progressBar);
     }
 
 

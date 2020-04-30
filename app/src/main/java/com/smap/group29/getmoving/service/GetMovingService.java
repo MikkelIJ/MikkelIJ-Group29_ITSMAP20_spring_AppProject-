@@ -2,10 +2,22 @@ package com.smap.group29.getmoving.service;
 
 import android.app.Service;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.smap.group29.getmoving.NewUserActivity;
 
 public class GetMovingService extends Service {
 
@@ -48,7 +60,6 @@ public class GetMovingService extends Service {
         // declares global broadcast
         stepIntent = new Intent(BROADCAST_ACTION_STEPS);
 
-
         mStepCounter = new StepCounter(this);
         mOpenWeatherAPI = new OpenWeatherAPI(this);
         mHandler.removeCallbacks(updateBroadcastData);
@@ -70,7 +81,6 @@ public class GetMovingService extends Service {
     }
 
 
-
     // runnable used for async method
     public Runnable updateBroadcastData = new Runnable() {
         @Override
@@ -89,7 +99,4 @@ public class GetMovingService extends Service {
         stepIntent.putExtra("counted_steps",mStepCounter.getSteps());
         sendBroadcast(stepIntent);
     }
-
-
-
 }

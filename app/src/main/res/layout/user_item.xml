@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -7,33 +8,55 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="82dp"
         android:layout_margin="4dp">
 
         <TextView
-            android:id="@+id/tv_userName"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:text="User 1"
-            android:textColor="@android:color/black"
-            android:textSize="20dp"
-            android:textStyle="bold"
-            android:gravity="center_vertical"
-
-            />
-        <TextView
-            android:id="@+id/tv_userScore"
-            android:text="1111"
+            android:id="@+id/tv_leaderBoardPosition"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_alignParentRight="true"
-            android:textSize="20dp"
-            android:textStyle="bold"
-            android:textColor="@android:color/black"
+            android:layout_height="match_parent"
             android:gravity="center_vertical"
+            android:text="#1"
+            android:textColor="@android:color/black"
+            android:textSize="32sp"
+            android:textStyle="bold"
+
             />
 
+        <ImageView
+            android:id="@+id/iv_leaderBoardImage"
+            android:layout_width="58dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/tv_leaderBoardPosition"
+            android:padding="2dp"
+            tools:srcCompat="@tools:sample/avatars[9]" />
 
-        </RelativeLayout>
+        <TextView
+            android:id="@+id/tv_leaderboardName"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@id/tv_leaderboardSteps"
+            android:layout_toRightOf="@id/iv_leaderBoardImage"
+            android:gravity="center_vertical"
+            android:text="Bobby Olsen"
+            android:textColor="@android:color/black"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_leaderboardSteps"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:gravity="center|end"
+            android:text="100000"
+            android:textColor="@android:color/black"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            app:autoSizeTextType="none" />
+
+
+    </RelativeLayout>
 
 </androidx.cardview.widget.CardView>

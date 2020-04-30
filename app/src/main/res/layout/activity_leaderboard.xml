@@ -8,7 +8,7 @@
     android:padding="16dp">
 
     <TextView
-        android:id="@+id/tv_getmovingLeaderboard"
+        android:id="@+id/tv_LeaderboardHeader"
         android:text="@string/getmovingLeaderboard"
         android:textSize="30sp"
         android:textColor="@color/colorBlack"
@@ -21,27 +21,26 @@
         />
 
     <Button
-        android:id="@+id/bt_back"
-        android:text="@string/bt_back"
-        android:textSize="20sp"
+        android:id="@+id/btn_leaderboardBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/bt_back"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
 
         />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        android:id="@+id/rv_leaderboard"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@id/bt_back"
+        app:layout_constraintBottom_toTopOf="@id/btn_leaderboardBack"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_getmovingLeaderboard"
+        app:layout_constraintTop_toBottomOf="@+id/tv_LeaderboardHeader"
         tools:listitem="@layout/user_item" />
 
 
