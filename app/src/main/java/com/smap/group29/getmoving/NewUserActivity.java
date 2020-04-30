@@ -4,8 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
@@ -33,8 +35,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.smap.group29.getmoving.model.User;
+import com.squareup.picasso.Picasso;
 
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,7 +50,10 @@ public class NewUserActivity extends AppCompatActivity {
     public static final String TAG = "TAG";
     private FirebaseAuth mAuth;
     private FirebaseFirestore mStore;
+    private StorageReference storageReference;
     String userID;
+
+    Uri imageUri;
 
     private ImageView iv_userImage;
     private EditText et_email,et_password,et_name, et_age, et_city, et_dailySteps;
@@ -57,12 +67,28 @@ public class NewUserActivity extends AppCompatActivity {
         initUI();
         mAuth = FirebaseAuth.getInstance();
         mStore = FirebaseFirestore.getInstance();
+        storageReference = FirebaseStorage.getInstance().getReference();
+
+
 
         //If the current user is logged in already we'll send them to the UserActivity
-        if(mAuth.getCurrentUser() != null){
-            startActivity(new Intent(getApplicationContext(), UserActivity.class));
-            finish();
-        }
+//        if(mAuth.getCurrentUser() != null){
+//            startActivity(new Intent(getApplicationContext(), UserActivity.class));
+//            finish();
+//        }
+
+        btn_addPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //When user clicks on addphoto the app opens the camararoll
+                Intent openCamararollIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(openCamararollIntent, 101);
+
+
+            }
+        });
+
+
 
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,12 +161,47 @@ public class NewUserActivity extends AppCompatActivity {
                     }
                 });
 
+
+                uploadImgToFirebase(imageUri);
+
+            }
+        });
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 101){
+            if(resultCode == Activity.RESULT_OK);{
+                imageUri = data.getData();
+                iv_userImage.setImageURI(imageUri);
+
+
+
+            }
+        }
+    }
+
+    private void uploadImgToFirebase(Uri imageUri) {
+        //upload imgage to firbasestorage
+        StorageReference fileRef = storageReference.child("users/profile.jpg");
+        fileRef.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Toast.makeText(NewUserActivity.this, "Image uploaded", Toast.LENGTH_SHORT);
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(NewUserActivity.this, "Failed to upload image", Toast.LENGTH_SHORT);
+
             }
         });
 
 
     }
-
 
     private void initUI(){
         iv_userImage    = findViewById(R.id.iv_newUserImage);

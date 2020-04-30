@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
@@ -20,12 +21,15 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.smap.group29.getmoving.service.GetMovingService;
 import com.smap.group29.getmoving.service.GetMovingService.LocalBinder;
 import com.smap.group29.getmoving.service.OpenWeatherAPI;
@@ -44,6 +48,7 @@ public class UserActivity extends AppCompatActivity {
 
     FirebaseAuth mAuth;
     FirebaseFirestore mStore;
+    StorageReference storageReference = FirebaseStorage.getInstance().getReference();
     String userID;
 
 
@@ -70,6 +75,11 @@ public class UserActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mStore = FirebaseFirestore.getInstance();
         userID = mAuth.getCurrentUser().getUid();
+        storageReference = FirebaseStorage.getInstance().getReference();
+
+
+
+
 
 
         //setting up the data from firebase user
@@ -85,6 +95,18 @@ public class UserActivity extends AppCompatActivity {
             }
         });
 
+        //loading the picture from firebase into imageview
+        final StorageReference imgProfile = storageReference.child("users/profile.jpg");
+        imgProfile.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Picasso.get().load(uri).into(iv_userPicture);
+
+
+            }
+
+        });
+
         initUI();
         initService();
         registerIntentFilters();
@@ -93,7 +115,9 @@ public class UserActivity extends AppCompatActivity {
         btn_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                onStop();
                 logout();
+
             }
         });
 
