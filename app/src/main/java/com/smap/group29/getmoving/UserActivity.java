@@ -20,12 +20,21 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.smap.group29.getmoving.service.GetMovingService;
 import com.smap.group29.getmoving.service.GetMovingService.LocalBinder;
 import com.smap.group29.getmoving.service.OpenWeatherAPI;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import android.view.Menu;
+
+import javax.annotation.Nullable;
 
 import static com.smap.group29.getmoving.service.GetMovingService.BROADCAST_ACTION_STEPS;
 import static com.smap.group29.getmoving.service.OpenWeatherAPI.BROADCAST_ACTION_WEATHER;
@@ -33,10 +42,14 @@ import static com.smap.group29.getmoving.service.OpenWeatherAPI.BROADCAST_ACTION
 
 public class UserActivity extends AppCompatActivity {
 
+    FirebaseAuth mAuth;
+    FirebaseFirestore mStore;
+    String userID;
+
 
     private static final String LOGD = "userActivity";
 
-    private Button btn_leaderboard;
+    private Button btn_leaderboard, btn_logout;
     private ImageButton btn_edit;
     private EditText et_dailyGoal;
     private TextView tv_name, tv_age, tv_city, tv_weatherTemp,tv_weatherFeelsLike, tv_weatherHumid, tv_weatherDescription, tv_stepsToday, tv_stepsTotal;
@@ -54,20 +67,51 @@ public class UserActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mAuth = FirebaseAuth.getInstance();
+        mStore = FirebaseFirestore.getInstance();
+        userID = mAuth.getCurrentUser().getUid();
+
+
+        //setting up the data from firebase user
+        DocumentReference documentReference = mStore.collection("KspUsers").document(userID);
+        documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                tv_name.setText(documentSnapshot.getString("name"));
+                tv_age.setText(documentSnapshot.getString("age"));
+                tv_city.setText(documentSnapshot.getString("city"));
+                et_dailyGoal.setText(documentSnapshot.getString("dailysteps"));
+
+            }
+        });
+
         initUI();
         initService();
         registerIntentFilters();
         mOpenWeatherAPI = new OpenWeatherAPI(this,2624652);
 
+        btn_logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                logout();
+            }
+        });
+
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        //inflater.inflate();
-        return true;
+    public void logout(){
+        FirebaseAuth.getInstance().signOut();
+        startActivity(new Intent(getApplicationContext(),LoginActivity.class));
+        finish();
     }
+
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        MenuInflater inflater = getMenuInflater();
+//        inflater.inflate(R.menu);
+//        return true;
+//    }
 
     @Override
     protected void onStop() {
@@ -132,6 +176,9 @@ public class UserActivity extends AppCompatActivity {
         iv_weatherIcon        = findViewById(R.id.iv_weatherIcon);
         btn_edit              = findViewById(R.id.btn_userEdit);
         btn_leaderboard       = findViewById(R.id.btn_user_leaderboard);
+        btn_logout            = findViewById(R.id.btn_logout);
+
+
 
         btn_edit.setOnClickListener(new View.OnClickListener() {
             @Override
