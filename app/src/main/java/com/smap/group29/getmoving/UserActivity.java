@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -87,11 +88,15 @@ public class UserActivity extends AppCompatActivity {
         documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                tv_name.setText(documentSnapshot.getString("name"));
-                tv_age.setText(documentSnapshot.getString("age"));
-                tv_city.setText(documentSnapshot.getString("city"));
-                et_dailyGoal.setText(documentSnapshot.getString("dailysteps"));
+                if (e!=null){
+                    Log.v("onEvent","Error:"+e.getMessage());
+                }else {
 
+                    tv_name.setText(documentSnapshot.getString("name"));
+                    tv_age.setText(documentSnapshot.getString("age"));
+                    tv_city.setText(documentSnapshot.getString("city"));
+                    et_dailyGoal.setText(documentSnapshot.getString("dailysteps"));
+                }
             }
         });
 
