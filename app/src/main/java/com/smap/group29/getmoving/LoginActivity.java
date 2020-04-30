@@ -125,7 +125,7 @@ public class LoginActivity extends AppCompatActivity{
         tv_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (et_email.getText().toString() != "" && et_password.getText().toString() != ""){
+                if (!et_email.getText().toString().isEmpty() && !et_password.getText().toString().isEmpty()){
                     signin(et_email.getText().toString(),et_password.getText().toString());
                 }else {
                     Toast.makeText(LoginActivity.this,"Fill out Email and Password",Toast.LENGTH_LONG).show();
@@ -135,7 +135,7 @@ public class LoginActivity extends AppCompatActivity{
         tv_createUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (et_email.getText().toString() != "" && et_password.getText().toString() != ""){
+                if (!et_email.getText().toString().isEmpty() && !et_password.getText().toString().isEmpty()){
                     newUser = new User(et_email.getText().toString(),et_password.getText().toString());
                     RegisterUser(et_email.getText().toString(),et_password.getText().toString());
                 }else {
