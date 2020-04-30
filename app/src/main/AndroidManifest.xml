@@ -5,6 +5,7 @@
     <!-- sets permissions-->
     <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION"/>
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <!-- Hardware Feature Required for Step Counter to function -->
     <uses-feature
         android:name="android.hardware.sensor.stepcounter"
@@ -24,7 +25,9 @@
         android:name=".service.GetMovingService"
         android:exported="false"
         />
-    <activity android:name=".UserActivity">
+        <activity android:name=".NewUserActivity"/>
+        <activity android:name=".UserActivity"/>
+    <activity android:name=".LoginActivity">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
 
