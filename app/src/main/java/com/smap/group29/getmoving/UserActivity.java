@@ -103,6 +103,7 @@ public class UserActivity extends AppCompatActivity {
                 Picasso.get().load(uri).into(iv_userPicture);
 
 
+
             }
 
         });
@@ -115,7 +116,7 @@ public class UserActivity extends AppCompatActivity {
         btn_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onStop();
+          //      onStop();
                 logout();
 
             }
@@ -128,6 +129,7 @@ public class UserActivity extends AppCompatActivity {
         FirebaseAuth.getInstance().signOut();
         startActivity(new Intent(getApplicationContext(),LoginActivity.class));
         finish();
+
     }
 
 //    @Override
@@ -142,6 +144,8 @@ public class UserActivity extends AppCompatActivity {
         super.onStop();
         unbindService(serviceConnection);
         mBound = false;
+
+
     }
 
     @Override

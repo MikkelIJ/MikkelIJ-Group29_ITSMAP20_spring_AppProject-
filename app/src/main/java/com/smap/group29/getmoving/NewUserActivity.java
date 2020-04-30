@@ -46,6 +46,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class NewUserActivity extends AppCompatActivity {
+    //Newuser and Useractivity is inspired by https://www.youtube.com/playlist?list=PLlGT4GXi8_8dDK5Y3KCxuKAPpil9V49rN
 
     public static final String TAG = "TAG";
     private FirebaseAuth mAuth;
@@ -71,11 +72,7 @@ public class NewUserActivity extends AppCompatActivity {
 
 
 
-        //If the current user is logged in already we'll send them to the UserActivity
-//        if(mAuth.getCurrentUser() != null){
-//            startActivity(new Intent(getApplicationContext(), UserActivity.class));
-//            finish();
-//        }
+
 
         btn_addPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -154,21 +151,15 @@ public class NewUserActivity extends AppCompatActivity {
                         }else{
                             Toast.makeText(NewUserActivity.this, "Error: " + task.getException().getMessage(),Toast.LENGTH_SHORT).show();
                             progressBar.setVisibility(View.VISIBLE);
-
                         }
-
-
                     }
                 });
 
-
                 uploadImgToFirebase(imageUri);
-
             }
         });
 
     }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -176,9 +167,6 @@ public class NewUserActivity extends AppCompatActivity {
             if(resultCode == Activity.RESULT_OK);{
                 imageUri = data.getData();
                 iv_userImage.setImageURI(imageUri);
-
-
-
             }
         }
     }
@@ -216,7 +204,6 @@ public class NewUserActivity extends AppCompatActivity {
         btn_cancel      = findViewById(R.id.btn_cancel);
         progressBar = findViewById(R.id.progressBar);
     }
-
 
 
 }

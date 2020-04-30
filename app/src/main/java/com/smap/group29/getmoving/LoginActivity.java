@@ -37,6 +37,7 @@ public class LoginActivity extends AppCompatActivity{
 
 
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +46,13 @@ public class LoginActivity extends AppCompatActivity{
         initUI();
         Intent newAccountIntent = new Intent(this,NewUserActivity.class);
         setUI();
+
+
+        // If the current user is logged in already we'll send them to the UserActivity
+        if(mAuth.getCurrentUser() != null){
+            startActivity(new Intent(getApplicationContext(), UserActivity.class));
+            finish();
+        }
     }
 
 
