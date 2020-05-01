@@ -17,9 +17,9 @@ import java.util.List;
 
 public class FirebaseUtil {
 
-    private static FirebaseUtil firebaseUtil;
-    private static FirebaseDatabase mFirebaseDatabase;
-    private static DatabaseReference mDatabaseReference;
+    public static FirebaseUtil firebaseUtil;
+    public static FirebaseDatabase mFirebaseDatabase;
+    public static DatabaseReference mDatabaseReference;
     public static FirebaseAuth mFirebaseAuth;
     public static FirebaseAuth.AuthStateListener mAuthStateListener;
     public static FirebaseStorage mFirebaseStorage;
@@ -27,7 +27,7 @@ public class FirebaseUtil {
 
     private static Activity caller;
 
-    private FirebaseUtil(){}
+    public FirebaseUtil(){}
 
     public static void openFirebaseReference(String ref, final Activity callerActivity){
         if (firebaseUtil == null){
@@ -49,7 +49,7 @@ public class FirebaseUtil {
         mDatabaseReference = mFirebaseDatabase.getReference().child(ref);
     }
 
-    private static void signIn(){
+    public static void signIn(){
         // Choose authentication providers
         List<AuthUI.IdpConfig> providers = Arrays.asList(
                 new AuthUI.IdpConfig.EmailBuilder().build(),

@@ -64,12 +64,11 @@ public class NewUserActivity extends AppCompatActivity {
         mEditTextAge = findViewById(R.id.et_age);
         mEditTextCity = findViewById(R.id.et_city);
         mEditTextDailySteps = findViewById(R.id.et_dailygoal);
-        mImageView = findViewById(R.id.iv_createnewuser);
 
-//        showImage(mNewUser.getImageUrl());
+//        populateEditText();
+//        mImageView = findViewById(R.id.iv_createnewuser);
 
 //        mButtonAddImage = findViewById(R.id.btn_addPhoto);
-
 //        mButtonAddImage.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -80,6 +79,23 @@ public class NewUserActivity extends AppCompatActivity {
 //            }
 //        });
     }
+
+    public void populateEditText(){
+        Intent intent = new Intent(getApplicationContext(), UserActivity.class);
+
+        String name = mEditTextName.getText().toString();
+        String age = mEditTextAge.getText().toString();
+        String city = mEditTextCity.getText().toString();
+        String dailySteps = mEditTextDailySteps.getText().toString();
+
+        intent.putExtra("name", name);
+        intent.putExtra("age", age);
+        intent.putExtra("city", city);
+        intent.putExtra("dailySteps", dailySteps);
+        startActivity(intent);
+        finish();
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
@@ -127,6 +143,8 @@ public class NewUserActivity extends AppCompatActivity {
         }
     }
 
+
+
     public void saveNewUser() {
         String name = mEditTextName.getText().toString();
         String age = mEditTextAge.getText().toString();
@@ -136,22 +154,7 @@ public class NewUserActivity extends AppCompatActivity {
         // Constructing NewUser & PUSH to the database
         NewUser newUser = new NewUser (name, age, city, dailySteps, "", "");
         mDatabaseReference.push().setValue(newUser);
-
-//        mDatabaseReference.child("users").setValue(newUser)
-//                .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                    @Override
-//                    public void onSuccess(Void aVoid) {
-//                        // Write was successful!
-//                        Log.d("Saving", "Saved to the Database!");
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        // Write failed
-//                        Log.d("Not Saving", "Failed to save to the Database!");
-//                    }
-//                });
+        populateEditText();
     }
 
     public void cleanAll() {

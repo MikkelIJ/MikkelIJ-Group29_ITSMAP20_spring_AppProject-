@@ -3,11 +3,14 @@ package com.smap.group29.getmoving.Activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
@@ -34,20 +37,42 @@ public class UserActivity extends AppCompatActivity {
 
     private TextView tv_weatherTemp, tv_weatherDescription;
 
+    // variables for the edit text of NewUser
+    TextView mTextViewName;
+    TextView mTextViewAge;
+    TextView mTextViewCity;
+    TextView mTextTextDailySteps;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-       FirebaseUtil.openFirebaseReference("TheNewRealDeal",this);
+        FirebaseUtil.openFirebaseReference("TheNewRealDeal",this);
 
         tv_weatherTemp = findViewById(R.id.tv_WeatherTemp);
         tv_weatherDescription = findViewById(R.id.tv_Weather);
 
+        populateTextView();
         findWeather();
 
-        Toolbar toolbar = findViewById(R.id.logout_menu);
+    }
+
+    public void populateTextView(){
+        mTextViewName= findViewById(R.id.tv_userName_desc);
+        mTextViewAge = findViewById(R.id.tv_userAge_desc);
+        mTextViewCity = findViewById(R.id.tv_userCity_desc);
+        mTextTextDailySteps = findViewById(R.id.tv_StepsToday_header);
+
+        String name = getIntent().getExtras().getString("name");
+        String age = getIntent().getExtras().getString("age");
+        String city = getIntent().getExtras().getString("city");
+        String dailySteps = getIntent().getExtras().getString("dailySteps");
+
+        mTextViewName.setText(name);
+        mTextViewAge.setText(age);
+        mTextViewCity.setText(city);
+        mTextTextDailySteps.setText(dailySteps);
     }
 
     @Override
