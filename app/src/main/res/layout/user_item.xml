@@ -12,7 +12,7 @@
         android:layout_margin="4dp">
 
         <TextView
-            android:id="@+id/tv_leaderBoardPosition"
+            android:id="@+id/tv_itemRank"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
@@ -24,20 +24,20 @@
             />
 
         <ImageView
-            android:id="@+id/iv_leaderBoardImage"
+            android:id="@+id/iv_itemImage"
             android:layout_width="58dp"
             android:layout_height="match_parent"
             android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/tv_leaderBoardPosition"
+            android:layout_toRightOf="@+id/tv_itemRank"
             android:padding="2dp"
             tools:srcCompat="@tools:sample/avatars[9]" />
 
         <TextView
-            android:id="@+id/tv_leaderboardName"
+            android:id="@+id/tv_itemName"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_toLeftOf="@id/tv_leaderboardSteps"
-            android:layout_toRightOf="@id/iv_leaderBoardImage"
+            android:layout_toLeftOf="@id/tv_itemSteps"
+            android:layout_toRightOf="@id/iv_itemImage"
             android:gravity="center_vertical"
             android:text="Bobby Olsen"
             android:textColor="@android:color/black"
@@ -45,7 +45,7 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/tv_leaderboardSteps"
+            android:id="@+id/tv_itemSteps"
             android:layout_width="70dp"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"

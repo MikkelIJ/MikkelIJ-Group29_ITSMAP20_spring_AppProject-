@@ -208,7 +208,7 @@ public class UserActivity extends AppCompatActivity {
     };
 
     private void initUI(){
-        tv_name               = findViewById(R.id.tv_leaderBoardPosition);
+        tv_name               = findViewById(R.id.tv_itemRank);
         tv_age                = findViewById(R.id.tv_userAge);
         tv_city               = findViewById(R.id.tv_userCity);
         tv_weatherTemp        = findViewById(R.id.tv_WeatherTemp);

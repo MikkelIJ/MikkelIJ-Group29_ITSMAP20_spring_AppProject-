@@ -7,19 +7,37 @@ public class User {
     private String name;
     private String age;
     private String city;
-    private String steps;
-    private String mUid;
+    private String dailysteps;
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    private String password;
+    private String email;
 
     private List<User> dummyData = new ArrayList<User>();
 
     public User() {
     }
 
-    public User(String name, String age, String city, String steps) {
+    public User(String name, String age, String city, String dailysteps) {
         this.name = name;
         this.age = age;
         this.city = city;
-        this.steps = steps;
+        this.dailysteps = dailysteps;
     }
 
     public String getName() {
@@ -34,8 +52,8 @@ public class User {
         return city;
     }
 
-    public String getSteps() {
-        return steps;
+    public String getDailysteps() {
+        return dailysteps;
     }
 
     public void setName(String name) {
@@ -50,16 +68,8 @@ public class User {
         this.city = city;
     }
 
-    public void setSteps(String steps) {
-        this.steps = steps;
+    public void setDailysteps(String dailysteps) {
+        this.dailysteps = dailysteps;
     }
 
-
-    public String getmUid() {
-        return mUid;
-    }
-
-    public void setmUid(String mUid) {
-        this.mUid = mUid;
-    }
 }

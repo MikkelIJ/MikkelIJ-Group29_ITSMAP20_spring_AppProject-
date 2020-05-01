@@ -1,6 +1,6 @@
 package com.smap.group29.getmoving.adaptor;
 
-import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,63 +10,49 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.smap.group29.getmoving.R;
 import com.smap.group29.getmoving.model.User;
 
-import java.util.List;
 
-import static com.smap.group29.getmoving.R.drawable.noimage;
+public class LeaderboardAdaptor extends FirestoreRecyclerAdapter<User, LeaderboardAdaptor.UserHolder> {
 
-public class LeaderboardAdaptor extends RecyclerView.Adapter<LeaderboardAdaptor.MyViewHolder>{
 
-    private List<User> mUserList;
-    private Context mContext;
-
-    public LeaderboardAdaptor(List<User> mUserList, Context mContext) {
-        this.mUserList = mUserList;
-        this.mContext = mContext;
+    public LeaderboardAdaptor(@NonNull FirestoreRecyclerOptions<User> options) {
+        super(options);
     }
 
-
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
-
-        ImageView iv_userImage;
-        TextView tv_user_name;
-        TextView tv_user_steps;
-        TextView tv_user_rank;
-
-        public MyViewHolder(@NonNull View itemView) {
-            super(itemView);
-
-            iv_userImage  = itemView.findViewById(R.id.iv_leaderBoardImage);
-            tv_user_name  = itemView.findViewById(R.id.tv_leaderboardName);
-            tv_user_steps = itemView.findViewById(R.id.tv_leaderboardSteps);
-            tv_user_rank  = itemView.findViewById(R.id.tv_leaderBoardPosition);
-        }
-
+    @Override
+    protected void onBindViewHolder(@NonNull UserHolder holder, int position, @NonNull User model) {
+        holder.tv_userRank.setText("1"); // + 1 to remove 0
+        holder.tv_userName.setText(model.getName());
+        holder.tv_userSteps.setText(model.getDailysteps());
+        Log.v("user",position + " " + model.getName() + " " + model.getDailysteps());
 
     }
 
     @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public UserHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_item,parent,false);
-        MyViewHolder myViewHolder = new MyViewHolder(v);
-
-        return myViewHolder;
+        return new UserHolder(v);
     }
 
-    @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+    class UserHolder extends RecyclerView.ViewHolder {
 
-        User currentUser = mUserList.get(position);
-        holder.tv_user_name.setText(currentUser.getName());
-        holder.tv_user_steps.setText(currentUser.getSteps());
-        holder.tv_user_rank.setText(String.valueOf(position+1));
-    }
+        TextView tv_userRank;
+        TextView tv_userName;
+        TextView tv_userSteps;
+        ImageView iv_userImage;
 
-    @Override
-    public int getItemCount() {
-        return mUserList != null ? mUserList.size() : 0;
+        public UserHolder(@NonNull View itemView) {
+            super(itemView);
+
+            tv_userRank = itemView.findViewById(R.id.tv_itemRank);
+            tv_userName = itemView.findViewById(R.id.tv_itemName);
+            tv_userSteps = itemView.findViewById(R.id.tv_itemSteps);
+            iv_userImage = itemView.findViewById(R.id.iv_itemImage);
+        }
     }
 }
