@@ -11,11 +11,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.smap.group29.getmoving.adaptor.LeaderboardAdaptor;
 import com.smap.group29.getmoving.model.User;
+import com.smap.group29.getmoving.utils.DummyData;
 
+import java.util.ArrayList;
 import java.util.List;
 
+// Firebase recyclerview inspired by https://github.com/firebase/FirebaseUI-Android/blob/master/database/README.md#using-the-firebaserecycleradapter
 public class LeaderboardActivity extends AppCompatActivity {
 
     private Button btn_back;
@@ -23,17 +31,25 @@ public class LeaderboardActivity extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
 
-    private List <User> mUserList;
+    private List <User> mUserList = new ArrayList<>();
+    private List <User> mUserList2 = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leaderboard);
+
+        mUserList.addAll(DummyData.getUsers());
+
         initUI();
         initRecyclerView();
         setUI();
 
+
     }
+
+
+
 
 
 

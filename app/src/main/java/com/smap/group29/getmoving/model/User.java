@@ -1,10 +1,16 @@
 package com.smap.group29.getmoving.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class User {
     private String name;
     private String age;
     private String city;
     private String steps;
+    private String mUid;
+
+    private List<User> dummyData = new ArrayList<User>();
 
     public User() {
     }
@@ -46,5 +52,14 @@ public class User {
 
     public void setSteps(String steps) {
         this.steps = steps;
+    }
+
+
+    public String getmUid() {
+        return mUid;
+    }
+
+    public void setmUid(String mUid) {
+        this.mUid = mUid;
     }
 }

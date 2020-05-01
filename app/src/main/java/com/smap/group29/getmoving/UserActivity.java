@@ -131,7 +131,7 @@ public class UserActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        uploadUserID();
+        //uploadUserID();
     }
 
     private void uploadUserID(){

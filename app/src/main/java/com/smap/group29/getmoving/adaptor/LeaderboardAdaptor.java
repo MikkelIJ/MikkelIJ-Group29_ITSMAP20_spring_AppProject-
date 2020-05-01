@@ -33,13 +33,15 @@ public class LeaderboardAdaptor extends RecyclerView.Adapter<LeaderboardAdaptor.
         ImageView iv_userImage;
         TextView tv_user_name;
         TextView tv_user_steps;
+        TextView tv_user_rank;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            iv_userImage = itemView.findViewById(R.id.iv_leaderBoardImage);
-            tv_user_name = itemView.findViewById(R.id.tv_leaderboardName);
+            iv_userImage  = itemView.findViewById(R.id.iv_leaderBoardImage);
+            tv_user_name  = itemView.findViewById(R.id.tv_leaderboardName);
             tv_user_steps = itemView.findViewById(R.id.tv_leaderboardSteps);
+            tv_user_rank  = itemView.findViewById(R.id.tv_leaderBoardPosition);
         }
 
 
@@ -56,9 +58,11 @@ public class LeaderboardAdaptor extends RecyclerView.Adapter<LeaderboardAdaptor.
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+
         User currentUser = mUserList.get(position);
-        holder.tv_user_name.setText("Bobby");
-        holder.tv_user_steps.setText("100000");
+        holder.tv_user_name.setText(currentUser.getName());
+        holder.tv_user_steps.setText(currentUser.getSteps());
+        holder.tv_user_rank.setText(String.valueOf(position+1));
     }
 
     @Override
