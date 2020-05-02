@@ -11,7 +11,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.smap.group29.getmoving.Models.NewUser;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -25,6 +27,8 @@ public class FirebaseUtil {
     public static FirebaseStorage mFirebaseStorage;
     public static StorageReference mStorageReference;
 
+    public static ArrayList<NewUser> mNewUsers;
+
     private static Activity caller;
 
     public FirebaseUtil(){}
@@ -33,6 +37,7 @@ public class FirebaseUtil {
         if (firebaseUtil == null){
             firebaseUtil = new FirebaseUtil();
             mFirebaseDatabase = FirebaseDatabase.getInstance();
+            mNewUsers = new ArrayList<NewUser>();
             mFirebaseAuth = FirebaseAuth.getInstance();
             caller = callerActivity;
 
