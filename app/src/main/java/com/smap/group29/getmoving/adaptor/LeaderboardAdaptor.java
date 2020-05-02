@@ -25,18 +25,20 @@ public class LeaderboardAdaptor extends FirestoreRecyclerAdapter<User, Leaderboa
 
     @Override
     protected void onBindViewHolder(@NonNull UserHolder holder, int position, @NonNull User model) {
-        holder.tv_userRank.setText("1"); // + 1 to remove 0
+        holder.tv_userRank.setText(String.valueOf(position+1)); // + 1 to remove 0
         holder.tv_userName.setText(model.getName());
         holder.tv_userSteps.setText(model.getDailysteps());
-        Log.v("user",position + " " + model.getName() + " " + model.getDailysteps());
+        Log.v("user",String.valueOf(position+1) + " " + model.getName() + " " + model.getDailysteps());
 
     }
 
     @NonNull
     @Override
     public UserHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_item,parent,false);
         return new UserHolder(v);
+
     }
 
     class UserHolder extends RecyclerView.ViewHolder {

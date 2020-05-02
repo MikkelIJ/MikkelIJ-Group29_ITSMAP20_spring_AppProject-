@@ -8,6 +8,19 @@ public class User {
     private String age;
     private String city;
     private String dailysteps;
+    private String password;
+    private String email;
+
+
+    public User() {
+    }
+
+    public User(String name, String age, String city, String dailysteps) {
+        this.name = name;
+        this.age = age;
+        this.city = city;
+        this.dailysteps = dailysteps;
+    }
 
     public String getPassword() {
         return password;
@@ -23,21 +36,6 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    private String password;
-    private String email;
-
-    private List<User> dummyData = new ArrayList<User>();
-
-    public User() {
-    }
-
-    public User(String name, String age, String city, String dailysteps) {
-        this.name = name;
-        this.age = age;
-        this.city = city;
-        this.dailysteps = dailysteps;
     }
 
     public String getName() {

@@ -49,7 +49,7 @@ public class LeaderboardActivity extends AppCompatActivity {
 
     private void setupRecyclerView() {
         RecyclerView mRecyclerView = findViewById(R.id.rv_leaderboard);
-        Query query = userRef.orderBy("age",Query.Direction.DESCENDING);
+        Query query = userRef.orderBy("name",Query.Direction.DESCENDING);
         FirestoreRecyclerOptions<User> mOptions = new FirestoreRecyclerOptions.Builder<User>().setQuery(query,User.class).build();
 
         mAdaptor = new LeaderboardAdaptor(mOptions);
