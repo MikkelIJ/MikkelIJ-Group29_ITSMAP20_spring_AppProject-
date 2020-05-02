@@ -3,7 +3,7 @@ package com.smap.group29.getmoving.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class User {
+public class NewUser {
     private String name;
     private String age;
     private String city;
@@ -12,10 +12,10 @@ public class User {
     private String email;
 
 
-    public User() {
+    public NewUser() {
     }
 
-    public User(String name, String age, String city, String dailysteps) {
+    public NewUser(String name, String age, String city, String dailysteps) {
         this.name = name;
         this.age = age;
         this.city = city;

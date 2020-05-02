@@ -12,13 +12,11 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -32,15 +30,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.smap.group29.getmoving.model.User;
-import com.squareup.picasso.Picasso;
 
-import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
 public class NewUserActivity extends AppCompatActivity {
-    //Newuser and Useractivity is inspired by https://www.youtube.com/playlist?list=PLlGT4GXi8_8dDK5Y3KCxuKAPpil9V49rN
+    //Newuser and Useractivity is inspired by  https://www.youtube.com/playlist?list=PLlGT4GXi8_8dDK5Y3KCxuKAPpil9V49rN
 
     public static final String TAG = "TAG";
     private FirebaseAuth mAuth;

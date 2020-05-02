@@ -13,10 +13,11 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.smap.group29.getmoving.adaptor.LeaderboardAdaptor;
-import com.smap.group29.getmoving.model.User;
+import com.smap.group29.getmoving.model.NewUser;
 
 
 // Firebase recyclerview inspired by https://github.com/firebase/FirebaseUI-Android/blob/master/database/README.md#using-the-firebaserecycleradapter
+// and https://codinginflow.com/tutorials/android/firebaseui-firestorerecycleradapter/part-4-new-note-activity
 public class LeaderboardActivity extends AppCompatActivity {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -49,8 +50,10 @@ public class LeaderboardActivity extends AppCompatActivity {
 
     private void setupRecyclerView() {
         RecyclerView mRecyclerView = findViewById(R.id.rv_leaderboard);
-        Query query = userRef.orderBy("name",Query.Direction.DESCENDING);
-        FirestoreRecyclerOptions<User> mOptions = new FirestoreRecyclerOptions.Builder<User>().setQuery(query,User.class).build();
+        Query query = userRef.orderBy("email",Query.Direction.DESCENDING);
+        FirestoreRecyclerOptions.Builder<NewUser> userBuilder = new FirestoreRecyclerOptions.Builder<>();
+        userBuilder.setQuery(query, NewUser.class);
+        FirestoreRecyclerOptions<NewUser> mOptions = userBuilder.build();
 
         mAdaptor = new LeaderboardAdaptor(mOptions);
         mRecyclerView.setHasFixedSize(true);

@@ -12,19 +12,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.smap.group29.getmoving.R;
-import com.smap.group29.getmoving.model.User;
+import com.smap.group29.getmoving.model.NewUser;
 
 
-public class LeaderboardAdaptor extends FirestoreRecyclerAdapter<User, LeaderboardAdaptor.UserHolder> {
+public class LeaderboardAdaptor extends FirestoreRecyclerAdapter<NewUser, LeaderboardAdaptor.UserHolder> {
 
 
-    public LeaderboardAdaptor(@NonNull FirestoreRecyclerOptions<User> options) {
+    public LeaderboardAdaptor(@NonNull FirestoreRecyclerOptions<NewUser> options) {
         super(options);
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull UserHolder holder, int position, @NonNull User model) {
+    protected void onBindViewHolder(@NonNull UserHolder holder, int position, @NonNull NewUser model) {
         holder.tv_userRank.setText(String.valueOf(position+1)); // + 1 to remove 0
         holder.tv_userName.setText(model.getName());
         holder.tv_userSteps.setText(model.getDailysteps());
@@ -41,6 +42,11 @@ public class LeaderboardAdaptor extends FirestoreRecyclerAdapter<User, Leaderboa
 
     }
 
+    @Override
+    public void onError(@NonNull FirebaseFirestoreException e) {
+        Log.v("user_error",e.getMessage());
+    }
+
     class UserHolder extends RecyclerView.ViewHolder {
 
         TextView tv_userRank;
@@ -48,7 +54,7 @@ public class LeaderboardAdaptor extends FirestoreRecyclerAdapter<User, Leaderboa
         TextView tv_userSteps;
         ImageView iv_userImage;
 
-        public UserHolder(@NonNull View itemView) {
+        public UserHolder( View itemView) {
             super(itemView);
 
             tv_userRank = itemView.findViewById(R.id.tv_itemRank);
