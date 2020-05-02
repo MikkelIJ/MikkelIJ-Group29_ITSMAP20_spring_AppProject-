@@ -10,7 +10,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 //import com.firebase.ui.auth.data.model.User;
-import com.smap.group29.getmoving.UserActivity;
+import com.smap.group29.getmoving.activities.UserActivity;
 import com.smap.group29.getmoving.utils.WeatherJsonParser;
 
 import java.util.ArrayList;

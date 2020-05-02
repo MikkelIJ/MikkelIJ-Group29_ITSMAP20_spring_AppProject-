@@ -30,11 +30,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.smap.group29.getmoving.activities.UserActivity;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class NewUserActivity extends AppCompatActivity {
+public class NewUserActivity_m extends AppCompatActivity {
     //Newuser and Useractivity is inspired by  https://www.youtube.com/playlist?list=PLlGT4GXi8_8dDK5Y3KCxuKAPpil9V49rN
 
     public static final String TAG = "TAG";
@@ -106,7 +107,7 @@ public class NewUserActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
-                            Toast.makeText(NewUserActivity.this, "User Created", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(NewUserActivity_m.this, "User Created", Toast.LENGTH_SHORT).show();
                             //getting the id of the currently logged in user
                             userID = mAuth.getCurrentUser().getUid();
                             //creating new document and storing the data with hashmap
@@ -134,7 +135,7 @@ public class NewUserActivity extends AppCompatActivity {
                             startActivity(new Intent(getApplicationContext(), UserActivity.class));
                             finish();
                         }else{
-                            Toast.makeText(NewUserActivity.this, "Error: " + task.getException().getMessage(),Toast.LENGTH_SHORT).show();
+                            Toast.makeText(NewUserActivity_m.this, "Error: " + task.getException().getMessage(),Toast.LENGTH_SHORT).show();
                             progressBar.setVisibility(View.VISIBLE);
                         }
                     }
@@ -167,13 +168,13 @@ public class NewUserActivity extends AppCompatActivity {
         fileRef.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Toast.makeText(NewUserActivity.this, "Image uploaded", Toast.LENGTH_SHORT);
+                Toast.makeText(NewUserActivity_m.this, "Image uploaded", Toast.LENGTH_SHORT);
 
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(NewUserActivity.this, "Failed to upload image", Toast.LENGTH_SHORT);
+                Toast.makeText(NewUserActivity_m.this, "Failed to upload image", Toast.LENGTH_SHORT);
             }
         });
     }

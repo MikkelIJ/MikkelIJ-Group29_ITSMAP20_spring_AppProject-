@@ -25,13 +25,12 @@
         android:name=".service.GetMovingService"
         android:exported="false"
         />
-        <activity android:name=".NewUserActivity"/>
-        <activity android:name=".LeaderboardActivity"/>
-        <activity android:name=".UserActivity"/>
-    <activity android:name=".LoginActivity">
+        <activity android:name=".NewUserActivity_m"/>
+        <activity android:name=".activities.LeaderboardActivity"/>
+        <activity android:name=".activities.UserActivity"/>
+    <activity android:name=".activities.NewUserActivity">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
-
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
     </activity>

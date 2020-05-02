@@ -3,9 +3,6 @@ package com.smap.group29.getmoving;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -20,6 +17,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.smap.group29.getmoving.activities.UserActivity;
 
 public class LoginActivity extends AppCompatActivity{
 
@@ -40,7 +38,7 @@ public class LoginActivity extends AppCompatActivity{
         setContentView(R.layout.activity_login);
         mAuth = FirebaseAuth.getInstance();
         initUI();
-        Intent newAccountIntent = new Intent(this,NewUserActivity.class);
+        Intent newAccountIntent = new Intent(this, NewUserActivity_m.class);
         setUI();
 
 
@@ -106,7 +104,7 @@ public class LoginActivity extends AppCompatActivity{
         tv_createUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, NewUserActivity.class);
+                Intent intent = new Intent(LoginActivity.this, NewUserActivity_m.class);
                 startActivity(intent);
 
 

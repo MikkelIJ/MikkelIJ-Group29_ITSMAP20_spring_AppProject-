@@ -1,4 +1,4 @@
-package com.smap.group29.getmoving;
+package com.smap.group29.getmoving.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -28,6 +28,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.smap.group29.getmoving.LoginActivity;
+import com.smap.group29.getmoving.R;
 import com.smap.group29.getmoving.service.GetMovingService;
 import com.smap.group29.getmoving.service.GetMovingService.LocalBinder;
 import com.smap.group29.getmoving.service.OpenWeatherAPI;
@@ -118,7 +120,7 @@ public class UserActivity extends AppCompatActivity {
         btn_leaderboard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(UserActivity.this,LeaderboardActivity.class);
+                Intent intent = new Intent(UserActivity.this, LeaderboardActivity.class);
                 startActivity(intent);
             }
         });
@@ -141,7 +143,7 @@ public class UserActivity extends AppCompatActivity {
 
     public void logout(){
         FirebaseAuth.getInstance().signOut();
-        startActivity(new Intent(getApplicationContext(),LoginActivity.class));
+        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
         finish();
 
     }
@@ -156,8 +158,8 @@ public class UserActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        unbindService(serviceConnection);
-        mBound = false;
+        //unbindService(serviceConnection);
+        //mBound = false;
 
 
     }
@@ -165,8 +167,14 @@ public class UserActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        bindService(stepIntent,serviceConnection,Context.BIND_AUTO_CREATE);
-        mBound = true;
+        //bindService(stepIntent,serviceConnection,Context.BIND_AUTO_CREATE);
+        //mBound = true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unbindService(serviceConnection);
     }
 
     private void initService(){

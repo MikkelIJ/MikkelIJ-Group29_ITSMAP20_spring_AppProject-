@@ -8,16 +8,36 @@ public class NewUser {
     private String liveSteps;
     private String password;
     private String email;
+    private String imageUrl;
+    private String imageName;
 
 
     public NewUser() {
     }
 
-    public NewUser(String name, String age, String city, String dailysteps) {
+    public NewUser(String name, String age, String city, String dailysteps, String imageurl, String imagename) {
         this.name = name;
         this.age = age;
         this.city = city;
         this.dailysteps = dailysteps;
+        this.imageUrl = imageurl;
+        this.imageName = imagename;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
     }
 
     public String getLiveSteps() {

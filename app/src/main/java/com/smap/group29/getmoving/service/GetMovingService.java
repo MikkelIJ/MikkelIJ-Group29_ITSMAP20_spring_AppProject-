@@ -2,7 +2,6 @@ package com.smap.group29.getmoving.service;
 
 import android.app.Service;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
@@ -17,10 +16,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-import com.smap.group29.getmoving.NewUserActivity;
 
 import java.util.HashMap;
 import java.util.Map;
