@@ -64,20 +64,18 @@ public class NewUserActivity extends AppCompatActivity {
         mEditTextAge = findViewById(R.id.et_age);
         mEditTextCity = findViewById(R.id.et_city);
         mEditTextDailySteps = findViewById(R.id.et_dailygoal);
+        mImageView = findViewById(R.id.iv_createnewuser);
 
-//        populateEditText();
-//        mImageView = findViewById(R.id.iv_createnewuser);
-
-//        mButtonAddImage = findViewById(R.id.btn_addPhoto);
-//        mButtonAddImage.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent  = new Intent(Intent.ACTION_GET_CONTENT);
-//                intent.setType("image/jpeg");
-//                intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true );
-//                startActivityForResult(intent.createChooser(intent, "Insert Image"), PICTURE_RESULT);
-//            }
-//        });
+        mButtonAddImage = findViewById(R.id.btn_addPhoto);
+        mButtonAddImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent  = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/jpeg");
+                intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true );
+                startActivityForResult(intent.createChooser(intent, "Insert Image"), PICTURE_RESULT);
+            }
+        });
     }
 
     public void populateEditText(){
@@ -95,7 +93,6 @@ public class NewUserActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
@@ -142,8 +139,6 @@ public class NewUserActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-
-
 
     public void saveNewUser() {
         String name = mEditTextName.getText().toString();
