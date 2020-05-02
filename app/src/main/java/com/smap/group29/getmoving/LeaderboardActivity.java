@@ -1,13 +1,20 @@
 package com.smap.group29.getmoving;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -21,9 +28,14 @@ import com.smap.group29.getmoving.model.NewUser;
 public class LeaderboardActivity extends AppCompatActivity {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference userRef = db.collection("KspUsers");
+    private CollectionReference dbRef = db.collection("KspUsers");
 
-    private LeaderboardAdaptor mAdaptor;
+    private LeaderboardAdaptor mAdapter;
+
+    private RecyclerView mUserList;
+    //private FirestoreRecyclerAdapter adapter;
+
+
     private Button btn_back;
 
     @Override
@@ -39,29 +51,27 @@ public class LeaderboardActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        mAdaptor.startListening();
+        mAdapter.startListening();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        mAdaptor.stopListening();
+        mAdapter.stopListening();
     }
 
     private void setupRecyclerView() {
-        RecyclerView mRecyclerView = findViewById(R.id.rv_leaderboard);
-        Query query = userRef.orderBy("email",Query.Direction.DESCENDING);
-        FirestoreRecyclerOptions.Builder<NewUser> userBuilder = new FirestoreRecyclerOptions.Builder<>();
-        userBuilder.setQuery(query, NewUser.class);
-        FirestoreRecyclerOptions<NewUser> mOptions = userBuilder.build();
 
-        mAdaptor = new LeaderboardAdaptor(mOptions);
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerView.setAdapter(mAdaptor);
+        mUserList = findViewById(R.id.rv_leaderboard);
+        Query query = dbRef.orderBy("dailysteps",Query.Direction.DESCENDING);
+        FirestoreRecyclerOptions<NewUser> mOptions = new FirestoreRecyclerOptions.Builder<NewUser>().setQuery(query, NewUser.class).build();
+
+        mAdapter = new LeaderboardAdaptor(mOptions);
+
+        mUserList.setHasFixedSize(true);
+        mUserList.setLayoutManager(new LinearLayoutManager(this));
+        mUserList.setAdapter(mAdapter);
     }
-
-
 
     private void initUI() {
         btn_back = findViewById(R.id.btn_leaderboardBack);
@@ -76,3 +86,4 @@ public class LeaderboardActivity extends AppCompatActivity {
         });
     }
 }
+

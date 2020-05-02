@@ -1,13 +1,11 @@
 package com.smap.group29.getmoving.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class NewUser {
     private String name;
     private String age;
     private String city;
     private String dailysteps;
+    private String liveSteps;
     private String password;
     private String email;
 
@@ -20,6 +18,14 @@ public class NewUser {
         this.age = age;
         this.city = city;
         this.dailysteps = dailysteps;
+    }
+
+    public String getLiveSteps() {
+        return liveSteps;
+    }
+
+    public void setLiveSteps(String liveSteps) {
+        this.liveSteps = liveSteps;
     }
 
     public String getPassword() {

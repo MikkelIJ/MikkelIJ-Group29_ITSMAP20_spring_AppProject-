@@ -13,11 +13,17 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.smap.group29.getmoving.NewUserActivity;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class GetMovingService extends Service {
 
@@ -28,6 +34,11 @@ public class GetMovingService extends Service {
 
     private StepCounter mStepCounter;
     private OpenWeatherAPI mOpenWeatherAPI;
+
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore mStore;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference dbRef = db.collection("KspUsers");
 
     // check service running
      boolean mBound = false;
@@ -65,6 +76,9 @@ public class GetMovingService extends Service {
         mHandler.removeCallbacks(updateBroadcastData);
         mHandler.post(updateBroadcastData);
 
+        mAuth = FirebaseAuth.getInstance();
+        mStore = FirebaseFirestore.getInstance();
+
         mBound = true;
     }
 
@@ -88,10 +102,33 @@ public class GetMovingService extends Service {
             // only allow if stepcounterservice is active
             if (mBound){
                 broadcastSteps();
+                updateDailySteps();
                 mHandler.postDelayed(this,1000);
             }
         }
     };
+
+    public void updateDailySteps(){
+
+        String userID = mAuth.getCurrentUser().getUid();
+        //creating new document and storing the data with hashmap
+        DocumentReference documentReference = mStore.collection("KspUsers").document(userID);
+
+        Map<String,Object> steps = new HashMap<>();
+        steps.put("dailysteps", String.valueOf(mStepCounter.getSteps()));
+        dbRef.document(userID).update(steps).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Toast.makeText(GetMovingService.this, "steps updated" + mStepCounter.getSteps(),Toast.LENGTH_SHORT).show();
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.v("updatesteps",e.getMessage());
+            }
+        });
+    }
 
 
     private void broadcastSteps(){

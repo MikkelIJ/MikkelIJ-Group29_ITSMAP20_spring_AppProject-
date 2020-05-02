@@ -75,10 +75,6 @@ public class UserActivity extends AppCompatActivity {
         storageReference = FirebaseStorage.getInstance().getReference();
 
 
-
-
-
-
         //setting up the data from firebase user
         DocumentReference documentReference = mStore.collection("KspUsers").document(userID);
         documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
@@ -91,7 +87,7 @@ public class UserActivity extends AppCompatActivity {
                     tv_name.setText(documentSnapshot.getString("name"));
                     tv_age.setText(documentSnapshot.getString("age"));
                     tv_city.setText(documentSnapshot.getString("city"));
-                    et_dailyGoal.setText(documentSnapshot.getString("dailysteps"));
+                    //et_dailyGoal.setText(documentSnapshot.getString("dailysteps"));
                 }
             }
         });
