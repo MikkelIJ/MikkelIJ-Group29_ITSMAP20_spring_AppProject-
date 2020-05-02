@@ -4,9 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -21,13 +18,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.smap.group29.getmoving.Activities.NewUserActivity;
-import com.smap.group29.getmoving.Activities.UserActivity;
+import com.smap.group29.getmoving.activities.NewUserActivity;
+import com.smap.group29.getmoving.activities.UserActivity;
 import com.smap.group29.getmoving.Utils.FirebaseUtil;
 
 public class LoginActivity extends AppCompatActivity{
@@ -129,22 +125,4 @@ public class LoginActivity extends AppCompatActivity{
         });
     }
 
-    public static void openFirebaseReference(String ref, final Activity callerActivity){
-        if (firebaseUtil == null){
-            firebaseUtil = new FirebaseUtil();
-            mFirebaseDatabase = FirebaseDatabase.getInstance();
-            mFirebaseAuth = FirebaseAuth.getInstance();
-            caller = callerActivity;
-
-            mAuthStateListener = new FirebaseAuth.AuthStateListener() {
-                @Override
-                public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                    // check if the user is logged in else don't need to
-                    if (firebaseAuth.getInstance().getCurrentUser() == null ){ FirebaseUtil.signIn(); }
-                    Toast.makeText(callerActivity.getBaseContext(), "Welcome back!", Toast.LENGTH_LONG).show();
-                }
-            };
-        }
-        mDatabaseReference = mFirebaseDatabase.getReference().child(ref);
-    }
 }
