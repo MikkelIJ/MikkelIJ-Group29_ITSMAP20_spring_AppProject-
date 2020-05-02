@@ -1,5 +1,7 @@
 package com.smap.group29.getmoving;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,6 +23,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.smap.group29.getmoving.adaptor.LeaderboardAdaptor;
 import com.smap.group29.getmoving.model.NewUser;
+import com.smap.group29.getmoving.service.GetMovingService;
 
 
 // Firebase recyclerview inspired by https://github.com/firebase/FirebaseUI-Android/blob/master/database/README.md#using-the-firebaserecycleradapter
@@ -35,7 +38,7 @@ public class LeaderboardActivity extends AppCompatActivity {
     private RecyclerView mUserList;
     //private FirestoreRecyclerAdapter adapter;
 
-
+    private Intent stepIntent;
     private Button btn_back;
 
     @Override
@@ -59,6 +62,7 @@ public class LeaderboardActivity extends AppCompatActivity {
         super.onStop();
         mAdapter.stopListening();
     }
+
 
     private void setupRecyclerView() {
 
