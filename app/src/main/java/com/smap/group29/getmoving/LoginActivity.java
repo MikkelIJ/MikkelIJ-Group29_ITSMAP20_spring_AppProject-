@@ -111,7 +111,7 @@ public class LoginActivity extends AppCompatActivity{
         try {
             account = completedTask.getResult(ApiException.class);
 
-            Intent intent = new Intent(LoginActivity.this,UserActivity.class);
+            Intent intent = new Intent(LoginActivity.this,NewUserActivity.class);
             startActivity(intent);
             // Signed in successfully, show authenticated UI.
             //updateUI(account);
@@ -119,8 +119,7 @@ public class LoginActivity extends AppCompatActivity{
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
-            Intent intent = new Intent(LoginActivity.this,UserActivity.class);
-            startActivity(intent);
+            Toast.makeText(this,"Login failed",Toast.LENGTH_LONG).show();
         }
     }
 
