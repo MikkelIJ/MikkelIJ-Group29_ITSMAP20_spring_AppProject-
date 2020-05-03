@@ -1,4 +1,4 @@
-package com.smap.group29.getmoving.service;
+package com.smap.group29.getmoving.sensor;
 
 import android.content.Context;
 import android.hardware.Sensor;
@@ -6,6 +6,8 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.util.Log;
+
+import com.smap.group29.getmoving.service.GetMovingService;
 
 public class StepCounter implements SensorEventListener {
 
@@ -49,6 +51,6 @@ public class StepCounter implements SensorEventListener {
     public int getSteps(){
         Log.v("getSteps",String.valueOf(stepsCounted));
         Log.v("getAccel",String.valueOf(accelerometer));
-        return (int) accelerometer;
+        return (int) stepsCounted;
     }
 }

@@ -1,4 +1,4 @@
-package com.smap.group29.getmoving.service;
+package com.smap.group29.getmoving.onlineAPI;
 
 import android.content.Intent;
 import android.util.Log;
@@ -10,7 +10,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 //import com.firebase.ui.auth.data.model.User;
-import com.smap.group29.getmoving.UserActivity;
+import com.smap.group29.getmoving.activities.UserActivity;
+import com.smap.group29.getmoving.service.GetMovingService;
 import com.smap.group29.getmoving.utils.WeatherJsonParser;
 
 import java.util.ArrayList;

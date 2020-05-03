@@ -1,4 +1,4 @@
-package com.smap.group29.getmoving;
+package com.smap.group29.getmoving.activities;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,6 +30,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.smap.group29.getmoving.R;
 import com.smap.group29.getmoving.utils.GlobalConstants;
 
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package com.smap.group29.getmoving;
+package com.smap.group29.getmoving.activities;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -24,6 +24,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.smap.group29.getmoving.R;
 import com.smap.group29.getmoving.adaptor.LeaderboardAdaptor;
 import com.smap.group29.getmoving.model.NewUser;
 import com.smap.group29.getmoving.service.GetMovingService;

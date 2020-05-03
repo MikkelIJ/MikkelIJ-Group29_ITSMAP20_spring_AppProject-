@@ -1,5 +1,6 @@
-package com.smap.group29.getmoving;
+package com.smap.group29.getmoving.activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.BroadcastReceiver;
@@ -12,6 +13,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,9 +32,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.smap.group29.getmoving.R;
 import com.smap.group29.getmoving.service.GetMovingService;
 import com.smap.group29.getmoving.service.GetMovingService.LocalBinder;
-import com.smap.group29.getmoving.service.OpenWeatherAPI;
+import com.smap.group29.getmoving.onlineAPI.OpenWeatherAPI;
 import com.smap.group29.getmoving.utils.GlobalConstants;
 import com.squareup.picasso.Picasso;
 
@@ -39,7 +44,7 @@ import java.util.ArrayList;
 import javax.annotation.Nullable;
 
 import static com.smap.group29.getmoving.service.GetMovingService.BROADCAST_ACTION_STEPS;
-import static com.smap.group29.getmoving.service.OpenWeatherAPI.BROADCAST_ACTION_WEATHER;
+import static com.smap.group29.getmoving.onlineAPI.OpenWeatherAPI.BROADCAST_ACTION_WEATHER;
 
 
 public class UserActivity extends AppCompatActivity {
@@ -52,10 +57,9 @@ public class UserActivity extends AppCompatActivity {
 
     private static final String LOGD = "userActivity";
 
-    private Button btn_leaderboard, btn_logout;
-    private ImageButton btn_edit;
+    private Button btn_leaderboard;
     private EditText et_dailyGoal;
-    private TextView tv_name, tv_age, tv_city, tv_weatherTemp,tv_weatherFeelsLike, tv_weatherHumid, tv_weatherDescription, tv_stepsToday, tv_stepsTotal;
+    private TextView tv_name, tv_age, tv_city, tv_weatherTemp,tv_weatherFeelsLike, tv_weatherHumid, tv_weatherDescription, tv_stepsToday, tv_stepsTotal, tv_email;
     private ImageView iv_userPicture, iv_weatherIcon;
 
     private Intent stepIntent;
@@ -64,6 +68,7 @@ public class UserActivity extends AppCompatActivity {
     private boolean mBound = false;
 
     private OpenWeatherAPI mOpenWeatherAPI;
+    private static UserActivity mCurrentInstance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +78,10 @@ public class UserActivity extends AppCompatActivity {
         mStore = FirebaseFirestore.getInstance();
         userID = mAuth.getCurrentUser().getUid();
         storageReference = FirebaseStorage.getInstance().getReference();
+
+
+
+
 
 
         //setting up the data from firebase user
@@ -85,6 +94,7 @@ public class UserActivity extends AppCompatActivity {
                 }else {
 
                     tv_name.setText(documentSnapshot.getString("name"));
+                    tv_email.setText(documentSnapshot.getString("email"));
                     tv_age.setText(documentSnapshot.getString("age"));
                     tv_city.setText(documentSnapshot.getString("city"));
                     et_dailyGoal.setText(documentSnapshot.getString("dailysteps"));
@@ -98,9 +108,7 @@ public class UserActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Uri uri) {
                 Picasso.get().load(uri).into(iv_userPicture);
-
             }
-
         });
 
         initUI();
@@ -108,17 +116,12 @@ public class UserActivity extends AppCompatActivity {
         registerIntentFilters();
         mOpenWeatherAPI = new OpenWeatherAPI(this,2624652);
 
-        btn_logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                logout();
-            }
-        });
+
 
         btn_leaderboard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(UserActivity.this,LeaderboardActivity.class);
+                Intent intent = new Intent(UserActivity.this, LeaderboardActivity.class);
                 startActivity(intent);
             }
         });
@@ -128,9 +131,45 @@ public class UserActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         initService();
-        //uploadUserID();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.logout_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+
+            case R.id.settings:
+                openSettings();
+                break;
+
+
+            case R.id.logout:
+                logout();
+                break;
+
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void openSettings() {
+        Intent intent = new Intent(getApplicationContext(), EditProfileActivity.class);
+        intent.putExtra("name", tv_name.getText().toString());
+        intent.putExtra("age", tv_age.getText().toString());
+        intent.putExtra("city", tv_city.getText().toString());
+        intent.putExtra("steps", et_dailyGoal.getText().toString());
+        intent.putExtra("email", tv_email.getText().toString());
+
+        startActivity(intent);
+    }
+
+    /*
     private void uploadUserID(){
         //upload userId to storage for gloabel access to fetch users for leaderboard
         StorageReference fileRef = storageReference.child("userlist/");
@@ -140,27 +179,22 @@ public class UserActivity extends AppCompatActivity {
         fileRef.putFile(userUri);
     }
 
+ */
+
     public void logout(){
         FirebaseAuth.getInstance().signOut();
-        unbindService(serviceConnection);
-        mBound = false;
-        startActivity(new Intent(getApplicationContext(),LoginActivity.class));
+        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
         finish();
 
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        MenuInflater inflater = getMenuInflater();
-//        inflater.inflate(R.menu);
-//        return true;
-//    }
 
     @Override
     protected void onStop() {
         super.onStop();
         unbindService(serviceConnection);
         mBound = false;
+
     }
 
     @Override
@@ -214,7 +248,7 @@ public class UserActivity extends AppCompatActivity {
     };
 
     private void initUI(){
-        tv_name               = findViewById(R.id.tv_itemRank);
+        tv_name               = findViewById(R.id.tv_userActivityName);
         tv_age                = findViewById(R.id.tv_userAge);
         tv_city               = findViewById(R.id.tv_userCity);
         tv_weatherTemp        = findViewById(R.id.tv_WeatherTemp);
@@ -226,18 +260,13 @@ public class UserActivity extends AppCompatActivity {
         et_dailyGoal          = findViewById(R.id.et_dailygoal);
         iv_userPicture        = findViewById(R.id.iv_userProfilePic);
         iv_weatherIcon        = findViewById(R.id.iv_weatherIcon);
-        btn_edit              = findViewById(R.id.btn_userEdit);
         btn_leaderboard       = findViewById(R.id.btn_user_leaderboard);
-        btn_logout            = findViewById(R.id.btn_logout);
+        tv_email              = findViewById(R.id.tv_userEmail);
 
 
 
-        btn_edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-            }
-        });
+
     }
 
 

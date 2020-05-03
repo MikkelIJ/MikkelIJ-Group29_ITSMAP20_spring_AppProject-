@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.smap.group29.getmoving">
-
-    <!-- sets permissions-->
-    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION"/>
+    <!-- sets permissions -->
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <!-- Hardware Feature Required for Step Counter to function -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- Hardware Feature Required for Step Counter to function -->
     <uses-feature
         android:name="android.hardware.sensor.stepcounter"
         android:required="true" />
-
-
-
 
     <application
         android:allowBackup="true"
@@ -21,22 +16,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".activities.EditProfileActivity"></activity>
+
         <service
-        android:name=".service.GetMovingService"
-        android:exported="false"
-        />
-        <activity android:name=".NewUserActivity"/>
-        <activity android:name=".LeaderboardActivity"/>
-        <activity android:name=".UserActivity"/>
-    <activity android:name=".LoginActivity">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+            android:name=".service.GetMovingService"
+            android:exported="false" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-    </activity>
-</application>
+        <activity android:name=".activities.NewUserActivity" />
+        <activity android:name=".activities.LeaderboardActivity" />
+        <activity android:name=".activities.UserActivity" />
+        <activity android:name=".activities.LoginActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
 
 </manifest>
