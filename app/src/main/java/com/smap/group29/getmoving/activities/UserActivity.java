@@ -103,7 +103,7 @@ public class UserActivity extends AppCompatActivity {
         });
 
         //loading the picture from firebase into imageview
-        final StorageReference imgProfile = storageReference.child("users/profile.jpg");
+        final StorageReference imgProfile = storageReference.child("users/"+mAuth.getUid()+"profile.jpg");
         imgProfile.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
@@ -289,7 +289,7 @@ public class UserActivity extends AppCompatActivity {
             tv_weatherFeelsLike.setText(weatherMessage.get(1));
             tv_weatherHumid.setText(weatherMessage.get(2));
             tv_weatherDescription.setText(weatherMessage.get(3));
-           // Picasso.with(context).load(weatherMessage.get(4)).error(R.drawable.noimage).into(iv_weatherIcon);
+            Picasso.get().load(weatherMessage.get(4)).error(R.drawable.noimage).into(iv_weatherIcon);
         }
     };
 }

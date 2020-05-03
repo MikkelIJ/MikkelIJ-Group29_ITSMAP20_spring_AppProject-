@@ -126,6 +126,7 @@ public class NewUserActivity extends AppCompatActivity {
                                     Log.d(TAG,"onSucces: user profile is created for" +userID);
                                     Log.v("signup",userID);
                                     startActivity(new Intent(getApplicationContext(), UserActivity.class));
+                                    //uploadImgToFirebase(imageUri);
                                     //finish();
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
@@ -143,7 +144,7 @@ public class NewUserActivity extends AppCompatActivity {
                         }
                     }
                 });
-                uploadImgToFirebase(imageUri);
+
             }
         });
 
@@ -167,7 +168,7 @@ public class NewUserActivity extends AppCompatActivity {
 
     private void uploadImgToFirebase(Uri imageUri) {
         //upload imgage to firbasestorage
-        StorageReference fileRef = storageReference.child("users/profile.jpg");
+        StorageReference fileRef = storageReference.child("users/"+ mAuth.getUid()+"profile.jpg");
         fileRef.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
