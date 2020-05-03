@@ -12,6 +12,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.smap.group29.getmoving.Models.NewUser;
+import com.smap.group29.getmoving.R;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,6 +54,8 @@ public class FirebaseUtil {
         }
         mDatabaseReference = mFirebaseDatabase.getReference().child(ref);
     }
+
+
 
     public static void signIn(){
         // Choose authentication providers
