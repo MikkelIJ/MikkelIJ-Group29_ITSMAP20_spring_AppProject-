@@ -49,6 +49,6 @@ public class StepCounter implements SensorEventListener {
     public int getSteps(){
         Log.v("getSteps",String.valueOf(stepsCounted));
         Log.v("getAccel",String.valueOf(accelerometer));
-        return stepsCounted;
+        return (int) accelerometer;
     }
 }

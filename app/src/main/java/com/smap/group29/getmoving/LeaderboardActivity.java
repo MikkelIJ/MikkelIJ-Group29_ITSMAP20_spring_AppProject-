@@ -1,8 +1,11 @@
 package com.smap.group29.getmoving;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,6 +44,9 @@ public class LeaderboardActivity extends AppCompatActivity {
     private Intent stepIntent;
     private Button btn_back;
 
+    private GetMovingService mService;
+    private boolean mBound = false;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,13 +61,45 @@ public class LeaderboardActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         mAdapter.startListening();
+
+        stepIntent = new Intent(this,GetMovingService.class);
+        bindService(stepIntent,serviceConnection,Context.BIND_AUTO_CREATE);
+
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        bindService(stepIntent,serviceConnection,Context.BIND_AUTO_CREATE);
+        mBound = true;
+    }
+
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            GetMovingService.LocalBinder binder = (GetMovingService.LocalBinder) service;
+            mService = binder.getService();
+            mBound = true;
+
+            mService.updateBroadcastData.run();
+
+
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mBound = false;
+        }
+    };
 
     @Override
     protected void onStop() {
         super.onStop();
         mAdapter.stopListening();
+        unbindService(serviceConnection);
     }
+
+
 
 
     private void setupRecyclerView() {

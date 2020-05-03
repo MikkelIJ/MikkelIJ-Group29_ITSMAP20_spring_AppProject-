@@ -19,12 +19,14 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -38,9 +40,9 @@ public class NewUserActivity extends AppCompatActivity {
     //Newuser and Useractivity is inspired by  https://www.youtube.com/playlist?list=PLlGT4GXi8_8dDK5Y3KCxuKAPpil9V49rN
 
     public static final String TAG = "TAG";
-    private FirebaseAuth mAuth;
-    private FirebaseFirestore mStore;
-    private StorageReference storageReference;
+    FirebaseAuth mAuth;
+    FirebaseFirestore mStore;
+    StorageReference storageReference = FirebaseStorage.getInstance().getReference();
     String userID;
 
     Uri imageUri;
@@ -108,8 +110,8 @@ public class NewUserActivity extends AppCompatActivity {
                         if(task.isSuccessful()){
                             Toast.makeText(NewUserActivity.this, "User Created", Toast.LENGTH_SHORT).show();
                             //getting the id of the currently logged in user
-                            userID = mAuth.getCurrentUser().getUid();
                             //creating new document and storing the data with hashmap
+                            final String userID = mAuth.getCurrentUser().getUid();
                             DocumentReference documentReference = mStore.collection("KspUsers").document(userID);
                             Map<String,Object> user = new HashMap<>();
                             user.put("email",email);
@@ -122,19 +124,21 @@ public class NewUserActivity extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(Void aVoid) {
                                     Log.d(TAG,"onSucces: user profile is created for" +userID);
-
+                                    Log.v("signup",userID);
+                                    startActivity(new Intent(getApplicationContext(), UserActivity.class));
+                                    //finish();
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
-                                    Log.d(TAG, "onFailure: " + e.toString());
+                                    Log.v(TAG, "signup" + e.toString());
                                 }
                             });
 
-                            startActivity(new Intent(getApplicationContext(), UserActivity.class));
-                            finish();
+
                         }else{
                             Toast.makeText(NewUserActivity.this, "Error: " + task.getException().getMessage(),Toast.LENGTH_SHORT).show();
+
                             progressBar.setVisibility(View.VISIBLE);
                         }
                     }

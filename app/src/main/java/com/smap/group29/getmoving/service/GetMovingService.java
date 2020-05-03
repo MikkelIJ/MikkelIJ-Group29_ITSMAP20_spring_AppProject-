@@ -36,7 +36,6 @@ public class GetMovingService extends Service {
     private OpenWeatherAPI mOpenWeatherAPI;
 
     private FirebaseAuth mAuth;
-    private FirebaseFirestore mStore;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference dbRef = db.collection("KspUsers");
 
@@ -77,7 +76,7 @@ public class GetMovingService extends Service {
         mHandler.post(updateBroadcastData);
 
         mAuth = FirebaseAuth.getInstance();
-        mStore = FirebaseFirestore.getInstance();
+        db = FirebaseFirestore.getInstance();
 
         mBound = true;
     }
@@ -112,7 +111,7 @@ public class GetMovingService extends Service {
 
         String userID = mAuth.getCurrentUser().getUid();
         //creating new document and storing the data with hashmap
-        DocumentReference documentReference = mStore.collection("KspUsers").document(userID);
+        DocumentReference documentReference = db.collection("KspUsers").document(userID);
 
         Map<String,Object> steps = new HashMap<>();
         steps.put("dailysteps", String.valueOf(mStepCounter.getSteps()));

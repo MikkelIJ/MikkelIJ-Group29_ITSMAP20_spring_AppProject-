@@ -63,7 +63,6 @@ public class UserActivity extends AppCompatActivity {
     private boolean mBound = false;
 
     private OpenWeatherAPI mOpenWeatherAPI;
-    private static UserActivity mCurrentInstance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +103,7 @@ public class UserActivity extends AppCompatActivity {
         });
 
         initUI();
-        initService();
+
         registerIntentFilters();
         mOpenWeatherAPI = new OpenWeatherAPI(this,2624652);
 
@@ -127,6 +126,7 @@ public class UserActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        initService();
         //uploadUserID();
     }
 
@@ -141,6 +141,8 @@ public class UserActivity extends AppCompatActivity {
 
     public void logout(){
         FirebaseAuth.getInstance().signOut();
+        unbindService(serviceConnection);
+        mBound = false;
         startActivity(new Intent(getApplicationContext(),LoginActivity.class));
         finish();
 
@@ -158,8 +160,6 @@ public class UserActivity extends AppCompatActivity {
         super.onStop();
         unbindService(serviceConnection);
         mBound = false;
-
-
     }
 
     @Override
@@ -169,9 +169,18 @@ public class UserActivity extends AppCompatActivity {
         mBound = true;
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        stopService(stepIntent);
+    }
+
     private void initService(){
+
         // Binds ListActivity to the WordlearnerService.
+
         stepIntent = new Intent(this,GetMovingService.class);
+        startService(stepIntent);
         bindService(stepIntent,serviceConnection,Context.BIND_AUTO_CREATE);
     }
 
