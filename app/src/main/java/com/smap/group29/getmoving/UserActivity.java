@@ -103,7 +103,7 @@ public class UserActivity extends AppCompatActivity {
         });
 
         //loading the picture from firebase into imageview
-        final StorageReference imgProfile = storageReference.child("users/profile.jpg");
+        StorageReference imgProfile = storageReference.child("users/profile.jpg");
         imgProfile.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {

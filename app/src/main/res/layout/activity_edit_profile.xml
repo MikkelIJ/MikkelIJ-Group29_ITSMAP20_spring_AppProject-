@@ -32,8 +32,6 @@
         />
 
 
-
-
     <EditText
         android:id="@+id/edit_name"
         android:layout_width="match_parent"

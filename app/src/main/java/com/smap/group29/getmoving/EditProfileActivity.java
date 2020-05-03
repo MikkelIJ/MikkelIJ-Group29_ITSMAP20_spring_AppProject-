@@ -1,8 +1,10 @@
 package com.smap.group29.getmoving;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,11 +13,19 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.smap.group29.getmoving.R;
+import com.squareup.picasso.Picasso;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class EditProfileActivity extends AppCompatActivity {
 
@@ -25,8 +35,9 @@ public class EditProfileActivity extends AppCompatActivity {
     Button btn_update, btn_cancel;
 
     FirebaseAuth mAuth;
-    FirebaseStorage mStore;
+    FirebaseFirestore mStore;
     FirebaseUser fUser;
+    StorageReference fbRef;
 
 
     @Override
@@ -34,12 +45,13 @@ public class EditProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
         mAuth = FirebaseAuth.getInstance();
-        mStore = FirebaseStorage.getInstance();
+        mStore = FirebaseFirestore.getInstance();
         fUser = mAuth.getCurrentUser();
+        fbRef = FirebaseStorage.getInstance().getReference();
 
         Intent data = getIntent();
         final String name = data.getStringExtra("name");
-        String email = data.getStringExtra("email");
+        String profileEmail = data.getStringExtra("email");
         String age = data.getStringExtra("age");
         String city = data.getStringExtra("city");
         String steps = data.getStringExtra("steps");
@@ -47,9 +59,21 @@ public class EditProfileActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate: "  + name +" " +" " + age+" " + city +" "+ steps);
 
         initUi();
+/*
+        StorageReference imgProfile = fbRef.child("users/profile.jpg");
+        imgProfile.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Picasso.get().load(uri).into(iv_profilePicture);
+
+            }
+
+        });
+
+ */
 
         edit_name.setText(name);
-        edit_email.setText(email);
+        edit_email.setText(profileEmail);
         edit_age.setText(age);
         edit_city.setText(city);
         edit_steps.setText(steps);
@@ -63,8 +87,39 @@ public class EditProfileActivity extends AppCompatActivity {
                     Toast.makeText(EditProfileActivity.this, "One or more fields are empty.", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                final String email = edit_email.getText().toString();
+                fUser.updateEmail(email).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        //Updating the userdata from edittexts input
+                        DocumentReference documentReference = mStore.collection("KspUsers").document(fUser.getUid());
+                        Map<String, Object> editedUser = new HashMap<>();
+                        editedUser.put("email",email);
+                        editedUser.put("name", edit_name.getText().toString());
+                        editedUser.put("age", edit_age.getText().toString());
+                        editedUser.put("city", edit_city.getText().toString());
+                        editedUser.put("dailysteps", edit_steps.getText().toString());
+                        documentReference.update(editedUser).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Toast.makeText(EditProfileActivity.this, "Profile updated", Toast.LENGTH_SHORT).show();
 
-           //     fUser.updateEmail(name).addOnSuccessListener()
+                                Intent intent = new Intent(getApplicationContext(), UserActivity.class);
+                                startActivity(intent);
+                                finish();
+                            }
+                        });
+                        Toast.makeText(EditProfileActivity.this, "User is updated",Toast.LENGTH_SHORT).show();
+
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(EditProfileActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
 
 
 
