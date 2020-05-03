@@ -1,5 +1,6 @@
 package com.smap.group29.getmoving;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.BroadcastReceiver;
@@ -12,6 +13,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -34,6 +38,7 @@ import com.smap.group29.getmoving.service.OpenWeatherAPI;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.zip.Inflater;
 
 import javax.annotation.Nullable;
 
@@ -131,9 +136,33 @@ public class UserActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        uploadUserID();
+       // uploadUserID();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.logout_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+
+            case R.id.settings:
+                Intent intent = new Intent(this, NewUserActivity.class);
+                startActivity(intent);
+
+            case R.id.logout:
+                logout();
+
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    /*
     private void uploadUserID(){
         //upload userId to storage for gloabel access to fetch users for leaderboard
         StorageReference fileRef = storageReference.child("userlist/");
@@ -142,6 +171,8 @@ public class UserActivity extends AppCompatActivity {
         Uri userUri =  userIntent.getData();
         fileRef.putFile(userUri);
     }
+
+ */
 
     public void logout(){
         FirebaseAuth.getInstance().signOut();
