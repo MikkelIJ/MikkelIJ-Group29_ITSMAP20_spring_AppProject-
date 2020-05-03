@@ -1,5 +1,6 @@
 package com.smap.group29.getmoving;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -17,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -29,6 +31,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.smap.group29.getmoving.utils.FirebaseUtil;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class LoginActivity extends AppCompatActivity{
 
@@ -40,10 +48,14 @@ public class LoginActivity extends AppCompatActivity{
     private GoogleSignInClient mGoogleSignInClient;
     private GoogleSignInAccount account;
 
+    private static Activity caller;
 
 
-
-
+    private static FirebaseUtil firebaseUtil;
+    private static FirebaseDatabase mFirebaseDatabase;
+    private static DatabaseReference mDatabaseReference;
+    public static FirebaseAuth mFirebaseAuth;
+    public static FirebaseAuth.AuthStateListener mAuthStateListener;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,6 +68,7 @@ public class LoginActivity extends AppCompatActivity{
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
+//        FirebaseUtil.openFirebaseReference("TheNewRealDeal",this);
 
         initUI();
         setUI();
@@ -90,6 +103,7 @@ public class LoginActivity extends AppCompatActivity{
     });
     }
     private void signIn(){
+        // Create and launch sign-in intent
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
 

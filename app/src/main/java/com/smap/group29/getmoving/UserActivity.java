@@ -1,6 +1,7 @@
 package com.smap.group29.getmoving;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.BroadcastReceiver;
@@ -27,6 +28,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -41,7 +43,6 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-import javax.annotation.Nullable;
 
 import static com.smap.group29.getmoving.service.GetMovingService.BROADCAST_ACTION_STEPS;
 import static com.smap.group29.getmoving.service.OpenWeatherAPI.BROADCAST_ACTION_WEATHER;
@@ -297,7 +298,7 @@ public class UserActivity extends AppCompatActivity {
             tv_weatherFeelsLike.setText(weatherMessage.get(1));
             tv_weatherHumid.setText(weatherMessage.get(2));
             tv_weatherDescription.setText(weatherMessage.get(3));
-            //Picasso.with(context).load(weatherMessage.get(4)).error(R.drawable.noimage).into(iv_weatherIcon);
+            Picasso.get().load(weatherMessage.get(4)).error(R.drawable.noimage).into(iv_weatherIcon);
         }
     };
 }
