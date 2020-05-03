@@ -125,7 +125,7 @@ public class LoginActivity extends AppCompatActivity{
         try {
             account = completedTask.getResult(ApiException.class);
 
-            Intent intent = new Intent(LoginActivity.this,NewUserActivity.class);
+            Intent intent = new Intent(LoginActivity.this,UserActivity.class);
             startActivity(intent);
             // Signed in successfully, show authenticated UI.
             //updateUI(account);
