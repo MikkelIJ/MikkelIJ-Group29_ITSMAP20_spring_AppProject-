@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
+    android:background="@drawable/getmoving_background_blank"
     tools:context=".UserActivity">
 
     <TextView
@@ -12,6 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/profileHeader"
+        android:textColor="#FFFFFF"
         android:textSize="24sp"
         app:autoSizeMaxTextSize="30sp"
         app:autoSizeMinTextSize="18sp"
@@ -26,6 +28,7 @@
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
         android:text="@string/user_name"
+        android:textColor="#FFFFFF"
         android:textSize="18sp"
         android:textStyle="bold"
         app:autoSizeTextType="uniform"
@@ -39,6 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:text="@string/age"
+        android:textColor="#FFFFFF"
         android:textSize="18sp"
         android:textStyle="bold"
         app:autoSizeTextType="uniform"
@@ -52,6 +56,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/temp_xy"
+        android:textColor="#FFFFFF"
         android:textSize="14sp"
         app:autoSizeMinTextSize="14sp"
         app:autoSizeTextType="none"
@@ -67,6 +72,7 @@
         android:layout_height="wrap_content"
         android:inputType="text"
         android:text="Feels like"
+        android:textColor="#FFFFFF"
         android:textSize="14sp"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintHorizontal_bias="0.0"
@@ -102,6 +108,7 @@
         android:layout_height="24dp"
         android:layout_marginTop="8dp"
         android:text="@string/weather_forecast"
+        android:textColor="#FFFFFF"
         android:textSize="18sp"
         android:textStyle="bold"
         app:autoSizeMinTextSize="14sp"
@@ -115,6 +122,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
+        android:background="#FFFFFF"
         android:text="@string/btn_leaderboard"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -126,6 +134,7 @@
         android:layout_height="0dp"
         android:gravity="center"
         android:text="@string/steps_today"
+        android:textColor="#FFFFFF"
         android:textSize="40sp"
         app:autoSizeMaxTextSize="40sp"
         app:autoSizeMinTextSize="24sp"
@@ -141,6 +150,7 @@
         android:layout_height="0dp"
         android:gravity="center"
         android:text="@string/_1000000"
+        android:textColor="#FFFFFF"
         app:autoSizeMaxTextSize="100sp"
         app:autoSizeMinTextSize="14sp"
         app:autoSizeTextType="uniform"
@@ -154,6 +164,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/city"
+        android:textColor="#FFFFFF"
         android:textSize="18sp"
         android:textStyle="bold"
         app:autoSizeTextType="uniform"
@@ -195,6 +206,7 @@
         android:layout_height="0dp"
         android:gravity="center"
         android:text="@string/total_steps_1_000_000_000_000_000"
+        android:textColor="#AB8787"
         app:layout_constraintBottom_toTopOf="@+id/btn_user_leaderboard"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -258,6 +270,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Humid"
+        android:textColor="#FFFFFF"
         app:layout_constraintEnd_toStartOf="@+id/iv_weatherIcon"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -275,6 +288,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/weathermessage"
+        android:textColor="#FFFFFF"
         app:layout_constraintBottom_toTopOf="@+id/tv_StepsToday_header"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintHorizontal_bias="0.0"
@@ -291,5 +305,12 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_userCity" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.30779755" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

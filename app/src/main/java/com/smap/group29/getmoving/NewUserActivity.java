@@ -183,15 +183,12 @@ public class NewUserActivity extends AppCompatActivity {
     private void initUI(){
         iv_userImage    = findViewById(R.id.iv_newUserImage);
         btn_addPhoto    = findViewById(R.id.btn_addPhoto);
-        et_email        = findViewById(R.id.et_email);
-        et_password     = findViewById(R.id.et_password);
         et_name         = findViewById(R.id.et_name);
         et_age          = findViewById(R.id.et_age);
         et_city         = findViewById(R.id.et_city);
         et_dailySteps   = findViewById(R.id.et_dailygoal);
         btn_save        = findViewById(R.id.btn_save);
         btn_cancel      = findViewById(R.id.btn_cancel);
-        progressBar     = findViewById(R.id.progressBar);
     }
 
 

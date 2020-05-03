@@ -11,6 +11,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,12 +24,14 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.smap.group29.getmoving.NewUserActivity;
 
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class GetMovingService extends Service {
 
     // inspired by https://github.com/SenSaa/Pedometer/blob/master/app/src/main/java/com/example/yusuf/pedometer/StepCountingService.java
+
 
     private static final String LOGD = "getmovingservice";
     public static final String BROADCAST_ACTION_STEPS = "com.smap.group29.getmoving.service.getmovingservice_broadcast";
@@ -39,6 +43,8 @@ public class GetMovingService extends Service {
     private FirebaseFirestore mStore;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference dbRef = db.collection("KspUsers");
+
+    private String userID;
 
     // check service running
      boolean mBound = false;
@@ -67,6 +73,10 @@ public class GetMovingService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
+        if (acct != null) {
+            userID = acct.getId();
+        }
 
         // declares global broadcast
         stepIntent = new Intent(BROADCAST_ACTION_STEPS);
@@ -110,7 +120,7 @@ public class GetMovingService extends Service {
 
     public void updateDailySteps(){
 
-        String userID = mAuth.getCurrentUser().getUid();
+
         //creating new document and storing the data with hashmap
         DocumentReference documentReference = mStore.collection("KspUsers").document(userID);
 

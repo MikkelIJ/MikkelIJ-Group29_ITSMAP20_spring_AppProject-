@@ -1,5 +1,6 @@
 package com.smap.group29.getmoving;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.BroadcastReceiver;
@@ -19,7 +20,12 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -46,7 +52,7 @@ public class UserActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     FirebaseFirestore mStore;
     StorageReference storageReference = FirebaseStorage.getInstance().getReference();
-    String userID;
+    public String userID;
 
 
     private static final String LOGD = "userActivity";
@@ -65,17 +71,35 @@ public class UserActivity extends AppCompatActivity {
     private OpenWeatherAPI mOpenWeatherAPI;
     private static UserActivity mCurrentInstance;
 
+    private GoogleSignInClient mGoogleSignInClient;
+    private GoogleSignInAccount account;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        initUI();
+
+        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
+        if (acct != null) {
+            String personName = acct.getDisplayName();
+            tv_name.setText(personName);
+            String personId = acct.getId();
+            Uri personPhoto = acct.getPhotoUrl();
+            Picasso.get().load(personPhoto).into(iv_userPicture);
+        }
+
+
         mAuth = FirebaseAuth.getInstance();
         mStore = FirebaseFirestore.getInstance();
-        userID = mAuth.getCurrentUser().getUid();
+        userID = acct.getId();
+
         storageReference = FirebaseStorage.getInstance().getReference();
 
 
         //setting up the data from firebase user
+
         DocumentReference documentReference = mStore.collection("KspUsers").document(userID);
         documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
             @Override
@@ -84,15 +108,16 @@ public class UserActivity extends AppCompatActivity {
                     Log.v("onEvent","Error:"+e.getMessage());
                 }else {
 
-                    tv_name.setText(documentSnapshot.getString("name"));
-                    tv_age.setText(documentSnapshot.getString("age"));
-                    tv_city.setText(documentSnapshot.getString("city"));
-                    //et_dailyGoal.setText(documentSnapshot.getString("dailysteps"));
+                    //tv_name.setText(documentSnapshot.getString("name"));
+                    //tv_age.setText(documentSnapshot.getString("age"));
+                    //tv_city.setText(documentSnapshot.getString("city"));
+                    et_dailyGoal.setText(documentSnapshot.getString("dailysteps"));
                 }
             }
         });
 
         //loading the picture from firebase into imageview
+        /*
         final StorageReference imgProfile = storageReference.child("users/profile.jpg");
         imgProfile.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
@@ -102,8 +127,8 @@ public class UserActivity extends AppCompatActivity {
             }
 
         });
+*/
 
-        initUI();
         initService();
         registerIntentFilters();
         mOpenWeatherAPI = new OpenWeatherAPI(this,2624652);
@@ -111,7 +136,13 @@ public class UserActivity extends AppCompatActivity {
         btn_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                logout();
+                switch (v.getId()) {
+                    // ...
+                    case R.id.btn_logout:
+                        logout();
+                        break;
+                    // ...
+                }
             }
         });
 
@@ -140,10 +171,26 @@ public class UserActivity extends AppCompatActivity {
     }
 
     public void logout(){
-        FirebaseAuth.getInstance().signOut();
-        startActivity(new Intent(getApplicationContext(),LoginActivity.class));
-        finish();
+        mGoogleSignInClient.signOut()
+                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        unbindService(serviceConnection);
+                        mBound = false;
+                        finish();
+                    }
+                });
 
+    }
+
+    private void revokeAccess() {
+        mGoogleSignInClient.revokeAccess()
+                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        // ...
+                    }
+                });
     }
 
 //    @Override
@@ -250,7 +297,7 @@ public class UserActivity extends AppCompatActivity {
             tv_weatherFeelsLike.setText(weatherMessage.get(1));
             tv_weatherHumid.setText(weatherMessage.get(2));
             tv_weatherDescription.setText(weatherMessage.get(3));
-           // Picasso.with(context).load(weatherMessage.get(4)).error(R.drawable.noimage).into(iv_weatherIcon);
+            //Picasso.with(context).load(weatherMessage.get(4)).error(R.drawable.noimage).into(iv_weatherIcon);
         }
     };
 }

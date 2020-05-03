@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -16,6 +17,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.internal.GoogleApiAvailabilityCache;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -24,11 +33,13 @@ import com.google.firebase.auth.FirebaseAuth;
 public class LoginActivity extends AppCompatActivity{
 
     private static final String TAG = "LoginActivity";
+    private static final int RC_SIGN_IN = 100;
 
-    private EditText et_email, et_password;
-    private TextView tv_login, tv_createUser;
+    private SignInButton btn_signInGoogle;
     private FirebaseAuth mAuth;
-    private ProgressBar progressBar;
+    private GoogleSignInClient mGoogleSignInClient;
+    private GoogleSignInAccount account;
+
 
 
 
@@ -38,80 +49,81 @@ public class LoginActivity extends AppCompatActivity{
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        mAuth = FirebaseAuth.getInstance();
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+
         initUI();
-        Intent newAccountIntent = new Intent(this,NewUserActivity.class);
         setUI();
 
-
-        // If the current user is logged in already we'll send them to the UserActivity
-        if(mAuth.getCurrentUser() != null){
-            startActivity(new Intent(getApplicationContext(), UserActivity.class));
-            finish();
-        }
     }
 
+    private boolean isSignedIn(){
+        return GoogleSignIn.getLastSignedInAccount(this) != null;
+    }
 
-
+    @Override
+    protected void onStart() {
+        super.onStart();
+        account = GoogleSignIn.getLastSignedInAccount(this);
+    }
 
     private void initUI(){
-        et_email        = findViewById(R.id.et_email);
-        et_password     = findViewById(R.id.et_password);
-        tv_login        = findViewById(R.id.tv_login);
-        tv_createUser   = findViewById(R.id.tv_createUser);
-        progressBar     = findViewById(R.id.progressBar2);
+        btn_signInGoogle = findViewById(R.id.btn_signInGoogle);
     }
 
     private void setUI(){
-        tv_login.setOnClickListener(new View.OnClickListener() {
+
+        btn_signInGoogle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = et_email.getText().toString().trim();
-                String password = et_password.getText().toString().trim();
-
-                if(TextUtils.isEmpty(email)){
-                    et_email.setError("Email is required");
-                    return;
-                }
-                if(TextUtils.isEmpty(password)){
-                    et_password.setError("Password is required");
-                    return;
-                }
-                if(password.length() < 6){
-                    et_password.setError("Password must be >= 6 characters");
-                    return;
-                }
-
-               progressBar.setVisibility(View.VISIBLE);
-
-                //authenticate the user
-
-                mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-                            Toast.makeText(LoginActivity.this, "Logged in succesfully", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(getApplicationContext(), UserActivity.class));
-
-                        }else{
-                            Toast.makeText(LoginActivity.this, "Error: " + task.getException().getMessage(),Toast.LENGTH_LONG).show();
-                            progressBar.setVisibility(View.INVISIBLE);
-                        }
-                    }
-                });
+                switch (v.getId()) {
+                    case R.id.btn_signInGoogle:
+                        signIn();
+                        break;
             }
-        });
+        }
+    });
+    }
+    private void signIn(){
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
 
+    }
 
-        tv_createUser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, NewUserActivity.class);
-                startActivity(intent);
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
+        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            // The Task returned from this call is always completed, no need to attach
+            // a listener.
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            handleSignInResult(task);
+        }
+    }
+    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+        try {
+            account = completedTask.getResult(ApiException.class);
 
-            }
+            Intent intent = new Intent(LoginActivity.this,UserActivity.class);
+            startActivity(intent);
+            // Signed in successfully, show authenticated UI.
+            //updateUI(account);
+        } catch (ApiException e) {
+            // The ApiException status code indicates the detailed failure reason.
+            // Please refer to the GoogleSignInStatusCodes class reference for more information.
+            Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
+            Intent intent = new Intent(LoginActivity.this,UserActivity.class);
+            startActivity(intent);
+        }
+    }
 
-        });
+    private void updateUI(Object o) {
     }
 }
