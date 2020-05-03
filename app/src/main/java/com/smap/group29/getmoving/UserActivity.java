@@ -14,6 +14,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -141,7 +144,7 @@ public class UserActivity extends AppCompatActivity {
                     // ...
                     case R.id.btn_logout:
                         logout();
-                        break;
+                          break;
                     // ...
                 }
             }
@@ -157,6 +160,26 @@ public class UserActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.logout_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.settings:
+                Intent intent = new Intent(UserActivity.this, LeaderboardActivity.class);
+                startActivity(intent);
+            case R.id.logout:
+                logout();
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
         //uploadUserID();
@@ -169,6 +192,10 @@ public class UserActivity extends AppCompatActivity {
         userIntent.putExtra("userUri",mAuth.getCurrentUser().getUid().toString());
         Uri userUri =  userIntent.getData();
         fileRef.putFile(userUri);
+    }
+
+    public void settings(){
+
     }
 
     public void logout(){
@@ -194,12 +221,6 @@ public class UserActivity extends AppCompatActivity {
                 });
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        MenuInflater inflater = getMenuInflater();
-//        inflater.inflate(R.menu);
-//        return true;
-//    }
 
     @Override
     protected void onStop() {
