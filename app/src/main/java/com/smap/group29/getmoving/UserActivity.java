@@ -56,10 +56,10 @@ public class UserActivity extends AppCompatActivity {
 
     private static final String LOGD = "userActivity";
 
-    private Button btn_leaderboard, btn_logout;
+    private Button btn_leaderboard;
     private ImageButton btn_edit;
     private EditText et_dailyGoal;
-    private TextView tv_name, tv_age, tv_city, tv_weatherTemp,tv_weatherFeelsLike, tv_weatherHumid, tv_weatherDescription, tv_stepsToday, tv_stepsTotal;
+    private TextView tv_name, tv_age, tv_city, tv_weatherTemp,tv_weatherFeelsLike, tv_weatherHumid, tv_weatherDescription, tv_stepsToday, tv_stepsTotal, tv_email;
     private ImageView iv_userPicture, iv_weatherIcon;
 
     private Intent stepIntent;
@@ -94,6 +94,7 @@ public class UserActivity extends AppCompatActivity {
                 }else {
 
                     tv_name.setText(documentSnapshot.getString("name"));
+                    tv_email.setText(documentSnapshot.getString("email"));
                     tv_age.setText(documentSnapshot.getString("age"));
                     tv_city.setText(documentSnapshot.getString("city"));
                     et_dailyGoal.setText(documentSnapshot.getString("dailysteps"));
@@ -117,12 +118,7 @@ public class UserActivity extends AppCompatActivity {
         registerIntentFilters();
         mOpenWeatherAPI = new OpenWeatherAPI(this,2624652);
 
-        btn_logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                logout();
-            }
-        });
+
 
         btn_leaderboard.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,6 +127,8 @@ public class UserActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+
     }
 
     @Override
@@ -151,15 +149,28 @@ public class UserActivity extends AppCompatActivity {
         switch (item.getItemId()){
 
             case R.id.settings:
-                Intent intent = new Intent(this, NewUserActivity.class);
-                startActivity(intent);
+                openSettings();
+                break;
+
 
             case R.id.logout:
                 logout();
+                break;
 
 
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void openSettings() {
+        Intent intent = new Intent(getApplicationContext(), EditProfileActivity.class);
+        intent.putExtra("name", tv_name.getText().toString());
+        intent.putExtra("age", tv_age.getText().toString());
+        intent.putExtra("city", tv_city.getText().toString());
+        intent.putExtra("steps", et_dailyGoal.getText().toString());
+        intent.putExtra("email", tv_email.getText().toString());
+
+        startActivity(intent);
     }
 
     /*
@@ -181,19 +192,12 @@ public class UserActivity extends AppCompatActivity {
 
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        MenuInflater inflater = getMenuInflater();
-//        inflater.inflate(R.menu);
-//        return true;
-//    }
 
     @Override
     protected void onStop() {
         super.onStop();
         unbindService(serviceConnection);
         mBound = false;
-
 
     }
 
@@ -253,7 +257,8 @@ public class UserActivity extends AppCompatActivity {
         iv_weatherIcon        = findViewById(R.id.iv_weatherIcon);
         btn_edit              = findViewById(R.id.btn_userEdit);
         btn_leaderboard       = findViewById(R.id.btn_user_leaderboard);
-        btn_logout            = findViewById(R.id.btn_logout);
+        tv_email              = findViewById(R.id.tv_userEmail);
+
 
 
 
