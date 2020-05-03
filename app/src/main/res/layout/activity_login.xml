@@ -16,6 +16,8 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.72" />
 
+
+
     <com.google.android.gms.common.SignInButton
         android:id="@+id/btn_signInGoogle"
         android:layout_width="wrap_content"
