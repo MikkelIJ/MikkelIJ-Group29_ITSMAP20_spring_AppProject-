@@ -21,6 +21,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.smap.group29.getmoving.NewUserActivity;
+import com.smap.group29.getmoving.utils.GlobalConstants;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,7 +38,7 @@ public class GetMovingService extends Service {
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference dbRef = db.collection("KspUsers");
+    private CollectionReference dbRef = db.collection(GlobalConstants.FIREBASE_USER_COLLECTION);
 
     // check service running
      boolean mBound = false;
@@ -111,7 +112,7 @@ public class GetMovingService extends Service {
 
         String userID = mAuth.getCurrentUser().getUid();
         //creating new document and storing the data with hashmap
-        DocumentReference documentReference = db.collection("KspUsers").document(userID);
+        DocumentReference documentReference = db.collection(GlobalConstants.FIREBASE_USER_COLLECTION).document(userID);
 
         Map<String,Object> steps = new HashMap<>();
         steps.put("dailysteps", String.valueOf(mStepCounter.getSteps()));

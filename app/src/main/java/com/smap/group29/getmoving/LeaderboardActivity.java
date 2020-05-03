@@ -27,6 +27,7 @@ import com.google.firebase.firestore.Query;
 import com.smap.group29.getmoving.adaptor.LeaderboardAdaptor;
 import com.smap.group29.getmoving.model.NewUser;
 import com.smap.group29.getmoving.service.GetMovingService;
+import com.smap.group29.getmoving.utils.GlobalConstants;
 
 
 // Firebase recyclerview inspired by https://github.com/firebase/FirebaseUI-Android/blob/master/database/README.md#using-the-firebaserecycleradapter
@@ -34,7 +35,7 @@ import com.smap.group29.getmoving.service.GetMovingService;
 public class LeaderboardActivity extends AppCompatActivity {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference dbRef = db.collection("KspUsers");
+    private CollectionReference dbRef = db.collection(GlobalConstants.FIREBASE_USER_COLLECTION);
 
     private LeaderboardAdaptor mAdapter;
 

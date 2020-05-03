@@ -31,6 +31,7 @@ import com.google.firebase.storage.StorageReference;
 import com.smap.group29.getmoving.service.GetMovingService;
 import com.smap.group29.getmoving.service.GetMovingService.LocalBinder;
 import com.smap.group29.getmoving.service.OpenWeatherAPI;
+import com.smap.group29.getmoving.utils.GlobalConstants;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -75,7 +76,7 @@ public class UserActivity extends AppCompatActivity {
 
 
         //setting up the data from firebase user
-        DocumentReference documentReference = mStore.collection("KspUsers").document(userID);
+        DocumentReference documentReference = mStore.collection(GlobalConstants.FIREBASE_USER_COLLECTION).document(userID);
         documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
@@ -86,7 +87,7 @@ public class UserActivity extends AppCompatActivity {
                     tv_name.setText(documentSnapshot.getString("name"));
                     tv_age.setText(documentSnapshot.getString("age"));
                     tv_city.setText(documentSnapshot.getString("city"));
-                    //et_dailyGoal.setText(documentSnapshot.getString("dailysteps"));
+                    et_dailyGoal.setText(documentSnapshot.getString("dailysteps"));
                 }
             }
         });

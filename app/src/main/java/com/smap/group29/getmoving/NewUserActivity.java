@@ -19,19 +19,18 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.smap.group29.getmoving.utils.GlobalConstants;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -112,7 +111,7 @@ public class NewUserActivity extends AppCompatActivity {
                             //getting the id of the currently logged in user
                             //creating new document and storing the data with hashmap
                             final String userID = mAuth.getCurrentUser().getUid();
-                            DocumentReference documentReference = mStore.collection("KspUsers").document(userID);
+                            DocumentReference documentReference = mStore.collection(GlobalConstants.FIREBASE_USER_COLLECTION).document(userID);
                             Map<String,Object> user = new HashMap<>();
                             user.put("email",email);
                             user.put("password", password);

@@ -8,6 +8,7 @@ public class NewUser {
     private String liveSteps;
     private String password;
     private String email;
+    private String totalsteps;
 
 
     public NewUser() {
@@ -18,6 +19,14 @@ public class NewUser {
         this.age = age;
         this.city = city;
         this.dailysteps = dailysteps;
+    }
+
+    public String getTotalsteps() {
+        return totalsteps;
+    }
+
+    public void setTotalsteps(String totalsteps) {
+        this.totalsteps = totalsteps;
     }
 
     public String getLiveSteps() {
