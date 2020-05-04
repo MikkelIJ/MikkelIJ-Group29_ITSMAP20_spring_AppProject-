@@ -1,6 +1,7 @@
 package com.smap.group29.getmoving.activities;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.BroadcastReceiver;
@@ -10,6 +11,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
@@ -30,6 +32,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.smap.group29.getmoving.R;
@@ -70,6 +75,13 @@ public class UserActivity extends AppCompatActivity {
     private OpenWeatherAPI mOpenWeatherAPI;
     private static UserActivity mCurrentInstance;
 
+    private IntentFilter getCurrentStepsFilter = new IntentFilter();
+    private IntentFilter getCurrentWeatherFilter = new IntentFilter();
+
+    private int stepsCounted = 0;
+    private int prevStepsCounted = 0;
+    private int totalsteps = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,28 +91,34 @@ public class UserActivity extends AppCompatActivity {
         userID = mAuth.getCurrentUser().getUid();
         storageReference = FirebaseStorage.getInstance().getReference();
 
-
+        initUI();
 
 
 
 
         //setting up the data from firebase user
-        DocumentReference documentReference = mStore.collection(GlobalConstants.FIREBASE_USER_COLLECTION).document(userID);
+        final DocumentReference documentReference = mStore.collection(GlobalConstants.FIREBASE_USER_COLLECTION).document(userID);
         documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                 if (e!=null){
                     Log.v("onEvent","Error:"+e.getMessage());
                 }else {
-
+                    totalsteps = Integer.valueOf(Math.toIntExact(documentSnapshot.getLong("stepstotal")));
+                    tv_stepsTotal.setText(String.valueOf(documentSnapshot.getLong("stepstotal")));
                     tv_name.setText(documentSnapshot.getString("name"));
                     tv_email.setText(documentSnapshot.getString("email"));
                     tv_age.setText(documentSnapshot.getString("age"));
                     tv_city.setText(documentSnapshot.getString("city"));
+
                     et_dailyGoal.setText(documentSnapshot.getString("dailysteps"));
+
                 }
             }
         });
+
+
 
         //loading the picture from firebase into imageview
         final StorageReference imgProfile = storageReference.child("users/"+ mAuth.getUid()+"profile.jpg");
@@ -111,7 +129,7 @@ public class UserActivity extends AppCompatActivity {
             }
         });
 
-        initUI();
+
 
         registerIntentFilters();
         mOpenWeatherAPI = new OpenWeatherAPI(this,2624652);
@@ -192,6 +210,8 @@ public class UserActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
+        unregisterReceiver(broadcastReceiverSteps);
+        unregisterReceiver(broadcastReceiverWeather);
         unbindService(serviceConnection);
         mBound = false;
 
@@ -220,14 +240,15 @@ public class UserActivity extends AppCompatActivity {
     }
 
     private void registerIntentFilters(){
-        IntentFilter getCurrentStepsFilter = new IntentFilter();
+        //IntentFilter getCurrentStepsFilter = new IntentFilter();
         getCurrentStepsFilter.addAction(BROADCAST_ACTION_STEPS);
         registerReceiver(broadcastReceiverSteps,getCurrentStepsFilter);
 
-        IntentFilter getCurrentWeatherFilter = new IntentFilter();
+        //IntentFilter getCurrentWeatherFilter = new IntentFilter();
         getCurrentWeatherFilter.addAction(BROADCAST_ACTION_WEATHER);
         registerReceiver(broadcastReceiverWeather,getCurrentWeatherFilter);
     }
+
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
@@ -274,9 +295,16 @@ public class UserActivity extends AppCompatActivity {
     private BroadcastReceiver broadcastReceiverSteps = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            int stepsCounted = intent.getIntExtra("counted_steps",0);
+            stepsCounted = intent.getIntExtra("counted_steps",0);
+
             Log.v("bcSteps","steps counted:" + stepsCounted);
             tv_stepsToday.setText(String.valueOf(stepsCounted));
+
+            if (stepsCounted != prevStepsCounted){
+                totalsteps = totalsteps + stepsCounted - prevStepsCounted;
+                tv_stepsTotal.setText(String.valueOf(totalsteps));
+                prevStepsCounted = stepsCounted;
+            }
         }
     };
 

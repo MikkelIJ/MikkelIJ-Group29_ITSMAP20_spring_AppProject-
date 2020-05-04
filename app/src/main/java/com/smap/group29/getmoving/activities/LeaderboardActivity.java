@@ -83,7 +83,7 @@ public class LeaderboardActivity extends AppCompatActivity {
             mService = binder.getService();
             mBound = true;
 
-            mService.updateBroadcastData.run();
+            //mService.updateBroadcastData.run();
 
 
         }

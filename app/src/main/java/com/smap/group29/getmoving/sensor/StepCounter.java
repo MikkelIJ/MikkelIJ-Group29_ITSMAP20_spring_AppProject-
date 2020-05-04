@@ -28,9 +28,7 @@ public class StepCounter implements SensorEventListener {
         this.mGetMovingService = activity;
         mSensorManager = (SensorManager)this.mGetMovingService.getSystemService(Context.SENSOR_SERVICE);
         mStepCounterSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
-        //mAccelerometerSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
         mSensorManager.registerListener(this,mStepCounterSensor,mSensorManager.SENSOR_DELAY_UI);
-        //mSensorManager.registerListener(this,mAccelerometerSensor,mSensorManager.SENSOR_DELAY_UI);
     }
 
 
@@ -42,13 +40,6 @@ public class StepCounter implements SensorEventListener {
         if (event.sensor.getType() == Sensor.TYPE_STEP_COUNTER){
             stepsCounted = (int) event.values[0];
             currentTime.toString();
-
-        }
-
-
-
-        if (event.sensor.getType() == Sensor.TYPE_GYROSCOPE){
-            accelerometer = (double) event.values[0];
         }
     }
 
@@ -59,8 +50,14 @@ public class StepCounter implements SensorEventListener {
 
     public int getSteps(){
         Log.v("getSteps",String.valueOf(stepsCounted));
-        //Log.v("getAccel",String.valueOf(accelerometer));
-        return (int) stepsCounted;
+
+        return stepsCounted;
     }
+
+    public void unRegisterStepCounter(){
+        mSensorManager.unregisterListener(this,mStepCounterSensor);
+    }
+
+
 
 }

@@ -9,6 +9,7 @@ public class NewUser {
     private String password;
     private String email;
     private String totalsteps;
+    private String wins;
 
 
     public NewUser() {
@@ -23,6 +24,14 @@ public class NewUser {
 
     public String getTotalsteps() {
         return totalsteps;
+    }
+
+    public String getWins() {
+        return wins;
+    }
+
+    public void setWins(String wins) {
+        this.wins = wins;
     }
 
     public void setTotalsteps(String totalsteps) {

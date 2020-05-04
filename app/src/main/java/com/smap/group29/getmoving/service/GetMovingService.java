@@ -6,6 +6,7 @@ import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -72,6 +73,8 @@ public class GetMovingService extends Service {
         mOpenWeatherAPI = new OpenWeatherAPI(this);
         mHandler.removeCallbacks(updateBroadcastData);
         mHandler.post(updateBroadcastData);
+        mHandler.removeCallbacks(updateStepsLeaderBoard);
+        mHandler.post(updateStepsLeaderBoard);
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
@@ -84,9 +87,13 @@ public class GetMovingService extends Service {
         return START_STICKY;
     }
 
+
     @Override
     public void onDestroy() {
         super.onDestroy();
+        mStepCounter.unRegisterStepCounter();
+        mHandler.removeCallbacks(updateBroadcastData);
+        mHandler.removeCallbacks(updateStepsLeaderBoard);
         mBound = false;
         Log.v("service", "Stopped");
     }
@@ -107,31 +114,41 @@ public class GetMovingService extends Service {
     public Runnable updateStepsLeaderBoard = new Runnable() {
         @Override
         public void run() {
+            if (mBound){
             updateDailySteps();
             mHandler.postDelayed(this,30000);
+            }
         }
     };
 
+    public void stopRepeating() {
+        mHandler.removeCallbacks(updateStepsLeaderBoard);
+        mHandler.removeCallbacks(updateBroadcastData);
+
+    }
+
     public void updateDailySteps(){
 
-        String userID = mAuth.getCurrentUser().getUid();
-        //creating new document and storing the data with hashmap
-        DocumentReference documentReference = db.collection(GlobalConstants.FIREBASE_USER_COLLECTION).document(userID);
+        if (mBound) {
+            String userID = mAuth.getCurrentUser().getUid();
+            //creating new document and storing the data with hashmap
+            DocumentReference documentReference = db.collection(GlobalConstants.FIREBASE_USER_COLLECTION).document(userID);
 
-        Map<String,Object> steps = new HashMap<>();
-        steps.put("dailysteps", String.valueOf(mStepCounter.getSteps()));
-        dbRef.document(userID).update(steps).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                //Toast.makeText(GetMovingService.this, "steps updated" + mStepCounter.getSteps(),Toast.LENGTH_SHORT).show();
+            Map<String, Object> steps = new HashMap<>();
+            steps.put("dailysteps", String.valueOf(mStepCounter.getSteps()));
+            dbRef.document(userID).update(steps).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    //Toast.makeText(GetMovingService.this, "steps updated" + mStepCounter.getSteps(),Toast.LENGTH_SHORT).show();
 
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.v("updatesteps",e.getMessage());
-            }
-        });
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.v("updatesteps", e.getMessage());
+                }
+            });
+        }
     }
 
 
