@@ -99,7 +99,7 @@ public class GetMovingService extends Service {
             // only allow if stepcounterservice is active
             if (mBound){
                 broadcastSteps();
-                updateDailySteps();
+                //updateDailySteps(); 
                 mHandler.postDelayed(this,1000);
             }
         }
