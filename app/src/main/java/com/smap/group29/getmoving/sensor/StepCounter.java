@@ -6,6 +6,9 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.util.Log;
+import java.util.Calendar; // used for resetting stepcounter every day
+import java.util.Date;
+
 
 import com.smap.group29.getmoving.service.GetMovingService;
 
@@ -18,6 +21,9 @@ public class StepCounter implements SensorEventListener {
     private int stepsCounted = 0;
     private double accelerometer = 0;
 
+    Date currentTime = Calendar.getInstance().getTime();
+
+
     public StepCounter(GetMovingService activity) {
         this.mGetMovingService = activity;
         mSensorManager = (SensorManager)this.mGetMovingService.getSystemService(Context.SENSOR_SERVICE);
@@ -27,13 +33,16 @@ public class StepCounter implements SensorEventListener {
         //mSensorManager.registerListener(this,mAccelerometerSensor,mSensorManager.SENSOR_DELAY_UI);
     }
 
+
+
     @Override
     public void onSensorChanged(SensorEvent event) {
 
         Log.v("event",String.valueOf(event.values[0]));
-
         if (event.sensor.getType() == Sensor.TYPE_STEP_COUNTER){
             stepsCounted = (int) event.values[0];
+            currentTime.toString();
+
         }
 
 
@@ -53,4 +62,5 @@ public class StepCounter implements SensorEventListener {
         //Log.v("getAccel",String.valueOf(accelerometer));
         return (int) stepsCounted;
     }
+
 }

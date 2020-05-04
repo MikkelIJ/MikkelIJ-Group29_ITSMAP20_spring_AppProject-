@@ -1,6 +1,7 @@
 package com.smap.group29.getmoving.activities;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -18,6 +19,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.smap.group29.getmoving.R;
+import com.smap.group29.getmoving.utils.CheckPermissions;
 
 public class LoginActivity extends AppCompatActivity{
 
@@ -27,6 +29,7 @@ public class LoginActivity extends AppCompatActivity{
     private TextView tv_login, tv_createUser;
     private FirebaseAuth mAuth;
     private ProgressBar progressBar;
+    private CheckPermissions mCheckPermissions;
 
 
 
@@ -36,21 +39,39 @@ public class LoginActivity extends AppCompatActivity{
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
         mAuth = FirebaseAuth.getInstance();
-        initUI();
-        Intent newAccountIntent = new Intent(this, NewUserActivity.class);
-        setUI();
-
-
-        // If the current user is logged in already we'll send them to the UserActivity
         if(mAuth.getCurrentUser() != null){
             startActivity(new Intent(getApplicationContext(), UserActivity.class));
             finish();
         }
+        
+        initUI();
+        setUI();
+
+
+        // If the current user is logged in already we'll send them to the UserActivity
+
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mCheckPermissions = new CheckPermissions();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            mCheckPermissions.checkPermissions(this);
+        }
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mCheckPermissions = new CheckPermissions();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            mCheckPermissions.checkPermissions(this);
+        }
 
+    }
 
     private void initUI(){
         et_email        = findViewById(R.id.et_email);
