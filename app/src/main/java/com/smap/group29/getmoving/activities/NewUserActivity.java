@@ -62,6 +62,8 @@ public class NewUserActivity extends AppCompatActivity {
         mStore = FirebaseFirestore.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference();
 
+        iv_userImage.setImageResource(R.drawable.noprofilepicture);
+
         btn_addPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -157,6 +159,7 @@ public class NewUserActivity extends AppCompatActivity {
             {
                 imageUri = data.getData();
                 iv_userImage.setImageURI(imageUri);
+
             }
         }
         if (resultCode == 0) {
