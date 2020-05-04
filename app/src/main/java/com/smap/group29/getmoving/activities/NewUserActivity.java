@@ -126,8 +126,8 @@ public class NewUserActivity extends AppCompatActivity {
                                     Log.d(TAG,"onSucces: user profile is created for" +userID);
                                     Log.v("signup",userID);
                                     startActivity(new Intent(getApplicationContext(), UserActivity.class));
-                                    //uploadImgToFirebase(imageUri);
-                                    //finish();
+                                    uploadImgToFirebase(imageUri);
+                                    finish();
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override

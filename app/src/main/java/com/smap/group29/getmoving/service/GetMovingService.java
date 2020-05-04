@@ -99,9 +99,16 @@ public class GetMovingService extends Service {
             // only allow if stepcounterservice is active
             if (mBound){
                 broadcastSteps();
-                //updateDailySteps(); 
                 mHandler.postDelayed(this,1000);
             }
+        }
+    };
+
+    public Runnable updateStepsLeaderBoard = new Runnable() {
+        @Override
+        public void run() {
+            updateDailySteps();
+            mHandler.postDelayed(this,30000);
         }
     };
 

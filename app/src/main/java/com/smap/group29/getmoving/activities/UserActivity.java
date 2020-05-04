@@ -103,7 +103,7 @@ public class UserActivity extends AppCompatActivity {
         });
 
         //loading the picture from firebase into imageview
-        final StorageReference imgProfile = storageReference.child("users/"+mAuth.getUid()+"profile.jpg");
+        final StorageReference imgProfile = storageReference.child("users/"+ mAuth.getUid()+"profile.jpg");
         imgProfile.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
@@ -237,6 +237,7 @@ public class UserActivity extends AppCompatActivity {
             mBound = true;
 
             mService.updateBroadcastData.run();
+            mService.updateStepsLeaderBoard.run();
             mOpenWeatherAPI.sendRequest();
 
         }
