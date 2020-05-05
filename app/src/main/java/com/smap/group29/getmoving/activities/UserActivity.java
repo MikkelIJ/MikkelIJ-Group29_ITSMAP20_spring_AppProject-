@@ -210,11 +210,17 @@ public class UserActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        unregisterReceiver(broadcastReceiverSteps);
-        unregisterReceiver(broadcastReceiverWeather);
+        // upload latest stepsvalue and total steps
         unbindService(serviceConnection);
         mBound = false;
 
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(broadcastReceiverSteps);
+        unregisterReceiver(broadcastReceiverWeather);
     }
 
     @Override
@@ -222,6 +228,13 @@ public class UserActivity extends AppCompatActivity {
         super.onResume();
         bindService(stepIntent,serviceConnection,Context.BIND_AUTO_CREATE);
         mBound = true;
+        //getCurrentStepsFilter.addAction(BROADCAST_ACTION_STEPS);
+        registerReceiver(broadcastReceiverSteps,getCurrentStepsFilter);
+
+        //IntentFilter getCurrentWeatherFilter = new IntentFilter();
+        //getCurrentWeatherFilter.addAction(BROADCAST_ACTION_WEATHER);
+        registerReceiver(broadcastReceiverWeather,getCurrentWeatherFilter);
+
     }
 
     @Override
