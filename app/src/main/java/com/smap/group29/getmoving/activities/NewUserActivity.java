@@ -42,7 +42,7 @@ public class NewUserActivity extends AppCompatActivity {
     public static final String TAG = "TAG";
     FirebaseAuth mAuth;
     FirebaseFirestore mStore;
-    StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+    StorageReference storageReference;
     String userID;
 
     Uri imageUri;

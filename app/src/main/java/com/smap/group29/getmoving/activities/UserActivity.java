@@ -105,7 +105,7 @@ public class UserActivity extends AppCompatActivity {
                 if (e!=null){
                     Log.v("onEvent","Error:"+e.getMessage());
                 }else {
-                    totalsteps = Integer.valueOf(Math.toIntExact(documentSnapshot.getLong("stepstotal")));
+                  //  totalsteps = Integer.valueOf(Math.toIntExact(documentSnapshot.getLong("stepstotal")));
                     tv_stepsTotal.setText(String.valueOf(documentSnapshot.getLong("stepstotal")));
                     tv_name.setText(documentSnapshot.getString("name"));
                     tv_email.setText(documentSnapshot.getString("email"));

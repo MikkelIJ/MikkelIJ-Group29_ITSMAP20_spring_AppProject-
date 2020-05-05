@@ -129,10 +129,6 @@ public class EditProfileActivity extends AppCompatActivity {
 
                     }
                 });
-
-
-
-
             }
         });
 
@@ -162,13 +158,17 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private void uploadImgToFirebase(final Uri imageUri) {
         //upload imgage to firbasestorage
-        StorageReference fileRef = fbRef.child("users/"+ mAuth.getUid()+"profile.jpg");
+        final StorageReference fileRef = fbRef.child("users/"+ mAuth.getUid()+"profile.jpg");
         fileRef.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Toast.makeText(EditProfileActivity.this, "Image uploaded", Toast.LENGTH_SHORT);
-                Picasso.get().load(imageUri).into(iv_profilePicture);
-
+                fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        Toast.makeText(EditProfileActivity.this, "Image uploaded", Toast.LENGTH_SHORT);
+                        Picasso.get().load(imageUri).into(iv_profilePicture);
+                    }
+                });
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
