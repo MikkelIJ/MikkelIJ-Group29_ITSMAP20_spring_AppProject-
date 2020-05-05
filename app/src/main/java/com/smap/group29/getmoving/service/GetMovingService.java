@@ -44,7 +44,7 @@ public class GetMovingService extends Service {
      Intent stepIntent, weatherIntent;
 
     // handler for broadcasting data at x intervals
-    private final Handler mHandler = new Handler();
+    public final Handler mHandler = new Handler();
 
 
     // Binder
@@ -87,6 +87,9 @@ public class GetMovingService extends Service {
         return START_STICKY;
     }
 
+    public void GM_removeCallbacks(){
+        mHandler.removeCallbacks(updateStepsLeaderBoard);
+    }
 
     @Override
     public void onDestroy() {

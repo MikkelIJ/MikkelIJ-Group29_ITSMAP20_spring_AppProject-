@@ -200,6 +200,8 @@ public class UserActivity extends AppCompatActivity {
  */
 
     public void logout(){
+        mService.GM_removeCallbacks();
+        mService.updateDailySteps(); // upload latest stepsvalue and total steps
         FirebaseAuth.getInstance().signOut();
         startActivity(new Intent(getApplicationContext(), LoginActivity.class));
         finish();
@@ -210,7 +212,7 @@ public class UserActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        // upload latest stepsvalue and total steps
+
         unbindService(serviceConnection);
         mBound = false;
 
