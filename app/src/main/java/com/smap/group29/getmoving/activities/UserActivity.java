@@ -105,15 +105,12 @@ public class UserActivity extends AppCompatActivity {
                 if (e!=null){
                     Log.v("onEvent","Error:"+e.getMessage());
                 }else {
-                  //  totalsteps = Integer.valueOf(Math.toIntExact(documentSnapshot.getLong("stepstotal")));
                     tv_stepsTotal.setText(String.valueOf(documentSnapshot.getLong("stepstotal")));
                     tv_name.setText(documentSnapshot.getString("name"));
                     tv_email.setText(documentSnapshot.getString("email"));
                     tv_age.setText(documentSnapshot.getString("age"));
                     tv_city.setText(documentSnapshot.getString("city"));
-
                     et_dailyGoal.setText(documentSnapshot.getString("dailysteps"));
-
                 }
             }
         });
@@ -210,15 +207,6 @@ public class UserActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onStop() {
-        super.onStop();
-
-        unbindService(serviceConnection);
-        mBound = false;
-
-    }
-
-    @Override
     protected void onPause() {
         super.onPause();
         unregisterReceiver(broadcastReceiverSteps);
@@ -230,13 +218,15 @@ public class UserActivity extends AppCompatActivity {
         super.onResume();
         bindService(stepIntent,serviceConnection,Context.BIND_AUTO_CREATE);
         mBound = true;
-        //getCurrentStepsFilter.addAction(BROADCAST_ACTION_STEPS);
         registerReceiver(broadcastReceiverSteps,getCurrentStepsFilter);
-
-        //IntentFilter getCurrentWeatherFilter = new IntentFilter();
-        //getCurrentWeatherFilter.addAction(BROADCAST_ACTION_WEATHER);
         registerReceiver(broadcastReceiverWeather,getCurrentWeatherFilter);
+    }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unbindService(serviceConnection);
+        mBound = false;
     }
 
     @Override
@@ -248,18 +238,15 @@ public class UserActivity extends AppCompatActivity {
     private void initService(){
 
         // Binds ListActivity to the WordlearnerService.
-
         stepIntent = new Intent(this,GetMovingService.class);
         startService(stepIntent);
         bindService(stepIntent,serviceConnection,Context.BIND_AUTO_CREATE);
     }
 
     private void registerIntentFilters(){
-        //IntentFilter getCurrentStepsFilter = new IntentFilter();
         getCurrentStepsFilter.addAction(BROADCAST_ACTION_STEPS);
         registerReceiver(broadcastReceiverSteps,getCurrentStepsFilter);
 
-        //IntentFilter getCurrentWeatherFilter = new IntentFilter();
         getCurrentWeatherFilter.addAction(BROADCAST_ACTION_WEATHER);
         registerReceiver(broadcastReceiverWeather,getCurrentWeatherFilter);
     }
@@ -272,6 +259,7 @@ public class UserActivity extends AppCompatActivity {
             mService = binder.getService();
             mBound = true;
 
+            mService.GM_removeCallbacks();
             mService.updateBroadcastData.run();
             mService.updateStepsLeaderBoard.run();
             mOpenWeatherAPI.sendRequest();
@@ -333,6 +321,7 @@ public class UserActivity extends AppCompatActivity {
             tv_weatherFeelsLike.setText(weatherMessage.get(1));
             tv_weatherHumid.setText(weatherMessage.get(2));
             tv_weatherDescription.setText(weatherMessage.get(3));
+            Picasso.get().setLoggingEnabled(true);
             Picasso.get().load(weatherMessage.get(4)).error(R.drawable.noimage).into(iv_weatherIcon);
         }
     };

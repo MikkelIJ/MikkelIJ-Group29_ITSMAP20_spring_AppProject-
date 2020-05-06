@@ -116,12 +116,16 @@ public class NewUserActivity extends AppCompatActivity {
                             final String userID = mAuth.getCurrentUser().getUid();
                             DocumentReference documentReference = mStore.collection(GlobalConstants.FIREBASE_USER_COLLECTION).document(userID);
                             Map<String,Object> user = new HashMap<>();
+                            user.put("uID",mAuth.getUid());
                             user.put("email",email);
                             user.put("password", password);
                             user.put("name", name);
                             user.put("age", age);
                             user.put("city", city);
                             user.put("dailysteps",dailySteps);
+                            user.put("stepstotal",0);
+                            user.put("wins",0);
+                            user.put("follow",0);
                             documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {

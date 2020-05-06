@@ -23,7 +23,7 @@ public class WeatherJsonParser {
             weatherInfo.add(1,"Feels like: " + (mOpenWeather.main.feels_like.doubleValue())+ "\u2103");
             weatherInfo.add(2,"Humid: " + (mOpenWeather.main.humidity.doubleValue() + "%"));
             weatherInfo.add(3,"Desciption: " + (mOpenWeather.weather.get(0).description));
-            weatherInfo.add(4,"http://openweathermap.org/img/wn/" + (mOpenWeather.weather.get(0).icon) + "@2x.png");
+            weatherInfo.add(4,"https://openweathermap.org/img/wn/" + (mOpenWeather.weather.get(0).icon) + "@2x.png");
             return  weatherInfo;
         } else {
             return null; // needs to be changed

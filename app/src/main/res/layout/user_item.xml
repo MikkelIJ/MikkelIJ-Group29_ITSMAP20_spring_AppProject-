@@ -2,33 +2,39 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardBackgroundColor="#00FFFFFF"
-    app:cardCornerRadius="4dp">
+    app:cardBackgroundColor="#6BFFFFFF"
+    app:cardCornerRadius="2dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="82dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
         android:layout_margin="4dp">
 
         <TextView
             android:id="@+id/tv_itemRank"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
             android:gravity="center_vertical"
             android:text="#1"
             android:textColor="@android:color/black"
             android:textSize="32sp"
-            android:textStyle="bold"
 
-            />
+            android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/iv_itemImage"
             android:layout_width="58dp"
             android:layout_height="match_parent"
             android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/tv_itemRank"
             android:layout_toRightOf="@+id/tv_itemRank"
             android:padding="2dp"
             tools:srcCompat="@tools:sample/avatars[9]" />
@@ -37,23 +43,26 @@
             android:id="@+id/tv_itemName"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_toStartOf="@id/tv_itemSteps"
             android:layout_toLeftOf="@id/tv_itemSteps"
+            android:layout_toEndOf="@id/iv_itemImage"
             android:layout_toRightOf="@id/iv_itemImage"
             android:gravity="center_vertical"
-            android:text="Bobby Olsen"
+            android:text="@string/bobby_olsen"
             android:textColor="@android:color/black"
             android:textSize="24sp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tv_itemSteps"
-            android:layout_width="70dp"
+            android:layout_width="90dp"
             android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:gravity="center|end"
             android:text="100000"
             android:textColor="@android:color/black"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:textStyle="bold"
             app:autoSizeTextType="none" />
 

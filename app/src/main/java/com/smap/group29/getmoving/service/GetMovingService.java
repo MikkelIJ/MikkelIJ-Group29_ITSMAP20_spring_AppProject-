@@ -3,6 +3,7 @@ package com.smap.group29.getmoving.service;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
@@ -21,6 +22,7 @@ import com.smap.group29.getmoving.onlineAPI.OpenWeatherAPI;
 import com.smap.group29.getmoving.sensor.StepCounter;
 import com.smap.group29.getmoving.utils.GlobalConstants;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,10 +40,12 @@ public class GetMovingService extends Service {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference dbRef = db.collection(GlobalConstants.FIREBASE_USER_COLLECTION);
 
+    private Calendar c; // c.get(Calendar.SECOND)
+
     // check service running
      boolean mBound = false;
 
-     Intent stepIntent, weatherIntent;
+     Intent stepIntent, weatherIntent, timerIntent;
 
     // handler for broadcasting data at x intervals
     public final Handler mHandler = new Handler();
@@ -68,6 +72,7 @@ public class GetMovingService extends Service {
 
         // declares global broadcast
         stepIntent = new Intent(BROADCAST_ACTION_STEPS);
+        timerIntent = new Intent("TIMER");
 
         mStepCounter = new StepCounter(this);
         mOpenWeatherAPI = new OpenWeatherAPI(this);
@@ -80,6 +85,8 @@ public class GetMovingService extends Service {
         db = FirebaseFirestore.getInstance();
 
         mBound = true;
+
+
     }
 
     @Override
@@ -90,6 +97,8 @@ public class GetMovingService extends Service {
     public void GM_removeCallbacks(){
         mHandler.removeCallbacks(updateStepsLeaderBoard);
     }
+
+
 
     @Override
     public void onDestroy() {
@@ -109,16 +118,19 @@ public class GetMovingService extends Service {
             // only allow if stepcounterservice is active
             if (mBound){
                 broadcastSteps();
-                mHandler.postDelayed(this,1000);
+                mHandler.postDelayed(this,30000);
             }
         }
     };
+
 
     public Runnable updateStepsLeaderBoard = new Runnable() {
         @Override
         public void run() {
             if (mBound){
+                Log.v("sec","runnable activated");
             updateDailySteps();
+            tellProgressbarToStart();
             mHandler.postDelayed(this,30000);
             }
         }
@@ -159,5 +171,11 @@ public class GetMovingService extends Service {
         Log.d(LOGD, "broadcasting step values");
         stepIntent.putExtra("counted_steps",mStepCounter.getSteps());
         sendBroadcast(stepIntent);
+    }
+
+    private void tellProgressbarToStart(){
+        Log.v("sec","tellprogressbarToStart activated");
+        timerIntent.putExtra("startprogressbar",1);
+        sendBroadcast(timerIntent);
     }
 }

@@ -6,31 +6,32 @@
     android:layout_height="match_parent"
     tools:context=".activities.LeaderboardActivity"
     android:background="@drawable/getmoving_background_blank"
-    android:padding="16dp">
+    android:paddingVertical="16dp">
 
     <TextView
         android:id="@+id/tv_LeaderboardHeader"
-        android:text="@string/getmovingLeaderboard"
-        android:textSize="30sp"
-        android:textColor="@color/colorBlack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/getmovingLeaderboard"
+        android:textColor="@color/colorBlack"
+        android:textSize="30sp"
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/btn_leaderboardBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
         android:text="@string/bt_back"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
 
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_leaderboard"
@@ -41,9 +42,18 @@
         app:layout_constraintBottom_toTopOf="@id/btn_leaderboardBack"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_LeaderboardHeader"
+        app:layout_constraintTop_toBottomOf="@id/progressBar3"
         tools:listitem="@layout/user_item" />
 
+    <ProgressBar
+        android:id="@+id/progressBar3"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_LeaderboardHeader" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

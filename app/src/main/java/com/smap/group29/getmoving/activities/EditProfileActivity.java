@@ -89,6 +89,12 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
 
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         btn_update.setOnClickListener(new View.OnClickListener() {
             @Override

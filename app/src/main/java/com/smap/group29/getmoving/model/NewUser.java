@@ -1,6 +1,8 @@
 package com.smap.group29.getmoving.model;
 
 public class NewUser {
+
+    private String uID;
     private String name;
     private String age;
     private String city;
@@ -20,6 +22,14 @@ public class NewUser {
         this.age = age;
         this.city = city;
         this.dailysteps = dailysteps;
+    }
+
+    public String getuID() {
+        return uID;
+    }
+
+    public void setuID(String uID) {
+        this.uID = uID;
     }
 
     public String getTotalsteps() {

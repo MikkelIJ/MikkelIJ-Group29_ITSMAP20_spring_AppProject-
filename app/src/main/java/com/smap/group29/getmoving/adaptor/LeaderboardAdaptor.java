@@ -1,5 +1,6 @@
 package com.smap.group29.getmoving.adaptor;
 
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,26 +13,51 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.smap.group29.getmoving.R;
 import com.smap.group29.getmoving.model.NewUser;
+import com.squareup.picasso.Picasso;
 
 
 public class LeaderboardAdaptor extends FirestoreRecyclerAdapter<NewUser, LeaderboardAdaptor.UserHolder> {
 
+    StorageReference fbRef = FirebaseStorage.getInstance().getReference();
 
     public LeaderboardAdaptor(@NonNull FirestoreRecyclerOptions<NewUser> options) {
         super(options);
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull UserHolder holder, int position, @NonNull NewUser model) {
-        holder.tv_userRank.setText(String.valueOf(position+1)); // + 1 to remove 0
+    protected void onBindViewHolder(@NonNull final UserHolder holder, int position, @NonNull NewUser model) {
+        holder.tv_userRank.setText(setPosition(position+1)); // + 1 to remove 0
         holder.tv_userName.setText(model.getName());
         holder.tv_userSteps.setText(model.getDailysteps());
+
+        StorageReference imgProfile = fbRef.child("users/"+ model.getuID()+"profile.jpg");
+        imgProfile.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Picasso.get().load(uri).into(holder.iv_userImage);
+            }
+        });
+
         Log.v("user",String.valueOf(position+1) + " " + model.getName() + " " + model.getDailysteps());
 
     }
+
+    private String setPosition(int position){
+        if (position == 1){
+            return "1\ud83c\udfc6";
+        }else
+            return String.valueOf(position);
+    }
+
 
     @NonNull
     @Override
