@@ -88,13 +88,15 @@ public class EditProfileActivity extends AppCompatActivity {
 
             }
         });
-
+/*
         btn_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
+
+ */
 
         btn_update.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -192,7 +194,7 @@ public class EditProfileActivity extends AppCompatActivity {
         edit_age = findViewById(R.id.edit_age);
         edit_city = findViewById(R.id.edit_city);
         edit_steps = findViewById(R.id.edit_dailygoal);
-        btn_cancel = findViewById(R.id.btn_cancelEdit);
+
         btn_update = findViewById(R.id.btn_update);
         btn_newPicture = findViewById(R.id.btn_changePhoto);
         iv_profilePicture = findViewById(R.id.iv_newUserImage);

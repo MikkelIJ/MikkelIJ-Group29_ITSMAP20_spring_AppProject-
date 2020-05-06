@@ -13,6 +13,7 @@ import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.Menu;
@@ -91,6 +92,8 @@ public class UserActivity extends AppCompatActivity {
         userID = mAuth.getCurrentUser().getUid();
         storageReference = FirebaseStorage.getInstance().getReference();
 
+
+        loadPic();
         initUI();
 
 
@@ -117,18 +120,6 @@ public class UserActivity extends AppCompatActivity {
 
 
 
-        //loading the picture from firebase into imageview
-        final StorageReference imgProfile = storageReference.child("users/"+ mAuth.getUid()+"profile.jpg");
-        imgProfile.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                Picasso.get().load(uri).into(iv_userPicture);
-            }
-
-        });
-
-
-
         registerIntentFilters();
         mOpenWeatherAPI = new OpenWeatherAPI(this,2624652);
 
@@ -141,6 +132,25 @@ public class UserActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+
+    public void loadPic(){
+        //Waiting one second with loading the picture to make sure the picture is on firebase before trying to load it into the imageview
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                final StorageReference imgProfile = storageReference.child("users/"+ mAuth.getUid()+"profile.jpg");
+                imgProfile.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        Picasso.get().load(uri).into(iv_userPicture);
+                    }
+                });
+            }
+        }, 1000);   //5 seconds
+
     }
 
     @Override
