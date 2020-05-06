@@ -105,12 +105,12 @@ public class UserActivity extends AppCompatActivity {
                 if (e!=null){
                     Log.v("onEvent","Error:"+e.getMessage());
                 }else {
-                    tv_stepsTotal.setText(String.valueOf(documentSnapshot.getLong("stepstotal")));
+                    tv_stepsTotal.setText(documentSnapshot.getString("stepstotal"));
                     tv_name.setText(documentSnapshot.getString("name"));
                     tv_email.setText(documentSnapshot.getString("email"));
                     tv_age.setText(documentSnapshot.getString("age"));
                     tv_city.setText(documentSnapshot.getString("city"));
-                    et_dailyGoal.setText(documentSnapshot.getString("dailysteps"));
+                    et_dailyGoal.setText(documentSnapshot.getString("dailygoal"));
                 }
             }
         });
@@ -124,6 +124,7 @@ public class UserActivity extends AppCompatActivity {
             public void onSuccess(Uri uri) {
                 Picasso.get().load(uri).into(iv_userPicture);
             }
+
         });
 
 
@@ -303,11 +304,6 @@ public class UserActivity extends AppCompatActivity {
             Log.v("bcSteps","steps counted:" + stepsCounted);
             tv_stepsToday.setText(String.valueOf(stepsCounted));
 
-            if (stepsCounted != prevStepsCounted){
-                totalsteps = totalsteps + stepsCounted - prevStepsCounted;
-                tv_stepsTotal.setText(String.valueOf(totalsteps));
-                prevStepsCounted = stepsCounted;
-            }
         }
     };
 
