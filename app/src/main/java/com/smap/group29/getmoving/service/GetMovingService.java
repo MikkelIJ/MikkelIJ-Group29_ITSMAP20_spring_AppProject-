@@ -118,7 +118,7 @@ public class GetMovingService extends Service {
             // only allow if stepcounterservice is active
             if (mBound){
                 broadcastSteps();
-                mHandler.postDelayed(this,30000);
+                mHandler.postDelayed(this,1000);
             }
         }
     };

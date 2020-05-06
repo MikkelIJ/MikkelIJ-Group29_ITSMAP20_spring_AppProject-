@@ -172,17 +172,23 @@ public class LeaderboardActivity extends AppCompatActivity {
     }
 
     private void timeTilRefresh(){
-        final CountDownTimer newtimer = new CountDownTimer(30000, 1000) {
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                final CountDownTimer newtimer = new CountDownTimer(30000, 1000) {
 
-            public void onTick(long millisUntilFinished) {
-                progressBar.setProgress((int) ((double) (30000-millisUntilFinished) / 30000 * 100));
-                Log.v("sec",String.valueOf(millisUntilFinished));
-            }
-            public void onFinish() {
-                progressBar.setProgress(0);
+                    public void onTick(long millisUntilFinished) {
+                        progressBar.setProgress((int) ((double) (30000-millisUntilFinished) / 30000 * 100));
+                        Log.v("sec",String.valueOf(millisUntilFinished));
+                    }
+                    public void onFinish() {
+                        progressBar.setProgress(0);
+                    }
+                };
+                newtimer.start();
             }
         };
-        newtimer.start();
+          runnable.run();
     }
 }
 
