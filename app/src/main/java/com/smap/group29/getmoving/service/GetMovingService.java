@@ -1,5 +1,6 @@
 package com.smap.group29.getmoving.service;
 
+import android.app.Notification;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
@@ -8,9 +9,12 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -18,6 +22,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.smap.group29.getmoving.R;
 import com.smap.group29.getmoving.onlineAPI.OpenWeatherAPI;
 import com.smap.group29.getmoving.sensor.StepCounter;
 import com.smap.group29.getmoving.utils.GlobalConstants;
@@ -25,6 +30,8 @@ import com.smap.group29.getmoving.utils.GlobalConstants;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.smap.group29.getmoving.utils.Notifications.CHANNEL_1_ID;
 
 public class GetMovingService extends Service {
 
@@ -39,8 +46,11 @@ public class GetMovingService extends Service {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference dbRef = db.collection(GlobalConstants.FIREBASE_USER_COLLECTION);
+    TextView steps;
 
     private Calendar c; // c.get(Calendar.SECOND)
+
+
 
     // check service running
      boolean mBound = false;
@@ -84,7 +94,9 @@ public class GetMovingService extends Service {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
+
         mBound = true;
+
 
 
     }
@@ -178,4 +190,6 @@ public class GetMovingService extends Service {
         timerIntent.putExtra("startprogressbar",1);
         sendBroadcast(timerIntent);
     }
+
+
 }

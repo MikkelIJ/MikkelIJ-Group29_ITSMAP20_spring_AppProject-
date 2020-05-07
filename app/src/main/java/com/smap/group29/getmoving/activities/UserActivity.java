@@ -3,7 +3,11 @@ package com.smap.group29.getmoving.activities;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -51,6 +55,7 @@ import javax.annotation.Nullable;
 
 import static com.smap.group29.getmoving.service.GetMovingService.BROADCAST_ACTION_STEPS;
 import static com.smap.group29.getmoving.onlineAPI.OpenWeatherAPI.BROADCAST_ACTION_WEATHER;
+import static com.smap.group29.getmoving.utils.Notifications.CHANNEL_1_ID;
 
 
 public class UserActivity extends AppCompatActivity {
@@ -61,6 +66,7 @@ public class UserActivity extends AppCompatActivity {
     String userID;
 
 
+
     private static final String LOGD = "userActivity";
 
     private Button btn_leaderboard;
@@ -69,6 +75,7 @@ public class UserActivity extends AppCompatActivity {
     private ImageView iv_userPicture, iv_weatherIcon;
 
     private Intent stepIntent;
+    private NotificationManagerCompat notificationManager;
 
     private GetMovingService mService;
     private boolean mBound = false;
@@ -91,6 +98,8 @@ public class UserActivity extends AppCompatActivity {
         mStore = FirebaseFirestore.getInstance();
         userID = mAuth.getCurrentUser().getUid();
         storageReference = FirebaseStorage.getInstance().getReference();
+        notificationManager = NotificationManagerCompat.from(this);
+
 
 
         loadPic();
@@ -135,6 +144,8 @@ public class UserActivity extends AppCompatActivity {
     }
 
 
+
+
     public void loadPic(){
         //Waiting one second with loading the picture to make sure the picture is on firebase before trying to load it into the imageview
 
@@ -157,6 +168,7 @@ public class UserActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         initService();
+        createNotification();
     }
 
     @Override
@@ -302,6 +314,25 @@ public class UserActivity extends AppCompatActivity {
 
 
 
+
+    }
+
+    public void createNotification(){
+        String dailySteps = tv_stepsToday.getText().toString();
+        String dailyGoal = et_dailyGoal.getText().toString();
+        String goalReached = "You have reached your daily goal of " + dailyGoal + " steps";
+
+        if(dailySteps == dailyGoal){
+            Notification notification = new NotificationCompat.Builder(this, CHANNEL_1_ID)
+                    .setSmallIcon(R.drawable.ic_walk)
+                    .setContentTitle("Notification from GetMoving")
+                    .setContentText(goalReached)
+                    .setPriority(NotificationCompat.PRIORITY_LOW)
+                    .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                    .build();
+            notificationManager.notify(1, notification);
+
+        }
 
     }
 
