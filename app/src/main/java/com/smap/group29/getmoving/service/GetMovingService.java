@@ -26,6 +26,7 @@ import com.smap.group29.getmoving.R;
 import com.smap.group29.getmoving.onlineAPI.OpenWeatherAPI;
 import com.smap.group29.getmoving.sensor.StepCounter;
 import com.smap.group29.getmoving.utils.GlobalConstants;
+import com.smap.group29.getmoving.utils.Notifications;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -49,11 +50,12 @@ public class GetMovingService extends Service {
     TextView steps;
 
     private Calendar c; // c.get(Calendar.SECOND)
+    private Notifications mNotifications = new Notifications();
 
 
 
     // check service running
-     boolean mBound = false;
+
 
      Intent stepIntent, weatherIntent, timerIntent;
 
@@ -95,22 +97,22 @@ public class GetMovingService extends Service {
         db = FirebaseFirestore.getInstance();
 
 
-        mBound = true;
-
-
-
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        return START_STICKY;
+
+
+        Notification notification = new NotificationCompat.Builder(this, CHANNEL_1_ID)
+                .setContentTitle("Example IntentService")
+                .setContentText("Running...")
+                .setSmallIcon(R.drawable.ic_android_black_24dp)
+                .build();
+
+        startForeground(1, notification);
+
+        return START_NOT_STICKY;
     }
-
-    public void GM_removeCallbacks(){
-        mHandler.removeCallbacks(updateStepsLeaderBoard);
-    }
-
-
 
     @Override
     public void onDestroy() {
@@ -118,9 +120,16 @@ public class GetMovingService extends Service {
         mStepCounter.unRegisterStepCounter();
         mHandler.removeCallbacks(updateBroadcastData);
         mHandler.removeCallbacks(updateStepsLeaderBoard);
-        mBound = false;
         Log.v("service", "Stopped");
     }
+
+
+    public void GM_removeCallbacks(){
+        mHandler.removeCallbacks(updateStepsLeaderBoard);
+    }
+
+
+
 
 
     // runnable used for async method
@@ -128,10 +137,10 @@ public class GetMovingService extends Service {
         @Override
         public void run() {
             // only allow if stepcounterservice is active
-            if (mBound){
+
                 broadcastSteps();
                 mHandler.postDelayed(this,1000);
-            }
+
         }
     };
 
@@ -139,24 +148,19 @@ public class GetMovingService extends Service {
     public Runnable updateStepsLeaderBoard = new Runnable() {
         @Override
         public void run() {
-            if (mBound){
-                Log.v("sec","runnable activated");
+
+            Log.v("sec","runnable activated");
             updateDailySteps();
             tellProgressbarToStart();
             mHandler.postDelayed(this,30000);
-            }
+
         }
     };
 
-    public void stopRepeating() {
-        mHandler.removeCallbacks(updateStepsLeaderBoard);
-        mHandler.removeCallbacks(updateBroadcastData);
-
-    }
 
     public void updateDailySteps(){
 
-        if (mBound) {
+
             String userID = mAuth.getCurrentUser().getUid();
             //creating new document and storing the data with hashmap
             DocumentReference documentReference = db.collection(GlobalConstants.FIREBASE_USER_COLLECTION).document(userID);
@@ -175,12 +179,12 @@ public class GetMovingService extends Service {
                     Log.v("updatesteps", e.getMessage());
                 }
             });
-        }
+
     }
 
 
     private void broadcastSteps(){
-        Log.d(LOGD, "broadcasting step values");
+        Log.v("getSteps", "broadcasting step values");
         stepIntent.putExtra("counted_steps",mStepCounter.getSteps());
         sendBroadcast(stepIntent);
     }
