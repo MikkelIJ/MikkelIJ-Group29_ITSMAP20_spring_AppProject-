@@ -104,6 +104,14 @@ public class UserActivity extends AppCompatActivity {
         loadPic();
         initUI();
 
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                startService1();
+
+
+            }
+        }, 3000);   //5 seconds
 
 
 
@@ -145,6 +153,9 @@ public class UserActivity extends AppCompatActivity {
 
 
 
+
+
+
     public void loadPic(){
         //Waiting one second with loading the picture to make sure the picture is on firebase before trying to load it into the imageview
 
@@ -167,6 +178,8 @@ public class UserActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         initService();
+
+
 
     }
 
@@ -255,6 +268,26 @@ public class UserActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         stopService(stepIntent);
+    }
+
+    public void startService1(){
+
+        String dailyGoal = et_dailyGoal.getText().toString();
+        String dailySteps = tv_stepsToday.getText().toString();
+
+        Intent serviceIntent = new Intent(this, GetMovingService.class);
+        serviceIntent.putExtra("dailyGoal", dailyGoal);
+        serviceIntent.putExtra("dailySteps", dailySteps);
+
+        startService( serviceIntent);
+
+    }
+
+    public void stopService( View v){
+
+        Intent serviceIntent = new Intent(this, GetMovingService.class);
+        stopService(serviceIntent);
+
     }
 
     private void initService(){

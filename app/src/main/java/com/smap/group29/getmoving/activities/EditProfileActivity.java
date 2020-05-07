@@ -115,7 +115,7 @@ public class EditProfileActivity extends AppCompatActivity {
                         Map<String, Object> editedUser = new HashMap<>();
                         editedUser.put("age", edit_age.getText().toString());
                         editedUser.put("city", edit_city.getText().toString());
-                        editedUser.put("dailysteps", edit_steps.getText().toString());
+                        editedUser.put("dailygoal", edit_steps.getText().toString());
                         editedUser.put("email",email);
                         editedUser.put("name", edit_name.getText().toString());
 

@@ -1,6 +1,7 @@
 package com.smap.group29.getmoving.service;
 
 import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
@@ -31,6 +32,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.smap.group29.getmoving.R;
+import com.smap.group29.getmoving.activities.UserActivity;
 import com.smap.group29.getmoving.onlineAPI.OpenWeatherAPI;
 import com.smap.group29.getmoving.sensor.StepCounter;
 import com.smap.group29.getmoving.utils.GlobalConstants;
@@ -115,40 +117,39 @@ public class GetMovingService extends Service {
 
         notificationManager = NotificationManagerCompat.from(this);
 
-        mBound = true;
-
-
-        final DocumentReference documentReference = db.collection(GlobalConstants.FIREBASE_USER_COLLECTION).document(userID);
-        documentReference.addSnapshotListener((Executor) this, new EventListener<DocumentSnapshot>() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                if (e!=null){
-                    Log.v("onEvent","Error:"+e.getMessage());
-                }else {
-                    dailyGoal = documentSnapshot.getString("dailygoal");
-
-                }
-            }
-        });
-
 
 
     }
 
+    //inspired by https://www.youtube.com/watch?v=FbpD5RZtbCc
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
 
-        Notification notification = new NotificationCompat.Builder(this, CHANNEL_1_ID)
-                .setContentTitle("Example IntentService")
-                .setContentText("Running...")
-                .setSmallIcon(R.drawable.ic_android_black_24dp)
-                .build();
+        String dailygoal = intent.getStringExtra("dailyGoal");
+        String dailysteps = intent.getStringExtra("dailySteps");
+        String goalReached = "You have reached your daily goal of " + dailyGoal + " steps";
 
-        startForeground(1, notification);
+        //Opens the userActivty from the notification
+        Intent notificationIntent = new Intent(this, UserActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,notificationIntent,0);
 
-        return START_NOT_STICKY;
+
+        if (dailygoal == dailysteps){
+            Notification notification = new NotificationCompat.Builder(this, CHANNEL_1_ID)
+                    .setSmallIcon(R.drawable.ic_walk)
+                    .setContentTitle("Notification from GetMoving")
+                    .setContentText(goalReached)
+                    .setPriority(NotificationCompat.PRIORITY_LOW)
+                    .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                    .build();
+
+            startForeground(1, notification);
+
+        }
+
+
+        return START_STICKY;
     }
 
     @Override
