@@ -1,21 +1,15 @@
 package com.smap.group29.getmoving.service;
 
 import android.app.Notification;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
-import android.os.Build;
-import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
-import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
@@ -24,17 +18,13 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.smap.group29.getmoving.R;
-import com.smap.group29.getmoving.activities.UserActivity;
 import com.smap.group29.getmoving.onlineAPI.OpenWeatherAPI;
 import com.smap.group29.getmoving.sensor.StepCounter;
 import com.smap.group29.getmoving.utils.FirebaseUtil;
@@ -42,11 +32,9 @@ import com.smap.group29.getmoving.utils.GlobalConstants;
 import com.smap.group29.getmoving.utils.Notifications;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Executor;
-
-import javax.annotation.Nullable;
 
 import static com.smap.group29.getmoving.utils.Notifications.CHANNEL_1_ID;
 
@@ -72,7 +60,9 @@ public class GetMovingService extends Service {
     private Notifications mNotifications = new Notifications();
 
     private FirebaseUtil firebaseUtil;
-
+    private Date currentTime = Calendar.getInstance().getTime();
+    private int currentDay = 4;
+    private int currentSteps = 666;
 
 
     // check service running
@@ -122,6 +112,7 @@ public class GetMovingService extends Service {
 
         notificationManager = NotificationManagerCompat.from(this);
         getValFirebase();
+        listenToFirebase();
 
     }
 
@@ -129,6 +120,7 @@ public class GetMovingService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
+        // service stops after 1 minute if this notification is not set
             Notification notification = new NotificationCompat.Builder(this, CHANNEL_1_ID)
                     .setSmallIcon(R.drawable.ic_walk)
                     .setContentTitle("Notification from GetMoving")
@@ -182,11 +174,10 @@ public class GetMovingService extends Service {
     public Runnable updateBroadcastData = new Runnable() {
         @Override
         public void run() {
-            // only allow if stepcounterservice is active
-
+            if (mStepCounter.getSteps() != currentSteps){
                 broadcastSteps();
-                mHandler.postDelayed(this,1000);
-
+            }
+            mHandler.postDelayed(this,1000);
         }
     };
 
@@ -195,16 +186,24 @@ public class GetMovingService extends Service {
         @Override
         public void run() {
 
-            Log.v("sec","runnable activated");
-            updateDailySteps();
+            if (mStepCounter.getSteps() != 0)
+            {
+                updateDailySteps(mStepCounter.getSteps());
+                if (currentTime.getDay() != currentDay){
+                    updateDailySteps(0);
+                    currentDay = currentTime.getDay();
+                }
+            }
             tellProgressbarToStart();
+            Log.v("sec","runnable activated");
             mHandler.postDelayed(this,30000);
+
 
         }
     };
 
 
-    public void updateDailySteps(){
+    public void updateDailySteps(int stepValue){
 
 
             String userID = mAuth.getCurrentUser().getUid();
@@ -212,7 +211,7 @@ public class GetMovingService extends Service {
             DocumentReference documentReference = db.collection(GlobalConstants.FIREBASE_USER_COLLECTION).document(userID);
 
             Map<String, Object> steps = new HashMap<>();
-            steps.put("dailysteps", String.valueOf(mStepCounter.getSteps()));
+            steps.put("dailysteps", String.valueOf(stepValue));
             dbRef.document(userID).update(steps).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
@@ -242,8 +241,8 @@ public class GetMovingService extends Service {
     }
 
     public void getValFirebase(){
-        DocumentReference documentReference = db.collection(GlobalConstants.FIREBASE_USER_COLLECTION).document(userID);
-        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+
+        dbRef.document().get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
@@ -258,6 +257,31 @@ public class GetMovingService extends Service {
                 }
             }
         });
+    }
+
+    public void updateUserValueFirebase(final String string, final String value){
+
+        dbRef.document().update(string,value).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.v("updatevalue","userValue " + string + "was updated to" + value);
+            }
+        });
+    }
+
+    private void listenToFirebase(){
+//        //setting up the data from firebase user
+//        final DocumentReference documentReference = db.collection(GlobalConstants.FIREBASE_USER_COLLECTION).document(userID);
+//        documentReference.addSnapshotListener(, new EventListener<DocumentSnapshot>() {
+//            @Override
+//            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+//                if (e!=null){
+//                    Log.v("onEvent","Error:"+e.getMessage());
+//                }else {
+//                    Log.v("fb", "DocumentSnapshot data: " + documentSnapshot.get("name"));
+//                }
+//            }
+//        });
     }
 
 }

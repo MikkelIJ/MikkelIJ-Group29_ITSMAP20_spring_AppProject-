@@ -1,13 +1,11 @@
 package com.smap.group29.getmoving.activities;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import android.app.Notification;
-import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -15,7 +13,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -25,8 +22,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -36,12 +31,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.ListenerRegistration;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.smap.group29.getmoving.R;
@@ -52,8 +42,6 @@ import com.smap.group29.getmoving.utils.GlobalConstants;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-
-import javax.annotation.Nullable;
 
 import static com.smap.group29.getmoving.service.GetMovingService.BROADCAST_ACTION_STEPS;
 import static com.smap.group29.getmoving.onlineAPI.OpenWeatherAPI.BROADCAST_ACTION_WEATHER;
@@ -89,7 +77,7 @@ public class UserActivity extends AppCompatActivity {
 
     private int stepsCounted = 0;
     private int prevStepsCounted = 0;
-    private int totalsteps = 0;
+    private int stepsTotal = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,43 +89,12 @@ public class UserActivity extends AppCompatActivity {
         storageReference = FirebaseStorage.getInstance().getReference();
         notificationManager = NotificationManagerCompat.from(this);
 
-
-
         loadPic();
         initUI();
-
-
-
-
-        //setting up the data from firebase user
-        final DocumentReference documentReference = mStore.collection(GlobalConstants.FIREBASE_USER_COLLECTION).document(userID);
-        documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                if (e!=null){
-                    Log.v("onEvent","Error:"+e.getMessage());
-                }else {
-                    tv_stepsTotal.setText(documentSnapshot.getString("stepstotal"));
-                    tv_name.setText(documentSnapshot.getString("name"));
-                    tv_email.setText(documentSnapshot.getString("email"));
-                    tv_age.setText(documentSnapshot.getString("age"));
-                    tv_city.setText(documentSnapshot.getString("city"));
-                    tv_dailyGoal.setText(documentSnapshot.getString("dailygoal"));
-                }
-            }
-        });
-
-
-
-
-
-
+        getUserDataFirebase();
 
         registerIntentFilters();
         mOpenWeatherAPI = new OpenWeatherAPI(this,2624652);
-
-
 
         btn_leaderboard.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -177,7 +134,7 @@ public class UserActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         initService();
-        createNotification();
+        //createNotification();
     }
 
     @Override
@@ -224,6 +181,7 @@ public class UserActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
+        mService.updateUserValueFirebase("stepstotal",stepsTotal+"");
         unbindService(serviceConnection);
         mBound = false;
     }
@@ -245,28 +203,15 @@ public class UserActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    /*
-    private void uploadUserID(){
-        //upload userId to storage for gloabel access to fetch users for leaderboard
-        StorageReference fileRef = storageReference.child("userlist/");
-        Intent userIntent = new Intent();
-        userIntent.putExtra("userUri",mAuth.getCurrentUser().getUid().toString());
-        Uri userUri =  userIntent.getData();
-        fileRef.putFile(userUri);
-    }
 
- */
 
     public void logout(){
         mService.GM_removeCallbacks();
-        mService.updateDailySteps(); // upload latest stepsvalue and total steps
         FirebaseAuth.getInstance().signOut();
         startActivity(new Intent(getApplicationContext(), LoginActivity.class));
         finish();
 
     }
-
-
 
 
     private void initService(){
@@ -354,6 +299,12 @@ public class UserActivity extends AppCompatActivity {
 
             Log.v("bcSteps","steps counted:" + stepsCounted);
             tv_stepsToday.setText(String.valueOf(stepsCounted));
+            if (stepsCounted > prevStepsCounted){
+                stepsTotal = stepsTotal + stepsCounted - prevStepsCounted;
+                tv_stepsTotal.setText(String.valueOf(stepsTotal));
+                prevStepsCounted = stepsCounted;
+            }
+
 
         }
     };
@@ -372,4 +323,34 @@ public class UserActivity extends AppCompatActivity {
             Picasso.get().load(weatherMessage.get(4)).error(R.drawable.noimage).into(iv_weatherIcon);
         }
     };
+
+
+    private void getUserDataFirebase(){
+        DocumentReference documentReference = mStore.collection(GlobalConstants.FIREBASE_USER_COLLECTION).document(userID);
+        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.v("fb", "DocumentSnapshot data: " + document.getData());
+                    stepsTotal = Integer.parseInt(document.getString("stepstotal"));
+                    tv_stepsTotal.setText(document.getString("stepstotal"));
+                    tv_name.setText(document.getString("name"));
+                    tv_email.setText(document.getString("email"));
+                    tv_age.setText(document.getString("age"));
+                    tv_city.setText(document.getString("city"));
+                    tv_dailyGoal.setText(document.getString("dailygoal"));
+                    } else {
+                        Log.d("fb", "No such document");
+                    }
+                } else {
+                    Log.d("fb", "get failed with ", task.getException());
+                }
+            }
+        });
+    }
+
+
+
 }

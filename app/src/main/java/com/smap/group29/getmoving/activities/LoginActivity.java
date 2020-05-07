@@ -20,6 +20,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.smap.group29.getmoving.R;
 import com.smap.group29.getmoving.utils.CheckPermissions;
+import com.smap.group29.getmoving.utils.FirebaseUtil;
 
 public class LoginActivity extends AppCompatActivity{
 
@@ -30,6 +31,7 @@ public class LoginActivity extends AppCompatActivity{
     private FirebaseAuth mAuth;
     private ProgressBar progressBar;
     private CheckPermissions mCheckPermissions;
+
 
 
 
@@ -118,6 +120,8 @@ public class LoginActivity extends AppCompatActivity{
                         }
                     }
                 });
+
+                //firebaseUtil.signIn(email,password);
             }
         });
 
