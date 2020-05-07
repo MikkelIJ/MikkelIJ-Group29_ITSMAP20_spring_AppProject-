@@ -70,12 +70,11 @@ public class UserActivity extends AppCompatActivity {
     private static final String LOGD = "userActivity";
 
     private Button btn_leaderboard;
-    private EditText et_dailyGoal;
-    private TextView tv_name, tv_age, tv_city, tv_weatherTemp,tv_weatherFeelsLike, tv_weatherHumid, tv_weatherDescription, tv_stepsToday, tv_stepsTotal, tv_email;
+    private TextView tv_name, tv_age, tv_city, tv_weatherTemp,tv_weatherFeelsLike, tv_weatherHumid, tv_weatherDescription, tv_stepsToday, tv_stepsTotal, tv_email, et_dailyGoal;
     private ImageView iv_userPicture, iv_weatherIcon;
 
     private Intent stepIntent;
-    private NotificationManagerCompat notificationManager;
+
 
     private GetMovingService mService;
     private boolean mBound = false;
@@ -98,7 +97,7 @@ public class UserActivity extends AppCompatActivity {
         mStore = FirebaseFirestore.getInstance();
         userID = mAuth.getCurrentUser().getUid();
         storageReference = FirebaseStorage.getInstance().getReference();
-        notificationManager = NotificationManagerCompat.from(this);
+
 
 
 
@@ -168,7 +167,7 @@ public class UserActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         initService();
-        createNotification();
+
     }
 
     @Override
@@ -317,24 +316,7 @@ public class UserActivity extends AppCompatActivity {
 
     }
 
-    public void createNotification(){
-        String dailySteps = tv_stepsToday.getText().toString();
-        String dailyGoal = et_dailyGoal.getText().toString();
-        String goalReached = "You have reached your daily goal of " + dailyGoal + " steps";
 
-        if(dailySteps == dailyGoal){
-            Notification notification = new NotificationCompat.Builder(this, CHANNEL_1_ID)
-                    .setSmallIcon(R.drawable.ic_walk)
-                    .setContentTitle("Notification from GetMoving")
-                    .setContentText(goalReached)
-                    .setPriority(NotificationCompat.PRIORITY_LOW)
-                    .setCategory(NotificationCompat.CATEGORY_MESSAGE)
-                    .build();
-            notificationManager.notify(1, notification);
-
-        }
-
-    }
 
 
     private BroadcastReceiver broadcastReceiverSteps = new BroadcastReceiver() {

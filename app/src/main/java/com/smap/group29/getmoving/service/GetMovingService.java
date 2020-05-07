@@ -4,6 +4,7 @@ import android.app.Notification;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
+import android.os.Build;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.IBinder;
@@ -13,15 +14,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.smap.group29.getmoving.R;
 import com.smap.group29.getmoving.onlineAPI.OpenWeatherAPI;
 import com.smap.group29.getmoving.sensor.StepCounter;
@@ -31,6 +39,9 @@ import com.smap.group29.getmoving.utils.Notifications;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Executor;
+
+import javax.annotation.Nullable;
 
 import static com.smap.group29.getmoving.utils.Notifications.CHANNEL_1_ID;
 
@@ -43,9 +54,12 @@ public class GetMovingService extends Service {
 
     private StepCounter mStepCounter;
     private OpenWeatherAPI mOpenWeatherAPI;
+    private NotificationManagerCompat notificationManager;
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+    private String userID, dailyGoal;
     private CollectionReference dbRef = db.collection(GlobalConstants.FIREBASE_USER_COLLECTION);
     TextView steps;
 
@@ -95,6 +109,29 @@ public class GetMovingService extends Service {
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
+        storageReference = FirebaseStorage.getInstance().getReference();
+        userID = mAuth.getCurrentUser().getUid();
+
+
+        notificationManager = NotificationManagerCompat.from(this);
+
+        mBound = true;
+
+
+        final DocumentReference documentReference = db.collection(GlobalConstants.FIREBASE_USER_COLLECTION).document(userID);
+        documentReference.addSnapshotListener((Executor) this, new EventListener<DocumentSnapshot>() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                if (e!=null){
+                    Log.v("onEvent","Error:"+e.getMessage());
+                }else {
+                    dailyGoal = documentSnapshot.getString("dailygoal");
+
+                }
+            }
+        });
+
 
 
     }
@@ -121,6 +158,24 @@ public class GetMovingService extends Service {
         mHandler.removeCallbacks(updateBroadcastData);
         mHandler.removeCallbacks(updateStepsLeaderBoard);
         Log.v("service", "Stopped");
+    }
+
+    public void createNotification(){
+
+        String dailySteps = String.valueOf(mStepCounter.getSteps());
+        String goalReached = "You have reached your daily goal of " + dailyGoal + " steps";
+        if(dailySteps == dailyGoal){
+            Notification notification = new NotificationCompat.Builder(this, CHANNEL_1_ID)
+                    .setSmallIcon(R.drawable.ic_walk)
+                    .setContentTitle("Notification from GetMoving")
+                    .setContentText(goalReached)
+                    .setPriority(NotificationCompat.PRIORITY_LOW)
+                    .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                    .build();
+            notificationManager.notify(1, notification);
+
+        }
+
     }
 
 

@@ -72,7 +72,6 @@ public class LeaderboardActivity extends AppCompatActivity {
         //mService.GM_removeCallbacks(); //crasher
 
 
-
         getTimerFlagFilter.addAction("TIMER");
         registerReceiver(broadcastReceiver,getTimerFlagFilter);
     }
