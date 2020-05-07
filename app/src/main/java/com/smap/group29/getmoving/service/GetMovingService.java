@@ -19,8 +19,10 @@ import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.firestore.CollectionReference;
@@ -35,6 +37,7 @@ import com.smap.group29.getmoving.R;
 import com.smap.group29.getmoving.activities.UserActivity;
 import com.smap.group29.getmoving.onlineAPI.OpenWeatherAPI;
 import com.smap.group29.getmoving.sensor.StepCounter;
+import com.smap.group29.getmoving.utils.FirebaseUtil;
 import com.smap.group29.getmoving.utils.GlobalConstants;
 import com.smap.group29.getmoving.utils.Notifications;
 
@@ -67,6 +70,8 @@ public class GetMovingService extends Service {
 
     private Calendar c; // c.get(Calendar.SECOND)
     private Notifications mNotifications = new Notifications();
+
+    private FirebaseUtil firebaseUtil;
 
 
 
@@ -116,8 +121,7 @@ public class GetMovingService extends Service {
 
 
         notificationManager = NotificationManagerCompat.from(this);
-
-
+        getValFirebase();
 
     }
 
@@ -125,29 +129,15 @@ public class GetMovingService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-
-        String dailygoal = intent.getStringExtra("dailyGoal");
-        String dailysteps = intent.getStringExtra("dailySteps");
-        String goalReached = "You have reached your daily goal of " + dailyGoal + " steps";
-
-        //Opens the userActivty from the notification
-        Intent notificationIntent = new Intent(this, UserActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,notificationIntent,0);
-
-
-        if (dailygoal == dailysteps){
             Notification notification = new NotificationCompat.Builder(this, CHANNEL_1_ID)
                     .setSmallIcon(R.drawable.ic_walk)
                     .setContentTitle("Notification from GetMoving")
-                    .setContentText(goalReached)
+                    .setContentText("goalReached")
                     .setPriority(NotificationCompat.PRIORITY_LOW)
                     .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                     .build();
 
             startForeground(1, notification);
-
-        }
-
 
         return START_STICKY;
     }
@@ -251,5 +241,23 @@ public class GetMovingService extends Service {
         sendBroadcast(timerIntent);
     }
 
+    public void getValFirebase(){
+        DocumentReference documentReference = db.collection(GlobalConstants.FIREBASE_USER_COLLECTION).document(userID);
+        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.v("fb", "DocumentSnapshot data: " + document.getData());
+                    } else {
+                        Log.d("fb", "No such document");
+                    }
+                } else {
+                    Log.d("fb", "get failed with ", task.getException());
+                }
+            }
+        });
+    }
 
 }

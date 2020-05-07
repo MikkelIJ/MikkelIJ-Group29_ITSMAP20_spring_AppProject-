@@ -30,7 +30,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -70,11 +72,11 @@ public class UserActivity extends AppCompatActivity {
     private static final String LOGD = "userActivity";
 
     private Button btn_leaderboard;
-    private TextView tv_name, tv_age, tv_city, tv_weatherTemp,tv_weatherFeelsLike, tv_weatherHumid, tv_weatherDescription, tv_stepsToday, tv_stepsTotal, tv_email, et_dailyGoal;
+    private TextView tv_name, tv_age, tv_city, tv_weatherTemp,tv_weatherFeelsLike, tv_weatherHumid, tv_weatherDescription, tv_stepsToday, tv_stepsTotal, tv_email, tv_dailyGoal;
     private ImageView iv_userPicture, iv_weatherIcon;
 
     private Intent stepIntent;
-
+    private NotificationManagerCompat notificationManager;
 
     private GetMovingService mService;
     private boolean mBound = false;
@@ -97,21 +99,13 @@ public class UserActivity extends AppCompatActivity {
         mStore = FirebaseFirestore.getInstance();
         userID = mAuth.getCurrentUser().getUid();
         storageReference = FirebaseStorage.getInstance().getReference();
-
+        notificationManager = NotificationManagerCompat.from(this);
 
 
 
         loadPic();
         initUI();
 
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            public void run() {
-                startService1();
-
-
-            }
-        }, 3000);   //5 seconds
 
 
 
@@ -129,10 +123,14 @@ public class UserActivity extends AppCompatActivity {
                     tv_email.setText(documentSnapshot.getString("email"));
                     tv_age.setText(documentSnapshot.getString("age"));
                     tv_city.setText(documentSnapshot.getString("city"));
-                    et_dailyGoal.setText(documentSnapshot.getString("dailygoal"));
+                    tv_dailyGoal.setText(documentSnapshot.getString("dailygoal"));
                 }
             }
         });
+
+
+
+
 
 
 
@@ -149,6 +147,7 @@ public class UserActivity extends AppCompatActivity {
             }
         });
     }
+
 
 
 
@@ -178,9 +177,7 @@ public class UserActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         initService();
-
-
-
+        createNotification();
     }
 
     @Override
@@ -207,39 +204,6 @@ public class UserActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-    private void openSettings() {
-        Intent intent = new Intent(getApplicationContext(), EditProfileActivity.class);
-        intent.putExtra("name", tv_name.getText().toString());
-        intent.putExtra("age", tv_age.getText().toString());
-        intent.putExtra("city", tv_city.getText().toString());
-        intent.putExtra("steps", et_dailyGoal.getText().toString());
-        intent.putExtra("email", tv_email.getText().toString());
-
-        startActivity(intent);
-    }
-
-    /*
-    private void uploadUserID(){
-        //upload userId to storage for gloabel access to fetch users for leaderboard
-        StorageReference fileRef = storageReference.child("userlist/");
-        Intent userIntent = new Intent();
-        userIntent.putExtra("userUri",mAuth.getCurrentUser().getUid().toString());
-        Uri userUri =  userIntent.getData();
-        fileRef.putFile(userUri);
-    }
-
- */
-
-    public void logout(){
-        mService.GM_removeCallbacks();
-        mService.updateDailySteps(); // upload latest stepsvalue and total steps
-        FirebaseAuth.getInstance().signOut();
-        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-        finish();
-
-    }
-
 
     @Override
     protected void onPause() {
@@ -270,32 +234,47 @@ public class UserActivity extends AppCompatActivity {
         stopService(stepIntent);
     }
 
-    public void startService1(){
+    private void openSettings() {
+        Intent intent = new Intent(getApplicationContext(), EditProfileActivity.class);
+        intent.putExtra("name", tv_name.getText().toString());
+        intent.putExtra("age", tv_age.getText().toString());
+        intent.putExtra("city", tv_city.getText().toString());
+        intent.putExtra("steps", tv_dailyGoal.getText().toString());
+        intent.putExtra("email", tv_email.getText().toString());
 
-        String dailyGoal = et_dailyGoal.getText().toString();
-        String dailySteps = tv_stepsToday.getText().toString();
+        startActivity(intent);
+    }
 
-        Intent serviceIntent = new Intent(this, GetMovingService.class);
-        serviceIntent.putExtra("dailyGoal", dailyGoal);
-        serviceIntent.putExtra("dailySteps", dailySteps);
+    /*
+    private void uploadUserID(){
+        //upload userId to storage for gloabel access to fetch users for leaderboard
+        StorageReference fileRef = storageReference.child("userlist/");
+        Intent userIntent = new Intent();
+        userIntent.putExtra("userUri",mAuth.getCurrentUser().getUid().toString());
+        Uri userUri =  userIntent.getData();
+        fileRef.putFile(userUri);
+    }
 
-        startService( serviceIntent);
+ */
+
+    public void logout(){
+        mService.GM_removeCallbacks();
+        mService.updateDailySteps(); // upload latest stepsvalue and total steps
+        FirebaseAuth.getInstance().signOut();
+        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+        finish();
 
     }
 
-    public void stopService( View v){
 
-        Intent serviceIntent = new Intent(this, GetMovingService.class);
-        stopService(serviceIntent);
 
-    }
 
     private void initService(){
 
         // Binds ListActivity to the WordlearnerService.
         stepIntent = new Intent(this,GetMovingService.class);
-        startService(stepIntent);
-        bindService(stepIntent,serviceConnection,Context.BIND_AUTO_CREATE);
+        startService(stepIntent); //startservice() is needed for the app to run forever. Though bindService() should call startService() i can not get it to work otherwise
+        bindService(stepIntent,serviceConnection,Context.BIND_AUTO_CREATE); // bindService() makes it posible to use mService and use it to execute methods in the service
     }
 
     private void registerIntentFilters(){
@@ -337,7 +316,7 @@ public class UserActivity extends AppCompatActivity {
         tv_weatherDescription = findViewById(R.id.tv_weatherDescription);
         tv_stepsToday         = findViewById(R.id.tv_steps_today);
         tv_stepsTotal         = findViewById(R.id.tv_stepsTotal);
-        et_dailyGoal          = findViewById(R.id.et_dailygoal);
+        tv_dailyGoal          = findViewById(R.id.et_dailygoal);
         iv_userPicture        = findViewById(R.id.iv_userProfilePic);
         iv_weatherIcon        = findViewById(R.id.iv_weatherIcon);
         btn_leaderboard       = findViewById(R.id.btn_user_leaderboard);
@@ -349,7 +328,23 @@ public class UserActivity extends AppCompatActivity {
 
     }
 
+    public void createNotification(){
+        String dailySteps = tv_stepsToday.getText().toString();
+        String dailyGoal = tv_dailyGoal.getText().toString();
+        String goalReached = "You have reached your daily goal of " + dailyGoal + " steps";
 
+        if(dailySteps == dailyGoal){
+            Notification notification = new NotificationCompat.Builder(this, CHANNEL_1_ID)
+                    .setSmallIcon(R.drawable.ic_walk)
+                    .setContentTitle("Notification from GetMoving")
+                    .setContentText(goalReached)
+                    .setPriority(NotificationCompat.PRIORITY_LOW)
+                    .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                    .build();
+            notificationManager.notify(1, notification);
+
+        }
+    }
 
 
     private BroadcastReceiver broadcastReceiverSteps = new BroadcastReceiver() {
