@@ -6,15 +6,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -27,23 +31,33 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.smap.group29.getmoving.R;
 import com.smap.group29.getmoving.adaptor.LeaderboardAdaptor;
 import com.smap.group29.getmoving.model.NewUser;
 import com.smap.group29.getmoving.service.GetMovingService;
 import com.smap.group29.getmoving.utils.GlobalConstants;
+import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
+import java.util.List;
 
 import static com.smap.group29.getmoving.service.GetMovingService.BROADCAST_ACTION_STEPS;
 
 
 // Firebase recyclerview inspired by https://github.com/firebase/FirebaseUI-Android/blob/master/database/README.md#using-the-firebaserecycleradapter
 // and https://codinginflow.com/tutorials/android/firebaseui-firestorerecycleradapter/part-4-new-note-activity
-public class LeaderboardActivity extends AppCompatActivity {
+public class LeaderboardActivity extends AppCompatActivity implements LeaderboardAdaptor.OnItemClickListener{
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference dbRef = db.collection(GlobalConstants.FIREBASE_USER_COLLECTION);
@@ -55,12 +69,19 @@ public class LeaderboardActivity extends AppCompatActivity {
 
     private Intent stepIntent;
     private IntentFilter getTimerFlagFilter = new IntentFilter();
-    private Button btn_back;
+    private TextView tv_header, tv_wins, tv_followers, tv_totalSteps;
+    private Button btn_back, btn_switchView, btn_follow;
+    private ImageView iv_userPictureLand;
 
     private GetMovingService mService;
     private boolean mBound = false;
 
     private ProgressBar progressBar;
+
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore mStore;
+    private StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+    private String userID;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,9 +92,19 @@ public class LeaderboardActivity extends AppCompatActivity {
         setUI();
         //mService.GM_removeCallbacks(); //crasher
 
+        mAuth = FirebaseAuth.getInstance();
+        mStore = FirebaseFirestore.getInstance();
+        userID = mAuth.getCurrentUser().getUid();
+        storageReference = FirebaseStorage.getInstance().getReference();
+
 
         getTimerFlagFilter.addAction("TIMER");
         registerReceiver(broadcastReceiver,getTimerFlagFilter);
+
+
+
+
+
     }
 
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
@@ -92,6 +123,11 @@ public class LeaderboardActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         mAdapter.startListening();
+        int orientation = getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            //getUserDataFirebase(mAdapter.getItem(1).getuID());
+            //loadPic(mAdapter.getItem(0).getuID());
+        }
 
         stepIntent = new Intent(this,GetMovingService.class);
         bindService(stepIntent,serviceConnection,Context.BIND_AUTO_CREATE);
@@ -147,7 +183,7 @@ public class LeaderboardActivity extends AppCompatActivity {
         Query query = dbRef.orderBy("dailysteps",Query.Direction.DESCENDING);
         FirestoreRecyclerOptions<NewUser> mOptions = new FirestoreRecyclerOptions.Builder<NewUser>().setQuery(query, NewUser.class).build();
 
-        mAdapter = new LeaderboardAdaptor(mOptions);
+        mAdapter = new LeaderboardAdaptor(mOptions,this);
 
         mUserList.setHasFixedSize(true);
         mUserList.setLayoutManager(new LinearLayoutManager(this));
@@ -157,6 +193,11 @@ public class LeaderboardActivity extends AppCompatActivity {
     private void initUI() {
         btn_back = findViewById(R.id.btn_leaderboardBack);
         progressBar = findViewById(R.id.progressBar3);
+        tv_header = findViewById(R.id.tv_LeaderboardHeader);
+        tv_wins = findViewById(R.id.tv_leaderboardLand_Wins);
+        tv_followers = findViewById(R.id.tv_leaderboardLandFollowers);
+        tv_totalSteps = findViewById(R.id.tv_totalStepsLeaderboardLand);
+        iv_userPictureLand = findViewById(R.id.iv_leaderboardLand);
     }
 
 
@@ -188,6 +229,53 @@ public class LeaderboardActivity extends AppCompatActivity {
             }
         };
           runnable.run();
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        String UserID = mAdapter.getItem(position).getuID();
+        getUserDataFirebase(UserID);
+        loadPic(UserID);
+    }
+
+    private void getUserDataFirebase(String userID){
+        DocumentReference documentReference = mStore.collection(GlobalConstants.FIREBASE_USER_COLLECTION).document(userID);
+        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.v("fb", "DocumentSnapshot data: " + document.getData());
+                        tv_totalSteps.setText("Total steps: "+document.getString("stepstotal"));
+                        tv_followers.setText("Followers: "+document.getString("followers"));
+                        tv_wins.setText("Wins: "+document.getString("wins"));
+                    } else {
+                        Log.d("fb", "No such document");
+                    }
+                } else {
+                    Log.d("fb", "get failed with ", task.getException());
+                }
+            }
+        });
+    }
+
+    public void loadPic(final String userID){
+        //Waiting one second with loading the picture to make sure the picture is on firebase before trying to load it into the imageview
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                final StorageReference imgProfile = storageReference.child("users/"+ userID+"profile.jpg");
+                imgProfile.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        Picasso.get().load(uri).into(iv_userPictureLand);
+                    }
+                });
+            }
+        }, 1000);
+
     }
 }
 

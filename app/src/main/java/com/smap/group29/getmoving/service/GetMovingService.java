@@ -34,6 +34,7 @@ import com.smap.group29.getmoving.utils.Notifications;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.smap.group29.getmoving.utils.Notifications.CHANNEL_1_ID;
@@ -63,6 +64,8 @@ public class GetMovingService extends Service {
     private Date currentTime = Calendar.getInstance().getTime();
     private int currentDay = 4;
     private int currentSteps = 666;
+
+    private List<String> userListIDs;
 
 
     // check service running
@@ -282,6 +285,10 @@ public class GetMovingService extends Service {
 //                }
 //            }
 //        });
+    }
+
+    public String userClickedLeaderboard(){
+        return "userClicked";
     }
 
 }
