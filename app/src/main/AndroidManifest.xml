@@ -27,6 +27,7 @@
         <activity android:name=".activities.NewUserActivity" />
         <activity android:name=".activities.LeaderboardActivity" />
         <activity android:name=".activities.UserActivity" />
+        <activity android:name=".sensor.StepCounter" />
         <activity android:name=".activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

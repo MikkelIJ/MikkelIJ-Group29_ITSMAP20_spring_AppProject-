@@ -12,11 +12,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.firebase.ui.common.ChangeEventType;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.storage.FirebaseStorage;
@@ -28,46 +30,47 @@ import com.squareup.picasso.Picasso;
 
 public class LeaderboardAdaptor extends FirestoreRecyclerAdapter<NewUser, LeaderboardAdaptor.UserHolder>  {
 
-    FirestoreRecyclerOptions<NewUser> mOptions;
     StorageReference fbRef = FirebaseStorage.getInstance().getReference();
     private OnItemClickListener mListener;
 
-    public LeaderboardAdaptor(@NonNull FirestoreRecyclerOptions<NewUser> options, OnItemClickListener mListener) {
+
+    public LeaderboardAdaptor(@NonNull FirestoreRecyclerOptions<NewUser> options) {
         super(options);
-        this.mListener = mListener;
     }
 
-
-
-
-
-    public interface OnItemClickListener{
-        void onItemClick(int position);
-    }
-
-    class UserHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    class UserHolder extends RecyclerView.ViewHolder{
 
         TextView tv_userRank;
         TextView tv_userName;
         TextView tv_userSteps;
         ImageView iv_userImage;
-        OnItemClickListener onItemClickListener;
 
-        public UserHolder( View itemView,final OnItemClickListener listener) {
+
+        public UserHolder( View itemView) {
             super(itemView);
 
             tv_userRank = itemView.findViewById(R.id.tv_itemRank);
             tv_userName = itemView.findViewById(R.id.tv_itemName);
             tv_userSteps = itemView.findViewById(R.id.tv_itemSteps);
             iv_userImage = itemView.findViewById(R.id.iv_itemImage);
-            this.onItemClickListener = listener;
-            itemView.setOnClickListener(this);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION && mListener != null){
+                        mListener.onItemClick(getSnapshots().getSnapshot(position),position);
+                    }
+                }
+            });
         }
+    }
 
-        @Override
-        public void onClick(View v) {
-            onItemClickListener.onItemClick(getAdapterPosition());
-        }
+    public interface OnItemClickListener{
+        void onItemClick(DocumentSnapshot documentSnapshot, int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener){
+        this.mListener = listener;
     }
 
     @Override
@@ -88,6 +91,8 @@ public class LeaderboardAdaptor extends FirestoreRecyclerAdapter<NewUser, Leader
 
     }
 
+
+
     private String setPosition(int position){
         if (position == 1){
             return "1\ud83c\udfc6";
@@ -101,7 +106,7 @@ public class LeaderboardAdaptor extends FirestoreRecyclerAdapter<NewUser, Leader
     public UserHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_item,parent,false);
-        return new UserHolder(v,mListener);
+        return new UserHolder(v);
 
     }
 

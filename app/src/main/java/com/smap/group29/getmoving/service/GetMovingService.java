@@ -3,13 +3,17 @@ package com.smap.group29.getmoving.service;
 import android.app.Notification;
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Binder;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
@@ -32,6 +36,7 @@ import com.smap.group29.getmoving.utils.GlobalConstants;
 import com.smap.group29.getmoving.utils.Notifications;
 
 import java.util.Calendar;
+import java.util.Currency;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -42,6 +47,9 @@ import static com.smap.group29.getmoving.utils.Notifications.CHANNEL_1_ID;
 public class GetMovingService extends Service {
 
     // inspired by https://github.com/SenSaa/Pedometer/blob/master/app/src/main/java/com/example/yusuf/pedometer/StepCountingService.java
+
+    public static final String SHARED_PREFS = "sharedPrefs";
+    public static final String TEXT = "currentsteps";
 
     private static final String LOGD = "getmovingservice";
     public static final String BROADCAST_ACTION_STEPS = "com.smap.group29.getmoving.service.getmovingservice_broadcast";
@@ -60,10 +68,9 @@ public class GetMovingService extends Service {
     private Calendar c; // c.get(Calendar.SECOND)
     private Notifications mNotifications = new Notifications();
 
-    private FirebaseUtil firebaseUtil;
-    private Date currentTime = Calendar.getInstance().getTime();
-    private int currentDay = 4;
-    private int currentSteps = 666;
+
+
+
 
     private List<String> userListIDs;
 
@@ -79,6 +86,8 @@ public class GetMovingService extends Service {
 
     // Binder
     private final IBinder binder = new LocalBinder();
+
+
     // source https://developer.android.com/guide/components/bound-services
     public class LocalBinder extends Binder {
         public GetMovingService getService() {
@@ -92,6 +101,7 @@ public class GetMovingService extends Service {
         return binder;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onCreate() {
         super.onCreate();
@@ -112,11 +122,8 @@ public class GetMovingService extends Service {
         storageReference = FirebaseStorage.getInstance().getReference();
         userID = mAuth.getCurrentUser().getUid();
 
-
         notificationManager = NotificationManagerCompat.from(this);
         getValFirebase();
-        listenToFirebase();
-
     }
 
     //inspired by https://www.youtube.com/watch?v=FbpD5RZtbCc
@@ -136,6 +143,7 @@ public class GetMovingService extends Service {
 
         return START_STICKY;
     }
+
 
     @Override
     public void onDestroy() {
@@ -177,10 +185,10 @@ public class GetMovingService extends Service {
     public Runnable updateBroadcastData = new Runnable() {
         @Override
         public void run() {
-            if (mStepCounter.getSteps() != currentSteps){
+
                 broadcastSteps();
-            }
-            mHandler.postDelayed(this,1000);
+
+            mHandler.postDelayed(this,10);
         }
     };
 
@@ -188,15 +196,8 @@ public class GetMovingService extends Service {
     public Runnable updateStepsLeaderBoard = new Runnable() {
         @Override
         public void run() {
-
-            if (mStepCounter.getSteps() != 0)
-            {
-                updateDailySteps(mStepCounter.getSteps());
-                if (currentTime.getDay() != currentDay){
-                    updateDailySteps(0);
-                    currentDay = currentTime.getDay();
-                }
-            }
+            updateDailySteps(mStepCounter.getSteps());
+            broadcastSteps();
             tellProgressbarToStart();
             Log.v("sec","runnable activated");
             mHandler.postDelayed(this,30000);
@@ -208,25 +209,10 @@ public class GetMovingService extends Service {
 
     public void updateDailySteps(int stepValue){
 
-
             String userID = mAuth.getCurrentUser().getUid();
-            //creating new document and storing the data with hashmap
-            DocumentReference documentReference = db.collection(GlobalConstants.FIREBASE_USER_COLLECTION).document(userID);
-
             Map<String, Object> steps = new HashMap<>();
             steps.put("dailysteps", String.valueOf(stepValue));
-            dbRef.document(userID).update(steps).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    //Toast.makeText(GetMovingService.this, "steps updated" + mStepCounter.getSteps(),Toast.LENGTH_SHORT).show();
-
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Log.v("updatesteps", e.getMessage());
-                }
-            });
+            dbRef.document(userID).update(steps);
 
     }
 
@@ -271,24 +257,4 @@ public class GetMovingService extends Service {
             }
         });
     }
-
-    private void listenToFirebase(){
-//        //setting up the data from firebase user
-//        final DocumentReference documentReference = db.collection(GlobalConstants.FIREBASE_USER_COLLECTION).document(userID);
-//        documentReference.addSnapshotListener(, new EventListener<DocumentSnapshot>() {
-//            @Override
-//            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-//                if (e!=null){
-//                    Log.v("onEvent","Error:"+e.getMessage());
-//                }else {
-//                    Log.v("fb", "DocumentSnapshot data: " + documentSnapshot.get("name"));
-//                }
-//            }
-//        });
-    }
-
-    public String userClickedLeaderboard(){
-        return "userClicked";
-    }
-
 }

@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -35,6 +36,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.smap.group29.getmoving.R;
+import com.smap.group29.getmoving.sensor.StepCounter;
 import com.smap.group29.getmoving.service.GetMovingService;
 import com.smap.group29.getmoving.service.GetMovingService.LocalBinder;
 import com.smap.group29.getmoving.onlineAPI.OpenWeatherAPI;
@@ -78,6 +80,8 @@ public class UserActivity extends AppCompatActivity {
     private int stepsCounted = 0;
     private int prevStepsCounted = 0;
     private int stepsTotal = 0;
+
+    private StepCounter mStepCounter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -181,7 +185,7 @@ public class UserActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        mService.updateUserValueFirebase("stepstotal",stepsTotal+"");
+        //mService.updateUserValueFirebase("stepstotal",stepsTotal+"");
         unbindService(serviceConnection);
         mBound = false;
     }
@@ -267,11 +271,6 @@ public class UserActivity extends AppCompatActivity {
         btn_leaderboard       = findViewById(R.id.btn_user_leaderboard);
         tv_email              = findViewById(R.id.tv_userEmail);
 
-
-
-
-
-
     }
 
     public void createNotification(){
@@ -298,7 +297,7 @@ public class UserActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             stepsCounted = intent.getIntExtra("counted_steps",0);
 
-            Log.v("bcSteps","steps counted:" + stepsCounted);
+            Log.v("bc","steps counted:" + stepsCounted);
             tv_stepsToday.setText(String.valueOf(stepsCounted));
             if (stepsCounted > prevStepsCounted){
                 stepsTotal = stepsTotal + stepsCounted - prevStepsCounted;

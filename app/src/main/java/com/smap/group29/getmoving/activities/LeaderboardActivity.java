@@ -8,15 +8,12 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.res.Configuration;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -24,22 +21,26 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.smap.group29.getmoving.R;
@@ -49,23 +50,21 @@ import com.smap.group29.getmoving.service.GetMovingService;
 import com.smap.group29.getmoving.utils.GlobalConstants;
 import com.squareup.picasso.Picasso;
 
-import java.util.Calendar;
-import java.util.List;
-
-import static com.smap.group29.getmoving.service.GetMovingService.BROADCAST_ACTION_STEPS;
-
 
 // Firebase recyclerview inspired by https://github.com/firebase/FirebaseUI-Android/blob/master/database/README.md#using-the-firebaserecycleradapter
 // and https://codinginflow.com/tutorials/android/firebaseui-firestorerecycleradapter/part-4-new-note-activity
-public class LeaderboardActivity extends AppCompatActivity implements LeaderboardAdaptor.OnItemClickListener{
+public class LeaderboardActivity extends AppCompatActivity{
 
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference dbRef = db.collection(GlobalConstants.FIREBASE_USER_COLLECTION);
+    private FirebaseFirestore mStore;
+    private CollectionReference collectionReference;
+    private FirebaseAuth mAuth;
+    private StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+    private DocumentReference documentReference;
+
 
     private LeaderboardAdaptor mAdapter;
-
     private RecyclerView mUserList;
-    //private FirestoreRecyclerAdapter adapter;
+    private LinearLayoutManager mLinearLayoutManager;
 
     private Intent stepIntent;
     private IntentFilter getTimerFlagFilter = new IntentFilter();
@@ -78,31 +77,42 @@ public class LeaderboardActivity extends AppCompatActivity implements Leaderboar
 
     private ProgressBar progressBar;
 
-    private FirebaseAuth mAuth;
-    private FirebaseFirestore mStore;
-    private StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+
+
     private String userID;
+    private int orientation;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leaderboard);
         initUI();
-        setupRecyclerView();
-        setUI();
-        //mService.GM_removeCallbacks(); //crasher
 
+        setUI();
+        orientation = getResources().getConfiguration().orientation;
         mAuth = FirebaseAuth.getInstance();
         mStore = FirebaseFirestore.getInstance();
         userID = mAuth.getCurrentUser().getUid();
+        collectionReference = mStore.collection(GlobalConstants.FIREBASE_USER_COLLECTION);
+        documentReference = mStore.collection(GlobalConstants.FIREBASE_USER_COLLECTION).document(userID);
         storageReference = FirebaseStorage.getInstance().getReference();
-
 
         getTimerFlagFilter.addAction("TIMER");
         registerReceiver(broadcastReceiver,getTimerFlagFilter);
 
+        getUserWithMostSteps();
+        setupRecyclerView();
+        collectionReference.addSnapshotListener(this, new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if (e != null){
+                    return;
+                }
+                for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()){
 
-
+                }
+            }
+        });
 
 
     }
@@ -123,7 +133,6 @@ public class LeaderboardActivity extends AppCompatActivity implements Leaderboar
     protected void onStart() {
         super.onStart();
         mAdapter.startListening();
-
 
         stepIntent = new Intent(this,GetMovingService.class);
         bindService(stepIntent,serviceConnection,Context.BIND_AUTO_CREATE);
@@ -176,14 +185,27 @@ public class LeaderboardActivity extends AppCompatActivity implements Leaderboar
     private void setupRecyclerView() {
 
         mUserList = findViewById(R.id.rv_leaderboard);
-        Query query = dbRef.orderBy("dailysteps",Query.Direction.DESCENDING);
+        Query query = collectionReference.orderBy("dailysteps",Query.Direction.DESCENDING);
         FirestoreRecyclerOptions<NewUser> mOptions = new FirestoreRecyclerOptions.Builder<NewUser>().setQuery(query, NewUser.class).build();
 
-        mAdapter = new LeaderboardAdaptor(mOptions,this);
+        mAdapter = new LeaderboardAdaptor(mOptions);
 
         mUserList.setHasFixedSize(true);
-        mUserList.setLayoutManager(new LinearLayoutManager(this));
+
+        mUserList.setLayoutManager(mLinearLayoutManager = new LinearLayoutManager(this));
+        mLinearLayoutManager.setSmoothScrollbarEnabled(true);
+        //mLinearLayoutManager.smoothScrollToPosition(); // todo
         mUserList.setAdapter(mAdapter);
+        mAdapter.setOnItemClickListener(new LeaderboardAdaptor.OnItemClickListener() {
+            @Override
+            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
+                if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    NewUser user = documentSnapshot.toObject(NewUser.class);
+                    getUserDataFirebase(user.getuID());
+                    loadPic(user.getuID());
+                }
+            }
+        });
     }
 
     private void initUI() {
@@ -227,16 +249,7 @@ public class LeaderboardActivity extends AppCompatActivity implements Leaderboar
           runnable.run();
     }
 
-    @Override
-    public void onItemClick(int position) {
-        int orientation = getResources().getConfiguration().orientation;
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            String UserID = mAdapter.getItem(position).getuID();
-            getUserDataFirebase(UserID);
-            loadPic(UserID);
-        }
 
-    }
 
     private void getUserDataFirebase(String userID){
         DocumentReference documentReference = mStore.collection(GlobalConstants.FIREBASE_USER_COLLECTION).document(userID);
@@ -277,5 +290,28 @@ public class LeaderboardActivity extends AppCompatActivity implements Leaderboar
         }, 1000);
 
     }
+
+    private void getUserWithMostSteps(){
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            collectionReference.orderBy("dailysteps",Query.Direction.DESCENDING).limit(1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()){
+                        for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
+                            String userID =  documentSnapshot.getData().get("uID").toString();
+                            loadPic(userID);
+                            getUserDataFirebase(userID);
+                        }
+
+
+                    }
+                }
+            });
+
+            getUserDataFirebase(userID);
+            loadPic(userID);
+        }
+    }
+
 }
 
