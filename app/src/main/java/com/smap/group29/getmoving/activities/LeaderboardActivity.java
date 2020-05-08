@@ -123,11 +123,7 @@ public class LeaderboardActivity extends AppCompatActivity implements Leaderboar
     protected void onStart() {
         super.onStart();
         mAdapter.startListening();
-        int orientation = getResources().getConfiguration().orientation;
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            //getUserDataFirebase(mAdapter.getItem(1).getuID());
-            //loadPic(mAdapter.getItem(0).getuID());
-        }
+
 
         stepIntent = new Intent(this,GetMovingService.class);
         bindService(stepIntent,serviceConnection,Context.BIND_AUTO_CREATE);
@@ -233,9 +229,13 @@ public class LeaderboardActivity extends AppCompatActivity implements Leaderboar
 
     @Override
     public void onItemClick(int position) {
-        String UserID = mAdapter.getItem(position).getuID();
-        getUserDataFirebase(UserID);
-        loadPic(UserID);
+        int orientation = getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            String UserID = mAdapter.getItem(position).getuID();
+            getUserDataFirebase(UserID);
+            loadPic(UserID);
+        }
+
     }
 
     private void getUserDataFirebase(String userID){
