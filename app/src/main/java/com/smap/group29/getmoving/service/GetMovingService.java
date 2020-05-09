@@ -1,5 +1,6 @@
 package com.smap.group29.getmoving.service;
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.Service;
 import android.content.Intent;
@@ -13,17 +14,14 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -31,17 +29,17 @@ import com.google.firebase.storage.StorageReference;
 import com.smap.group29.getmoving.R;
 import com.smap.group29.getmoving.onlineAPI.OpenWeatherAPI;
 import com.smap.group29.getmoving.sensor.StepCounter;
-import com.smap.group29.getmoving.utils.FirebaseUtil;
+import com.smap.group29.getmoving.utils.DataHelper;
 import com.smap.group29.getmoving.utils.GlobalConstants;
 import com.smap.group29.getmoving.utils.Notifications;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Currency;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.smap.group29.getmoving.utils.GlobalConstants.FILE_NAME;
 import static com.smap.group29.getmoving.utils.Notifications.CHANNEL_1_ID;
 
 public class GetMovingService extends Service {
@@ -67,7 +65,13 @@ public class GetMovingService extends Service {
 
     private Calendar c; // c.get(Calendar.SECOND)
     private Notifications mNotifications = new Notifications();
+    private DataHelper mDataHelper;
 
+    private int milestoneStep;
+    private int currentSteps;
+    private int totalStepsSinceReboot;
+    private int today;
+    private int additionStep;
 
 
 
@@ -110,6 +114,7 @@ public class GetMovingService extends Service {
         stepIntent = new Intent(BROADCAST_ACTION_STEPS);
         timerIntent = new Intent("TIMER");
 
+
         mStepCounter = new StepCounter(this);
         mOpenWeatherAPI = new OpenWeatherAPI(this);
         mHandler.removeCallbacks(updateBroadcastData);
@@ -124,6 +129,8 @@ public class GetMovingService extends Service {
 
         notificationManager = NotificationManagerCompat.from(this);
         getValFirebase();
+
+        mDataHelper = new DataHelper(this);
     }
 
     //inspired by https://www.youtube.com/watch?v=FbpD5RZtbCc
@@ -187,7 +194,6 @@ public class GetMovingService extends Service {
         public void run() {
 
                 broadcastSteps();
-
             mHandler.postDelayed(this,10);
         }
     };
@@ -196,7 +202,7 @@ public class GetMovingService extends Service {
     public Runnable updateStepsLeaderBoard = new Runnable() {
         @Override
         public void run() {
-            updateDailySteps(mStepCounter.getSteps());
+            updateDailySteps(handleSteps(mStepCounter.getSteps()));
             broadcastSteps();
             tellProgressbarToStart();
             Log.v("sec","runnable activated");
@@ -219,7 +225,7 @@ public class GetMovingService extends Service {
 
     private void broadcastSteps(){
         Log.v("getSteps", "broadcasting step values");
-        stepIntent.putExtra("counted_steps",mStepCounter.getSteps());
+        stepIntent.putExtra("counted_steps",handleSteps(mStepCounter.getSteps()));
         sendBroadcast(stepIntent);
     }
 
@@ -256,5 +262,50 @@ public class GetMovingService extends Service {
                 Log.v("updatevalue","userValue " + string + "was updated to" + value);
             }
         });
+    }
+
+    private int handleSteps(int steps){
+        totalStepsSinceReboot = steps;
+
+        Log.d("skridt1",String.valueOf("totalStepsSinceReboot" + totalStepsSinceReboot));
+
+        today = getPreferences(today());
+        Log.d("skridt2",String.valueOf("milestoneStep 1" + milestoneStep));
+        if(today == -1){ // if new day, then assign total steps to milestonestep
+            milestoneStep = totalStepsSinceReboot;
+            Log.d("skridt3",String.valueOf(milestoneStep));
+            savePreferences(today(), milestoneStep);
+
+            mDataHelper.save(milestoneStep);
+//            int savedVal = mDataHelper.load(milestoneStep);
+        }else {
+            additionStep = totalStepsSinceReboot - Integer.parseInt(mDataHelper.load().trim()) ; // reset to 0
+            Log.d("skridt4",String.valueOf(additionStep));
+            savePreferences(today(), additionStep);
+            currentSteps = additionStep;
+            Log.d("skridt5",String.valueOf(currentSteps));
+        }
+
+        Log.d("event",String.valueOf(milestoneStep));
+
+        return currentSteps;
+    }
+
+    public String today(){
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        return sdf.format(Calendar.getInstance().getTime());
+    }
+
+    private void savePreferences(String key, int value) {
+        SharedPreferences sharedPreferences = this.getSharedPreferences(key,MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(key, value);
+        editor.commit();
+    }
+
+    private int getPreferences(String key){
+        SharedPreferences sharedPreferences = this.getSharedPreferences(key,MODE_PRIVATE);
+
+        return sharedPreferences.getInt(key,-1);
     }
 }

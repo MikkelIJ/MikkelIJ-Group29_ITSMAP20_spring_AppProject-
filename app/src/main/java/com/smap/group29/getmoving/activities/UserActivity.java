@@ -40,6 +40,7 @@ import com.smap.group29.getmoving.sensor.StepCounter;
 import com.smap.group29.getmoving.service.GetMovingService;
 import com.smap.group29.getmoving.service.GetMovingService.LocalBinder;
 import com.smap.group29.getmoving.onlineAPI.OpenWeatherAPI;
+import com.smap.group29.getmoving.utils.DataHelper;
 import com.smap.group29.getmoving.utils.GlobalConstants;
 import com.squareup.picasso.Picasso;
 
@@ -80,6 +81,8 @@ public class UserActivity extends AppCompatActivity {
     private int stepsCounted = 0;
     private int prevStepsCounted = 0;
     private int stepsTotal = 0;
+
+
 
     private StepCounter mStepCounter;
 
@@ -246,6 +249,7 @@ public class UserActivity extends AppCompatActivity {
             mService.updateBroadcastData.run();
             mService.updateStepsLeaderBoard.run();
             mOpenWeatherAPI.sendRequest();
+
 
         }
 

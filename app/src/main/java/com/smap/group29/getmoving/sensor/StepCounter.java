@@ -1,6 +1,7 @@
 package com.smap.group29.getmoving.sensor;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.hardware.Sensor;
@@ -8,27 +9,20 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Build;
-import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar; // used for resetting stepcounter every day
-import java.util.Date;
 
 
 import com.smap.group29.getmoving.service.GetMovingService;
+import com.smap.group29.getmoving.utils.DataHelper;
 
-import static android.content.Context.MODE_PRIVATE;
 import static android.hardware.Sensor.TYPE_STEP_COUNTER;
 
-public class StepCounter extends AppCompatActivity implements SensorEventListener {
+public class StepCounter extends Activity implements SensorEventListener {
 
 
 
@@ -41,6 +35,7 @@ public class StepCounter extends AppCompatActivity implements SensorEventListene
     private int totalStepsSinceReboot;
     private int today;
     private int additionStep;
+    //private DataHelper mDataHelper = new DataHelper(this);
 
 
 
@@ -53,32 +48,31 @@ public class StepCounter extends AppCompatActivity implements SensorEventListene
     }
 
 
-
     @Override
     public void onSensorChanged(SensorEvent event) {
 
-        totalStepsSinceReboot = (int) event.values[0];
-
-        Log.d("skridt1",String.valueOf("totalStepsSinceReboot" + totalStepsSinceReboot));
-//        if (event.sensor.getType() == Sensor.TYPE_STEP_COUNTER){
-//            stepsCounted = (int) event.values[0];
+        currentSteps = (int) event.values[0];
+//        totalStepsSinceReboot = (int) event.values[0];
+//
+//        Log.d("skridt1",String.valueOf("totalStepsSinceReboot" + totalStepsSinceReboot));
+//
+//            today = getPreferences(today());
+//        Log.d("skridt2",String.valueOf("milestoneStep 1" + milestoneStep));
+//        if(today == -1){ // if new day, then assign total steps to milestonestep
+//            milestoneStep = totalStepsSinceReboot;
+//            Log.d("skridt3",String.valueOf(milestoneStep));
+//            savePreferences(today(), milestoneStep);
+////            mDataHelper.save(milestoneStep);
+////            int savedVal = mDataHelper.load(milestoneStep);
+//        }else {
+//            additionStep = totalStepsSinceReboot - milestoneStep; // reset to 0
+//            Log.d("skridt4",String.valueOf(additionStep));
+//            savePreferences(today(), additionStep);
+//            currentSteps = additionStep;
+//            Log.d("skridt5",String.valueOf(currentSteps));
 //        }
-
-            today = getPreferences(today());
-        Log.d("skridt2",String.valueOf("milestoneStep 1" + milestoneStep));
-        if(today == -1){ // if new day, then assign total steps to milestonestep
-            milestoneStep = totalStepsSinceReboot;
-            Log.d("skridt3",String.valueOf(milestoneStep));
-            savePreferences(today(), milestoneStep);
-        }else {
-            additionStep = totalStepsSinceReboot - milestoneStep; // reset to 0
-            Log.d("skridt4",String.valueOf(additionStep));
-            savePreferences(today(), additionStep);
-            currentSteps = additionStep;
-            Log.d("skridt5",String.valueOf(currentSteps));
-        }
-
-        Log.d("event",String.valueOf(milestoneStep));
+//
+//        Log.d("event",String.valueOf(milestoneStep));
     }
 
     @Override
