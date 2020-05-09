@@ -125,7 +125,7 @@ public class NewUserActivity extends AppCompatActivity {
                             user.put("name", name);
                             user.put("age", age);
                             user.put("city", city);
-                            user.put("dailysteps","0");
+                            user.put("dailysteps",0);
                             user.put("dailygoal",dailyGoal);
                             user.put("stepstotal","0");
                             user.put("wins","0");

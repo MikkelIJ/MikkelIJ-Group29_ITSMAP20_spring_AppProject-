@@ -351,8 +351,6 @@ public class GetMovingService extends Service {
 
         return sharedPreferences.getInt(key,-1);
     }
-    private void notifications(){
 
-    }
 
 }
