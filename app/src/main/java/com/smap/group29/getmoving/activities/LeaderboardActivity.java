@@ -25,6 +25,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -49,6 +50,8 @@ import com.smap.group29.getmoving.model.NewUser;
 import com.smap.group29.getmoving.service.GetMovingService;
 import com.smap.group29.getmoving.utils.GlobalConstants;
 import com.squareup.picasso.Picasso;
+
+import java.util.Collections;
 
 
 // Firebase recyclerview inspired by https://github.com/firebase/FirebaseUI-Android/blob/master/database/README.md#using-the-firebaserecycleradapter
@@ -102,17 +105,7 @@ public class LeaderboardActivity extends AppCompatActivity{
 
         getUserWithMostSteps();
         setupRecyclerView();
-        collectionReference.addSnapshotListener(this, new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                if (e != null){
-                    return;
-                }
-                for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()){
 
-                }
-            }
-        });
 
 
     }
@@ -133,7 +126,6 @@ public class LeaderboardActivity extends AppCompatActivity{
     protected void onStart() {
         super.onStart();
         mAdapter.startListening();
-
         stepIntent = new Intent(this,GetMovingService.class);
         bindService(stepIntent,serviceConnection,Context.BIND_AUTO_CREATE);
 
@@ -184,18 +176,16 @@ public class LeaderboardActivity extends AppCompatActivity{
 
     private void setupRecyclerView() {
 
+
         mUserList = findViewById(R.id.rv_leaderboard);
         Query query = collectionReference.orderBy("dailysteps",Query.Direction.DESCENDING);
         FirestoreRecyclerOptions<NewUser> mOptions = new FirestoreRecyclerOptions.Builder<NewUser>().setQuery(query, NewUser.class).build();
-
         mAdapter = new LeaderboardAdaptor(mOptions);
-
         mUserList.setHasFixedSize(true);
-
         mUserList.setLayoutManager(mLinearLayoutManager = new LinearLayoutManager(this));
         mLinearLayoutManager.setSmoothScrollbarEnabled(true);
         //mLinearLayoutManager.smoothScrollToPosition(); // todo
-        mUserList.setAdapter(mAdapter);
+
         mAdapter.setOnItemClickListener(new LeaderboardAdaptor.OnItemClickListener() {
             @Override
             public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
@@ -206,6 +196,8 @@ public class LeaderboardActivity extends AppCompatActivity{
                 }
             }
         });
+        mUserList.setAdapter(mAdapter);
+
     }
 
     private void initUI() {

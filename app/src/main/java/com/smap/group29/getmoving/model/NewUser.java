@@ -8,7 +8,7 @@ public class NewUser {
     private String name;
     private String age;
     private String city;
-    private String dailysteps;
+    private long dailysteps;
     private String liveSteps;
     private String password;
     private String email;
@@ -19,7 +19,7 @@ public class NewUser {
     public NewUser() {
     }
 
-    public NewUser(String name, String age, String city, String dailysteps) {
+    public NewUser(String name, String age, String city, long dailysteps) {
         this.name = name;
         this.age = age;
         this.city = city;
@@ -86,7 +86,7 @@ public class NewUser {
         return city;
     }
 
-    public String getDailysteps() {
+    public long getDailysteps() {
         return dailysteps;
     }
 
@@ -102,7 +102,7 @@ public class NewUser {
         this.city = city;
     }
 
-    public void setDailysteps(String dailysteps) {
+    public void setDailysteps(long dailysteps) {
         this.dailysteps = dailysteps;
     }
 

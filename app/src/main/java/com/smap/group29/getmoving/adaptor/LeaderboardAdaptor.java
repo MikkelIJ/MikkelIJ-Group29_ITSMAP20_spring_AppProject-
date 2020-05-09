@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.firebase.ui.common.ChangeEventType;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.firebase.ui.firestore.ObservableSnapshotArray;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -65,6 +66,10 @@ public class LeaderboardAdaptor extends FirestoreRecyclerAdapter<NewUser, Leader
         }
     }
 
+
+
+
+
     public interface OnItemClickListener{
         void onItemClick(DocumentSnapshot documentSnapshot, int position);
     }
@@ -75,9 +80,11 @@ public class LeaderboardAdaptor extends FirestoreRecyclerAdapter<NewUser, Leader
 
     @Override
     protected void onBindViewHolder(@NonNull final UserHolder holder, int position, @NonNull NewUser model) {
-        holder.tv_userRank.setText(setPosition(position+1)); // + 1 to remove 0
+        //holder.tv_userRank.setText(setPosition(position+1)); // + 1 to remove 0  // TODO make position update when datachange
         holder.tv_userName.setText(model.getName());
-        holder.tv_userSteps.setText(model.getDailysteps());
+        holder.tv_userSteps.setText(String.valueOf(model.getDailysteps()));
+
+
 
         StorageReference imgProfile = fbRef.child("users/"+ model.getuID()+"profile.jpg");
         imgProfile.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
@@ -87,10 +94,15 @@ public class LeaderboardAdaptor extends FirestoreRecyclerAdapter<NewUser, Leader
             }
         });
 
-        Log.v("user",String.valueOf(position+1) + " " + model.getName() + " " + model.getDailysteps());
+        //Log.v("user",String.valueOf(position+1) + " " + model.getName() + " " + model.getDailysteps());
 
     }
 
+    @Override
+    public void onDataChanged() {
+        super.onDataChanged();
+
+    }
 
 
     private String setPosition(int position){

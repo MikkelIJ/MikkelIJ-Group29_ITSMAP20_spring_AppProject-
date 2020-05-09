@@ -14,22 +14,27 @@ import android.util.Log;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.auth.User;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.smap.group29.getmoving.R;
+import com.smap.group29.getmoving.model.NewUser;
 import com.smap.group29.getmoving.activities.UserActivity;
 import com.smap.group29.getmoving.model.NewUser;
 import com.smap.group29.getmoving.onlineAPI.OpenWeatherAPI;
@@ -136,7 +141,9 @@ public class GetMovingService extends Service {
         getValFirebase();
         getUserDataFirebase();
 
+
         mDataHelper = new DataHelper(this);
+
     }
 
     //inspired by https://www.youtube.com/watch?v=FbpD5RZtbCc
@@ -177,6 +184,21 @@ public class GetMovingService extends Service {
         Log.v("service", "Stopped");
     }
 
+    public void createNotification(){
+
+//        String dailySteps = String.valueOf(mStepCounter.getSteps());
+//        String goalReached = "You have reached your daily goal of " + dailyGoal + " steps";
+//        if(dailySteps == dailyGoal){
+//            Notification notification = new NotificationCompat.Builder(this, CHANNEL_1_ID)
+//                    .setSmallIcon(R.drawable.ic_walk)
+//                    .setContentTitle("Notification from GetMoving")
+//                    .setContentText(goalReached)
+//                    .setPriority(NotificationCompat.PRIORITY_LOW)
+//                    .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+//                    .build();
+//            notificationManager.notify(1, notification);
+//        }
+    }
 
 
 
@@ -210,7 +232,7 @@ public class GetMovingService extends Service {
         @Override
         public void run() {
 
-                broadcastSteps();
+            broadcastSteps();
             mHandler.postDelayed(this,10);
         }
     };
@@ -219,7 +241,7 @@ public class GetMovingService extends Service {
     public Runnable updateStepsLeaderBoard = new Runnable() {
         @Override
         public void run() {
-            updateDailySteps(handleSteps(mStepCounter.getSteps()));
+            updateDailySteps(handleSteps());
             broadcastSteps();
             tellProgressbarToStart();
             Log.v("sec","runnable activated");
@@ -230,19 +252,32 @@ public class GetMovingService extends Service {
     };
 
 
-    public void updateDailySteps(int stepValue){
+    public void updateDailySteps(long stepValue){
 
             String userID = mAuth.getCurrentUser().getUid();
-            Map<String, Object> steps = new HashMap<>();
-            steps.put("dailysteps", String.valueOf(stepValue));
-            dbRef.document(userID).update(steps);
+
+            dbRef.document(userID).update("stepValue",stepValue).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Log.d("TAG", "DocumentSnapshot successfully updated!");
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.w("TAG", "Error updating document", e);
+                }
+            });
+
+//            Map<String, Object> steps = new HashMap<>();
+//            steps.put("dailysteps", stepValue);
+//            dbRef.document(userID).update(steps);
 
     }
 
 
     private void broadcastSteps(){
         Log.v("getSteps", "broadcasting step values");
-        stepIntent.putExtra("counted_steps",handleSteps(mStepCounter.getSteps()));
+        stepIntent.putExtra("counted_steps",handleSteps());
         sendBroadcast(stepIntent);
     }
 
@@ -271,18 +306,9 @@ public class GetMovingService extends Service {
         });
     }
 
-    public void updateUserValueFirebase(final String string, final String value){
 
-        dbRef.document().update(string,value).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Log.v("updatevalue","userValue " + string + "was updated to" + value);
-            }
-        });
-    }
-
-    private int handleSteps(int steps){
-        totalStepsSinceReboot = steps;
+    private int handleSteps(){
+        totalStepsSinceReboot = mStepCounter.getSteps();
 
         Log.d("skridt1",String.valueOf("totalStepsSinceReboot" + totalStepsSinceReboot));
 
@@ -325,4 +351,8 @@ public class GetMovingService extends Service {
 
         return sharedPreferences.getInt(key,-1);
     }
+    private void notifications(){
+
+    }
+
 }

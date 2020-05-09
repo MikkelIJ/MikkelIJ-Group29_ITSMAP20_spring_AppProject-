@@ -15,25 +15,26 @@
         android:layout_alignParentTop="true"
         android:layout_margin="4dp">
 
-        <TextView
-            android:id="@+id/tv_itemRank"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:gravity="center_vertical"
-            android:text="#1"
-            android:textColor="@android:color/black"
-            android:textSize="32sp"
+<!--        <TextView-->
+<!--            android:id="@+id/tv_itemRank"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_alignParentStart="true"-->
+<!--            android:layout_alignParentLeft="true"-->
+<!--            android:layout_alignParentTop="true"-->
+<!--            android:gravity="center_vertical"-->
+<!--            android:text="#1"-->
+<!--            android:textColor="@android:color/black"-->
+<!--            android:textSize="32sp"-->
 
-            android:textStyle="bold" />
+<!--            android:textStyle="bold" />-->
 
         <ImageView
             android:id="@+id/iv_itemImage"
             android:layout_width="58dp"
             android:layout_height="match_parent"
             android:layout_alignParentTop="true"
+            android:layout_marginLeft="10dp"
             android:layout_toEndOf="@+id/tv_itemRank"
             android:layout_toRightOf="@+id/tv_itemRank"
             android:padding="2dp"
@@ -59,6 +60,7 @@
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
             android:gravity="center|end"
             android:text="100000"
             android:textColor="@android:color/black"

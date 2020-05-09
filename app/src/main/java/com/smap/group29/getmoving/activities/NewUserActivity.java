@@ -31,6 +31,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.smap.group29.getmoving.R;
+import com.smap.group29.getmoving.model.NewUser;
 import com.smap.group29.getmoving.utils.GlobalConstants;
 
 import java.util.HashMap;
@@ -47,6 +48,8 @@ public class NewUserActivity extends AppCompatActivity {
 
     Uri imageUri;
     Uri userUri;
+
+    private NewUser newUser;
 
     private ImageView iv_userImage;
     private EditText et_email,et_password,et_name, et_age, et_city, et_dailySteps;
@@ -87,7 +90,7 @@ public class NewUserActivity extends AppCompatActivity {
                 final String name = et_name.getText().toString();
                 final String age = et_age.getText().toString();
                 final String city = et_city.getText().toString();
-                final String dailySteps = et_dailySteps.getText().toString();
+                final String dailyGoal = et_dailySteps.getText().toString();
 
 
                 if(TextUtils.isEmpty(email)){
@@ -123,7 +126,7 @@ public class NewUserActivity extends AppCompatActivity {
                             user.put("age", age);
                             user.put("city", city);
                             user.put("dailysteps","0");
-                            user.put("dailygoal",dailySteps);
+                            user.put("dailygoal",dailyGoal);
                             user.put("stepstotal","0");
                             user.put("wins","0");
                             user.put("follow","0");
