@@ -64,7 +64,8 @@ public class GetMovingService extends Service {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private StorageReference storageReference = FirebaseStorage.getInstance().getReference();
-    private String userID, dailygoal ;
+    private String userID;
+    private int dailygoal ;
     private CollectionReference dbRef = db.collection(GlobalConstants.FIREBASE_USER_COLLECTION);
     TextView steps;
 
@@ -142,17 +143,15 @@ public class GetMovingService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-
-
-      String dgoal = dailygoal;
-      String dsteps = String.valueOf(mStepCounter.getSteps());
+        int goal = dailygoal;
+        int steps = mStepCounter.getSteps();
 
         Intent notificationIntent = new Intent(this, UserActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this,
                 0, notificationIntent, 0);
 
-        // service stops after 1 minute if this notification is not set
-        if(dgoal == dsteps) {
+     //    service stops after 1 minute if this notification is not set
+        if(steps >= goal) {
             Notification notification = new NotificationCompat.Builder(this, CHANNEL_1_ID)
                     .setSmallIcon(R.drawable.ic_walk)
                     .setContentTitle("Notification from GetMoving")
@@ -194,7 +193,7 @@ public class GetMovingService extends Service {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         Log.v("fb", "DocumentSnapshot data: " + document.getData());
-                        dailygoal = (document.getString("dailygoal"));
+                        dailygoal = (Integer.parseInt(document.getString("dailygoal")));
                     } else {
                         Log.d("fb", "No such document");
                     }

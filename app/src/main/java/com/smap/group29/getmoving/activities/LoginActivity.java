@@ -30,7 +30,7 @@ public class LoginActivity extends AppCompatActivity{
     private TextView tv_login, tv_createUser;
     private FirebaseAuth mAuth;
     private ProgressBar progressBar;
-    private CheckPermissions mCheckPermissions;
+   // private CheckPermissions mCheckPermissions;
 
 
 
@@ -59,19 +59,19 @@ public class LoginActivity extends AppCompatActivity{
     @Override
     protected void onStart() {
         super.onStart();
-        mCheckPermissions = new CheckPermissions();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            mCheckPermissions.checkPermissions(this);
-        }
+//        mCheckPermissions = new CheckPermissions();
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            mCheckPermissions.checkPermissions(this);
+//        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mCheckPermissions = new CheckPermissions();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            mCheckPermissions.checkPermissions(this);
-        }
+//        mCheckPermissions = new CheckPermissions();
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            mCheckPermissions.checkPermissions(this);
+//        }
 
     }
 
