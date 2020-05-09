@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 
 import android.app.Notification;
 import android.content.BroadcastReceiver;
@@ -25,6 +26,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -100,6 +102,9 @@ public class UserActivity extends AppCompatActivity {
         initUI();
         getUserDataFirebase();
 
+
+
+
         registerIntentFilters();
         mOpenWeatherAPI = new OpenWeatherAPI(this,2624652);
 
@@ -110,11 +115,10 @@ public class UserActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+
+
     }
-
-
-
-
 
 
 
@@ -141,7 +145,7 @@ public class UserActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         initService();
-        //createNotification();
+
     }
 
     @Override
@@ -277,23 +281,21 @@ public class UserActivity extends AppCompatActivity {
 
     }
 
+/*
     public void createNotification(){
-        String dailySteps = tv_stepsToday.getText().toString();
-        String dailyGoal = tv_dailyGoal.getText().toString();
-        String goalReached = "You have reached your daily goal of " + dailyGoal + " steps";
+        String dailySteps = (tv_stepsToday.getText().toString());
+        String dailyGoal = (tv_dailyGoal.getText().toString());
 
-        if(dailySteps == dailyGoal){
-            Notification notification = new NotificationCompat.Builder(this, CHANNEL_1_ID)
-                    .setSmallIcon(R.drawable.ic_walk)
-                    .setContentTitle("Notification from GetMoving")
-                    .setContentText(goalReached)
-                    .setPriority(NotificationCompat.PRIORITY_LOW)
-                    .setCategory(NotificationCompat.CATEGORY_MESSAGE)
-                    .build();
-            notificationManager.notify(1, notification);
 
-        }
+        Intent serviceIntent = new Intent(this, UserActivity.class);
+        serviceIntent.putExtra("dailySteps", dailySteps);
+        serviceIntent.putExtra("dailyGoal", dailyGoal);
+
+        ContextCompat.startForegroundService(this, serviceIntent);
+
     }
+
+ */
 
 
     private BroadcastReceiver broadcastReceiverSteps = new BroadcastReceiver() {
@@ -354,7 +356,5 @@ public class UserActivity extends AppCompatActivity {
             }
         });
     }
-
-
 
 }

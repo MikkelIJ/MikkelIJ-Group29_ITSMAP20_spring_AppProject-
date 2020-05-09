@@ -2,6 +2,7 @@ package com.smap.group29.getmoving.service;
 
 import android.annotation.SuppressLint;
 import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -22,11 +23,15 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.auth.User;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.smap.group29.getmoving.R;
+import com.smap.group29.getmoving.activities.UserActivity;
+import com.smap.group29.getmoving.model.NewUser;
 import com.smap.group29.getmoving.onlineAPI.OpenWeatherAPI;
 import com.smap.group29.getmoving.sensor.StepCounter;
 import com.smap.group29.getmoving.utils.DataHelper;
@@ -59,7 +64,7 @@ public class GetMovingService extends Service {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private StorageReference storageReference = FirebaseStorage.getInstance().getReference();
-    private String userID, dailyGoal;
+    private String userID, dailygoal ;
     private CollectionReference dbRef = db.collection(GlobalConstants.FIREBASE_USER_COLLECTION);
     TextView steps;
 
@@ -114,7 +119,6 @@ public class GetMovingService extends Service {
         stepIntent = new Intent(BROADCAST_ACTION_STEPS);
         timerIntent = new Intent("TIMER");
 
-
         mStepCounter = new StepCounter(this);
         mOpenWeatherAPI = new OpenWeatherAPI(this);
         mHandler.removeCallbacks(updateBroadcastData);
@@ -129,6 +133,7 @@ public class GetMovingService extends Service {
 
         notificationManager = NotificationManagerCompat.from(this);
         getValFirebase();
+        getUserDataFirebase();
 
         mDataHelper = new DataHelper(this);
     }
@@ -137,16 +142,28 @@ public class GetMovingService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
+
+
+      String dgoal = dailygoal;
+      String dsteps = String.valueOf(mStepCounter.getSteps());
+
+        Intent notificationIntent = new Intent(this, UserActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this,
+                0, notificationIntent, 0);
+
         // service stops after 1 minute if this notification is not set
+        if(dgoal == dsteps) {
             Notification notification = new NotificationCompat.Builder(this, CHANNEL_1_ID)
                     .setSmallIcon(R.drawable.ic_walk)
                     .setContentTitle("Notification from GetMoving")
                     .setContentText("goalReached")
                     .setPriority(NotificationCompat.PRIORITY_LOW)
                     .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                    .setContentIntent(pendingIntent)
                     .build();
 
             startForeground(1, notification);
+        }
 
         return START_STICKY;
     }
@@ -161,31 +178,32 @@ public class GetMovingService extends Service {
         Log.v("service", "Stopped");
     }
 
-    public void createNotification(){
 
-        String dailySteps = String.valueOf(mStepCounter.getSteps());
-        String goalReached = "You have reached your daily goal of " + dailyGoal + " steps";
-        if(dailySteps == dailyGoal){
-            Notification notification = new NotificationCompat.Builder(this, CHANNEL_1_ID)
-                    .setSmallIcon(R.drawable.ic_walk)
-                    .setContentTitle("Notification from GetMoving")
-                    .setContentText(goalReached)
-                    .setPriority(NotificationCompat.PRIORITY_LOW)
-                    .setCategory(NotificationCompat.CATEGORY_MESSAGE)
-                    .build();
-            notificationManager.notify(1, notification);
-
-        }
-
-    }
 
 
     public void GM_removeCallbacks(){
         mHandler.removeCallbacks(updateStepsLeaderBoard);
     }
 
-
-
+    private void getUserDataFirebase(){
+        DocumentReference documentReference = db.collection(GlobalConstants.FIREBASE_USER_COLLECTION).document(userID);
+        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.v("fb", "DocumentSnapshot data: " + document.getData());
+                        dailygoal = (document.getString("dailygoal"));
+                    } else {
+                        Log.d("fb", "No such document");
+                    }
+                } else {
+                    Log.d("fb", "get failed with ", task.getException());
+                }
+            }
+        });
+    }
 
 
     // runnable used for async method

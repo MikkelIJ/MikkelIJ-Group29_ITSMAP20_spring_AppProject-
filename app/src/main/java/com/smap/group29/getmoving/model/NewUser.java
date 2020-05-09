@@ -1,8 +1,7 @@
 package com.smap.group29.getmoving.model;
 
-import androidx.room.Entity;
 
-@Entity
+
 public class NewUser {
 
     private String uID;
