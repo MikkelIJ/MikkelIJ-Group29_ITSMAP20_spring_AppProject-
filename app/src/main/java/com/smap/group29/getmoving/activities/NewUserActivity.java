@@ -79,6 +79,12 @@ public class NewUserActivity extends AppCompatActivity {
             }
         });
 
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
 
         btn_save.setOnClickListener(new View.OnClickListener() {
