@@ -78,11 +78,11 @@ public class GetMovingService extends Service {
     private Notifications mNotifications = new Notifications();
     private DataHelper mDataHelper;
 
-    private int milestoneStep;
-    private int currentSteps;
-    private int totalStepsSinceReboot;
-    private int today;
-    private int additionStep;
+    private long milestoneStep;
+    private long currentSteps;
+    private long totalStepsSinceReboot;
+    private long today;
+    private long additionStep;
 
 
 
@@ -150,8 +150,8 @@ public class GetMovingService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        int goal = dailygoal;
-        int steps = mStepCounter.getSteps();
+        long goal = dailygoal;
+        long steps = mStepCounter.getSteps();
 
         Intent notificationIntent = new Intent(this, UserActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this,
@@ -242,7 +242,7 @@ public class GetMovingService extends Service {
         @Override
         public void run() {
             updateDailySteps(handleSteps());
-            broadcastSteps();
+            //broadcastSteps();
             tellProgressbarToStart();
             Log.v("sec","runnable activated");
             mHandler.postDelayed(this,30000);
@@ -256,7 +256,7 @@ public class GetMovingService extends Service {
 
             String userID = mAuth.getCurrentUser().getUid();
 
-            dbRef.document(userID).update("stepValue",stepValue).addOnSuccessListener(new OnSuccessListener<Void>() {
+            dbRef.document(userID).update("dailysteps",stepValue).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
                     Log.d("TAG", "DocumentSnapshot successfully updated!");
@@ -307,7 +307,7 @@ public class GetMovingService extends Service {
     }
 
 
-    private int handleSteps(){
+    private long handleSteps(){
         totalStepsSinceReboot = mStepCounter.getSteps();
 
         Log.d("skridt1",String.valueOf("totalStepsSinceReboot" + totalStepsSinceReboot));
@@ -339,17 +339,17 @@ public class GetMovingService extends Service {
         return sdf.format(Calendar.getInstance().getTime());
     }
 
-    private void savePreferences(String key, int value) {
+    private void savePreferences(String key, long value) {
         SharedPreferences sharedPreferences = this.getSharedPreferences(key,MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(key, value);
+        editor.putLong(key, value);
         editor.commit();
     }
 
-    private int getPreferences(String key){
+    private long getPreferences(String key){
         SharedPreferences sharedPreferences = this.getSharedPreferences(key,MODE_PRIVATE);
 
-        return sharedPreferences.getInt(key,-1);
+        return sharedPreferences.getLong(key,-1);
     }
 
 

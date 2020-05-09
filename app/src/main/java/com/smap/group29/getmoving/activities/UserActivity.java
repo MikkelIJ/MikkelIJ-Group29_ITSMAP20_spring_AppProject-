@@ -80,9 +80,9 @@ public class UserActivity extends AppCompatActivity {
     private IntentFilter getCurrentStepsFilter = new IntentFilter();
     private IntentFilter getCurrentWeatherFilter = new IntentFilter();
 
-    private int stepsCounted = 0;
-    private int prevStepsCounted = 0;
-    private int stepsTotal = 0;
+    private long stepsCounted = 0;
+    private long prevStepsCounted = 0;
+    private long stepsTotal = 0;
 
 
 
@@ -301,7 +301,7 @@ public class UserActivity extends AppCompatActivity {
     private BroadcastReceiver broadcastReceiverSteps = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            stepsCounted = intent.getIntExtra("counted_steps",0);
+            stepsCounted = intent.getLongExtra("counted_steps",0);
 
             Log.v("bc","steps counted:" + stepsCounted);
             tv_stepsToday.setText(String.valueOf(stepsCounted));

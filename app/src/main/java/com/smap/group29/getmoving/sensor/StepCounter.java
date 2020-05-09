@@ -31,10 +31,10 @@ public class StepCounter extends Activity implements SensorEventListener {
     private final SensorManager mSensorManager;
     private final Sensor mStepCounterSensor;
     private int milestoneStep;
-    private int currentSteps;
-    private int totalStepsSinceReboot;
+    private long currentSteps;
+    private long totalStepsSinceReboot;
     private int today;
-    private int additionStep;
+    private long additionStep;
     //private DataHelper mDataHelper = new DataHelper(this);
 
 
@@ -51,7 +51,7 @@ public class StepCounter extends Activity implements SensorEventListener {
     @Override
     public void onSensorChanged(SensorEvent event) {
 
-        currentSteps = (int) event.values[0];
+        currentSteps = (long) event.values[0];
 //        totalStepsSinceReboot = (int) event.values[0];
 //
 //        Log.d("skridt1",String.valueOf("totalStepsSinceReboot" + totalStepsSinceReboot));
@@ -100,7 +100,7 @@ public class StepCounter extends Activity implements SensorEventListener {
 
 
 
-    public int getSteps(){
+    public long getSteps(){
         Log.v("getSteps",String.valueOf(currentSteps));
         return currentSteps;
     }

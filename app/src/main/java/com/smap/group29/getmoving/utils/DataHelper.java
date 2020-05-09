@@ -28,7 +28,7 @@ public class DataHelper extends Activity{
         this.mContext = context;
     }
 
-    public void save( int valueToSave){
+    public void save( long valueToSave){
         String stepsToSave = String.valueOf(valueToSave);
         FileOutputStream fos = null;
 
