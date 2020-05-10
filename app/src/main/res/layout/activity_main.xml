@@ -23,7 +23,7 @@
 
     <TextView
         android:id="@+id/tv_userActivityName"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="@string/user_name"
@@ -37,7 +37,7 @@
 
     <TextView
         android:id="@+id/tv_userEmail"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/email"
         android:textSize="18sp"
@@ -51,8 +51,8 @@
 
     <TextView
         android:id="@+id/tv_userAge"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:text="@string/age"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -167,7 +167,7 @@
 
     <TextView
         android:id="@+id/tv_userCity"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/city"
         android:textSize="18sp"
@@ -283,7 +283,7 @@
 
     <TextView
         android:id="@+id/tv_userActivity_followers"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/followers_0"
         android:textSize="18sp"

@@ -342,10 +342,10 @@ public class UserActivity extends AppCompatActivity {
                         Log.v("fb", "DocumentSnapshot data: " + document.getData());
                     stepsTotal = Integer.parseInt(document.getString("stepstotal"));
                     tv_stepsTotal.setText(document.getString("stepstotal"));
-                    tv_name.setText(document.getString("name"));
-                    tv_email.setText(document.getString("email"));
-                    tv_age.setText(document.getString("age"));
-                    tv_city.setText(document.getString("city"));
+                    tv_name.setText("Name: " + document.getString("name"));
+                    //tv_email.setText("Email: "+document.getString("email"));
+                    tv_age.setText("Age: "+document.getString("age"));
+                    tv_city.setText("City: "+document.getString("city"));
                     tv_dailyGoal.setText(String.valueOf(document.getLong("dailygoal")));
                     } else {
                         Log.d("fb", "No such document");

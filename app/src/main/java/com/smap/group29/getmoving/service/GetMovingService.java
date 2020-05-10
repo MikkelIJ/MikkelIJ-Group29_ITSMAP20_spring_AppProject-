@@ -4,12 +4,10 @@ import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Binder;
 import android.os.Build;
 import android.os.Handler;
@@ -36,31 +34,25 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.auth.User;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.smap.group29.getmoving.R;
-import com.smap.group29.getmoving.model.NewUser;
-import com.smap.group29.getmoving.activities.UserActivity;
-import com.smap.group29.getmoving.model.NewUser;
 import com.smap.group29.getmoving.onlineAPI.OpenWeatherAPI;
 import com.smap.group29.getmoving.sensor.StepCounter;
 import com.smap.group29.getmoving.utils.DataHelper;
 import com.smap.group29.getmoving.utils.GlobalConstants;
-import com.smap.group29.getmoving.utils.Notifications;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
-import static com.smap.group29.getmoving.utils.GlobalConstants.CHANNEL_ID1;
-import static com.smap.group29.getmoving.utils.GlobalConstants.CHANNEL_ID2;
 import static com.smap.group29.getmoving.utils.GlobalConstants.CHANNEL_NAME1;
 import static com.smap.group29.getmoving.utils.GlobalConstants.CHANNEL_NAME2;
-import static com.smap.group29.getmoving.utils.GlobalConstants.FILE_NAME;
+import static com.smap.group29.getmoving.utils.GlobalConstants.CHANNEL_NAME3;
 
 
 public class GetMovingService extends Service {
@@ -182,6 +174,29 @@ public class GetMovingService extends Service {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
+    public void notification_YouGotTheLead(){
+        View v;
+        String NOTIFICATION_CHANNEL_ID = "com.example.mikkel3";
+
+        NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, CHANNEL_NAME3, NotificationManager.IMPORTANCE_HIGH);
+        chan.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        assert manager != null;
+        manager.createNotificationChannel(chan);
+
+        Notification notification3 = new NotificationCompat.Builder(this,NOTIFICATION_CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_walk)
+                .setContentTitle("GetMoving")
+                .setContentText("You got the lead!")
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                .build();
+
+        notificationManager.notify(3,notification3);
+    }
+
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void notification_ServiceIsLive(){
         View v;
         String NOTIFICATION_CHANNEL_ID = "com.example.mikkel2";
@@ -214,43 +229,9 @@ public class GetMovingService extends Service {
 
         notification_ServiceIsLive();
         getUserDataFirebase();
+        getUserWithMostSteps();
 
         return START_STICKY;
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private void startMyOwnForeground(){
-        String NOTIFICATION_CHANNEL_ID = "com.example.simpleapp";
-        String channelName = "My Background Service";
-        NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_NONE);
-        chan.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
-        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        assert manager != null;
-        manager.createNotificationChannel(chan);
-
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
-        Notification notification = notificationBuilder.setOngoing(true)
-                .setSmallIcon(R.drawable.ic_android_black_24dp)
-                .setContentTitle("GetMoving is counting your steps in the background")
-                .setContentText("Steps today: " + handleSteps())
-                .setPriority(NotificationManager.IMPORTANCE_MIN)
-                .setCategory(Notification.CATEGORY_SERVICE)
-                .build();
-        startForeground(200, notification);
-    }
-
-    public void createNotificationChannels(){
-        if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.O){
-            NotificationChannel serviceChannel = new NotificationChannel(
-                    CHANNEL_ID1,
-                    CHANNEL_NAME1,
-                    NotificationManager.IMPORTANCE_DEFAULT
-            );
-            mNotificationManager = getSystemService(NotificationManager.class);
-            assert mNotificationManager != null;
-            mNotificationManager.createNotificationChannel(serviceChannel);
-            //mNotificationManager.notify();
-        }
     }
 
 
@@ -287,21 +268,54 @@ public class GetMovingService extends Service {
                     //Log.d("TAG", "Current data: " + documentSnapshot.getData());
                     long dailySteps = documentSnapshot.getLong("dailysteps");
                     dailyGoal = documentSnapshot.getLong("dailygoal");
-                    long prevDailyGoal =  getPreferences("dailygoal");
+                    long prevDailyGoal =  getPreferencesLong("dailygoal");
                     if (prevDailyGoal == -1) {
                         if (dailySteps > dailyGoal) {
                             sendOnChannel1();
-                            savePreferences("dailygoal", dailyGoal);
+                            savePreferencesLong("dailygoal", dailyGoal);
                         }
                     }
                     if (prevDailyGoal != dailyGoal){
                         if (dailySteps > dailyGoal){
                             sendOnChannel1();
-                            savePreferences("dailygoal", dailyGoal);
+                            savePreferencesLong("dailygoal", dailyGoal);
                         }
                     }
                 } else {
                     Log.d("TAG", "Current data: null");
+                }
+            }
+        });
+    }
+
+    private void getUserWithMostSteps(){
+        dbRef.orderBy ("dailysteps",Query.Direction.DESCENDING).limit(1).addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w("TAG", "Listen failed.", e);
+                    return;
+                }
+
+                for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
+
+                    if (doc.getData() != null) {
+                        String flag = getPreferencesString("lead");
+                        String storeID = (String) doc.get("uID");
+                        String userID = mAuth.getUid();
+                        if (flag.contains("lead")){
+                                if (storeID.contains(userID)){
+                                    notification_YouGotTheLead();
+                                    savePreferencesString("lead",doc.getString("uID"));
+                            }
+                        }
+                        if (flag.contains(userID)){
+                            if (!storeID.contains(userID)){
+                                savePreferencesString("lead","lead");
+                            }
+                        }
+                    }
                 }
             }
         });
@@ -393,19 +407,19 @@ public class GetMovingService extends Service {
 
         Log.d("skridt1",String.valueOf("totalStepsSinceReboot" + totalStepsSinceReboot));
 
-        today = getPreferences(today());
+        today = getPreferencesLong(today());
         Log.d("skridt2",String.valueOf("milestoneStep 1" + milestoneStep));
         if(today == -1){ // if new day, then assign total steps to milestonestep
             milestoneStep = totalStepsSinceReboot;
             Log.d("skridt3",String.valueOf(milestoneStep));
-            savePreferences(today(), milestoneStep);
+            savePreferencesLong(today(), milestoneStep);
 
             mDataHelper.save(milestoneStep);
 //            int savedVal = mDataHelper.load(milestoneStep);
         }else {
             additionStep = totalStepsSinceReboot - Integer.parseInt(mDataHelper.load().trim()) ; // reset to 0
             Log.d("skridt4",String.valueOf(additionStep));
-            savePreferences(today(), additionStep);
+            savePreferencesLong(today(), additionStep);
             currentSteps = additionStep;
             Log.d("skridt5",String.valueOf(currentSteps));
         }
@@ -420,19 +434,29 @@ public class GetMovingService extends Service {
         return sdf.format(Calendar.getInstance().getTime());
     }
 
-    private void savePreferences(String key, long value) {
+    private void savePreferencesLong(String key, long value) {
         SharedPreferences sharedPreferences = this.getSharedPreferences(key,MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putLong(key, value);
         editor.commit();
     }
 
-    private long getPreferences(String key){
+    private void savePreferencesString(String key, String value) {
+        SharedPreferences sharedPreferences = this.getSharedPreferences(key,MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(key, value);
+        editor.commit();
+    }
+
+    private long getPreferencesLong(String key){
         SharedPreferences sharedPreferences = this.getSharedPreferences(key,MODE_PRIVATE);
 
         return sharedPreferences.getLong(key,-1);
     }
 
+    private String getPreferencesString(String key){
+        SharedPreferences sharedPreferences = this.getSharedPreferences(key,MODE_PRIVATE);
 
-
+        return sharedPreferences.getString(key,"lead");
+    }
 }
