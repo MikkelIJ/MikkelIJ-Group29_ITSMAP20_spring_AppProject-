@@ -284,13 +284,21 @@ public class GetMovingService extends Service {
                 }
 
                 if (documentSnapshot != null && documentSnapshot.exists()) {
-                    Log.d("TAG", "Current data: " + documentSnapshot.getData());
-                    long dailySteps = handleSteps();
+                    //Log.d("TAG", "Current data: " + documentSnapshot.getData());
+                    long dailySteps = documentSnapshot.getLong("dailysteps");
                     dailyGoal = documentSnapshot.getLong("dailygoal");
-
-                    if (dailySteps > dailyGoal) {
-                        sendOnChannel1();
-
+                    long prevDailyGoal =  getPreferences("dailygoal");
+                    if (prevDailyGoal == -1) {
+                        if (dailySteps > dailyGoal) {
+                            sendOnChannel1();
+                            savePreferences("dailygoal", dailyGoal);
+                        }
+                    }
+                    if (prevDailyGoal != dailyGoal){
+                        if (dailySteps > dailyGoal){
+                            sendOnChannel1();
+                            savePreferences("dailygoal", dailyGoal);
+                        }
                     }
                 } else {
                     Log.d("TAG", "Current data: null");
