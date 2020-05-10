@@ -50,7 +50,6 @@ import java.util.ArrayList;
 
 import static com.smap.group29.getmoving.service.GetMovingService.BROADCAST_ACTION_STEPS;
 import static com.smap.group29.getmoving.onlineAPI.OpenWeatherAPI.BROADCAST_ACTION_WEATHER;
-import static com.smap.group29.getmoving.utils.Notifications.CHANNEL_1_ID;
 
 
 public class UserActivity extends AppCompatActivity {
@@ -340,13 +339,13 @@ public class UserActivity extends AppCompatActivity {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         Log.v("fb", "DocumentSnapshot data: " + document.getData());
-                    stepsTotal = Integer.parseInt(document.getString("stepstotal"));
-                    tv_stepsTotal.setText(document.getString("stepstotal"));
+                    //stepsTotal = Integer.parseInt(document.getString("stepstotal"));
+                    //tv_stepsTotal.setText(document.getString("stepstotal"));
                     tv_name.setText(document.getString("name"));
                     tv_email.setText(document.getString("email"));
                     tv_age.setText(document.getString("age"));
                     tv_city.setText(document.getString("city"));
-                    tv_dailyGoal.setText(document.getString("dailygoal"));
+                    tv_dailyGoal.setText(String.valueOf(document.getLong("dailygoal")));
                     } else {
                         Log.d("fb", "No such document");
                     }

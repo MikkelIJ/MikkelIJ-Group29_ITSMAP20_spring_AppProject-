@@ -105,9 +105,6 @@ public class LeaderboardActivity extends AppCompatActivity{
 
         getUserWithMostSteps();
         setupRecyclerView();
-
-
-
     }
 
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
@@ -128,7 +125,6 @@ public class LeaderboardActivity extends AppCompatActivity{
         mAdapter.startListening();
         stepIntent = new Intent(this,GetMovingService.class);
         bindService(stepIntent,serviceConnection,Context.BIND_AUTO_CREATE);
-
     }
 
 
