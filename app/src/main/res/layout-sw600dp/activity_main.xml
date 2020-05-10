@@ -70,7 +70,8 @@
         android:textSize="14sp"
         app:autoSizeMinTextSize="14sp"
         app:autoSizeTextType="none"
-        app:layout_constraintStart_toStartOf="@+id/guideline3"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintStart_toEndOf="@+id/iv_weatherIcon"
         app:layout_constraintTop_toBottomOf="@+id/tv_weatherHeader" />
 
 
@@ -81,7 +82,8 @@
         android:inputType="text"
         android:text="Feels like"
         android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="@+id/guideline3"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintStart_toEndOf="@+id/iv_weatherIcon"
         app:layout_constraintTop_toBottomOf="@+id/tv_WeatherTemp" />
 
     <ImageView
@@ -90,7 +92,7 @@
         android:layout_height="0dp"
         android:contentDescription="@string/user_profile_picture"
         android:scaleType="centerCrop"
-        app:layout_constraintBottom_toTopOf="@+id/textView3"
+        app:layout_constraintBottom_toTopOf="@+id/guideline5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
         app:layout_constraintTop_toTopOf="parent"
@@ -103,9 +105,9 @@
         android:layout_marginBottom="16dp"
         android:contentDescription="@string/todo"
         app:layout_constraintBottom_toTopOf="@+id/guideline5"
-        app:layout_constraintEnd_toStartOf="@+id/guideline3"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+
         app:layout_constraintTop_toBottomOf="@+id/tv_weatherHeader"
         tools:src="@drawable/partlycloudyday" />
 
@@ -118,10 +120,11 @@
         android:text="@string/weather_forecast"
         android:textSize="18sp"
         android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
         app:autoSizeMinTextSize="14sp"
         app:autoSizeTextType="uniform"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+
+
         app:layout_constraintTop_toTopOf="@+id/guideline4" />
 
     <Button
@@ -136,31 +139,30 @@
 
     <TextView
         android:id="@+id/tv_StepsToday_header"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/steps_today"
-        android:textSize="40sp"
+        android:textSize="30sp"
         app:autoSizeMaxTextSize="40sp"
         app:autoSizeMinTextSize="24sp"
         app:autoSizeTextType="uniform"
         app:layout_constraintBottom_toTopOf="@+id/guideline6"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline5" />
 
     <TextView
         android:id="@+id/tv_steps_today"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/_1000000"
+        android:textSize="80dp"
         app:autoSizeMaxTextSize="100sp"
         app:autoSizeMinTextSize="14sp"
+
         app:autoSizeTextType="uniform"
         app:layout_constraintBottom_toTopOf="@+id/guideline8"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.531"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_StepsToday_header"
         app:layout_constraintVertical_bias="0.0" />
@@ -182,15 +184,14 @@
         android:id="@+id/et_dailygoal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+
         android:autofillHints=""
-        android:ems="0"
         android:gravity="center"
         android:hint="@string/_10_000"
         android:inputType="number"
         android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline4"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guideline3" />
+        app:layout_constraintStart_toEndOf="@+id/textView3"
+        app:layout_constraintTop_toBottomOf="@+id/tv_userActivity_followers" />
 
     <TextView
         android:id="@+id/tv_stepsTotal"
@@ -247,22 +248,23 @@
 
     <TextView
         android:id="@+id/textView3"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/daily_goal"
         android:textSize="12sp"
-        app:layout_constraintBottom_toTopOf="@+id/et_dailygoal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guideline3" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_userActivity_followers" />
 
     <TextView
         android:id="@+id/tv_weatherHumid"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Humid"
-        app:layout_constraintStart_toStartOf="@+id/guideline3"
-        app:layout_constraintTop_toBottomOf="@+id/tv_WeatherFeelsLike" />
+        app:layout_constraintStart_toEndOf="@+id/iv_weatherIcon"
+        app:layout_constraintTop_toBottomOf="@+id/tv_WeatherFeelsLike"
+        tools:layout_editor_absoluteX="512dp"
+        android:layout_marginLeft="8dp"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
@@ -277,9 +279,10 @@
         android:layout_height="wrap_content"
         android:text="@string/weathermessage"
         app:layout_constraintBottom_toTopOf="@+id/guideline5"
-        app:layout_constraintStart_toStartOf="@+id/guideline3"
+        app:layout_constraintStart_toEndOf="@+id/iv_weatherIcon"
         app:layout_constraintTop_toBottomOf="@+id/tv_weatherHumid"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0"
+        android:layout_marginLeft="8dp"/>
 
     <TextView
         android:id="@+id/tv_userActivity_followers"
