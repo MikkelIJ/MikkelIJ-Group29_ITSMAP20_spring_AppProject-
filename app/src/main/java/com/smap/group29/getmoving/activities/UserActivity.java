@@ -339,8 +339,8 @@ public class UserActivity extends AppCompatActivity {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         Log.v("fb", "DocumentSnapshot data: " + document.getData());
-                    //stepsTotal = Integer.parseInt(document.getString("stepstotal"));
-                    //tv_stepsTotal.setText(document.getString("stepstotal"));
+                    stepsTotal = Integer.parseInt(document.getString("stepstotal"));
+                    tv_stepsTotal.setText(document.getString("stepstotal"));
                     tv_name.setText(document.getString("name"));
                     tv_email.setText(document.getString("email"));
                     tv_age.setText(document.getString("age"));

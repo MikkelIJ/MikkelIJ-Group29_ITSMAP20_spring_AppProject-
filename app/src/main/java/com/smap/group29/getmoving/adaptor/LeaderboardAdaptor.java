@@ -28,6 +28,7 @@ import com.smap.group29.getmoving.R;
 import com.smap.group29.getmoving.model.NewUser;
 import com.squareup.picasso.Picasso;
 
+// inspired by code in flow https://www.youtube.com/watch?v=3WR4QAiVuCw&list=RDCMUC_Fh8kvtkVPkeihBs42jGcA&start_radio=1&t=507
 
 public class LeaderboardAdaptor extends FirestoreRecyclerAdapter<NewUser, LeaderboardAdaptor.UserHolder>  {
 
