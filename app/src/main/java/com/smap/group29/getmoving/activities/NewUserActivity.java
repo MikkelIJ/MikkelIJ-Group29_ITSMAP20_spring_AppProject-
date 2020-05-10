@@ -96,7 +96,7 @@ public class NewUserActivity extends AppCompatActivity {
                 final String name = et_name.getText().toString();
                 final String age = et_age.getText().toString();
                 final String city = et_city.getText().toString();
-                final String dailyGoal = et_dailySteps.getText().toString();
+                final long  dailyGoal = Long.parseLong(et_dailySteps.getText().toString());
 
 
                 if(TextUtils.isEmpty(email)){
