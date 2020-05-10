@@ -6,6 +6,9 @@ public abstract class GlobalConstants {
     public static final String FILE_NAME = "currentsteps.txt";
 
     // notifications
-    public static final String CHANNEL_ID = "com.smap.group29.getmoving.channel1";
-    public static final String CHANNEL_NAME = "Channel 1";
+    public static final String CHANNEL_ID1 = "com.smap.group29.getmoving.channel1";
+    public static final String CHANNEL_NAME1 = "Channel 1";
+
+    public static final String CHANNEL_ID2 = "com.smap.group29.getmoving.channel2";
+    public static final String CHANNEL_NAME2 = "Channel 2";
 }

@@ -6,18 +6,22 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Binder;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
@@ -51,7 +55,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.smap.group29.getmoving.utils.GlobalConstants.CHANNEL_ID;
+
+import static com.smap.group29.getmoving.utils.GlobalConstants.CHANNEL_ID1;
+import static com.smap.group29.getmoving.utils.GlobalConstants.CHANNEL_ID2;
+import static com.smap.group29.getmoving.utils.GlobalConstants.CHANNEL_NAME1;
+import static com.smap.group29.getmoving.utils.GlobalConstants.CHANNEL_NAME2;
 import static com.smap.group29.getmoving.utils.GlobalConstants.FILE_NAME;
 
 
@@ -89,6 +97,7 @@ public class GetMovingService extends Service {
     private long totalStepsSinceReboot;
     private long today;
     private long additionStep;
+    private long dailyGoal;
 
 
 
@@ -145,47 +154,96 @@ public class GetMovingService extends Service {
 
         notificationManager = NotificationManagerCompat.from(this);
         //getValFirebase();
-
-
-
         mDataHelper = new DataHelper(this);
+    }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void sendOnChannel1(){
+        View v;
+        long currentsteps = handleSteps();
+        String NOTIFICATION_CHANNEL_ID = "com.example.mikkel1";
+
+        NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, CHANNEL_NAME2, NotificationManager.IMPORTANCE_HIGH);
+        chan.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        assert manager != null;
+        manager.createNotificationChannel(chan);
+
+        Notification notification1 = new NotificationCompat.Builder(this,NOTIFICATION_CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_walk)
+                .setContentTitle("GetMoving")
+                .setContentText("You reached the daily goal of " + dailyGoal + " steps!")
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                .build();
+
+        notificationManager.notify(2,notification1);
+        //startForeground(30,notification1);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void notification_ServiceIsLive(){
+        View v;
+        String NOTIFICATION_CHANNEL_ID = "com.example.mikkel2";
+
+        NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, CHANNEL_NAME1, NotificationManager.IMPORTANCE_LOW);
+        chan.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        assert manager != null;
+        manager.createNotificationChannel(chan);
+
+        long currentsteps = 1111;
+        Notification notification2 = new NotificationCompat.Builder(this,NOTIFICATION_CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_walk)
+                .setContentTitle("GetMoving")
+                .setContentText("Service is live")
+                .setPriority(NotificationCompat.PRIORITY_LOW)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                .setOngoing(false)
+                .build();
+
+
+        startForeground(20,notification2);
     }
 
     //inspired by https://www.youtube.com/watch?v=FbpD5RZtbCc
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
     //    service is killed by android system after 1 minute if this notification is not set
-        getUserDataFirebase();
-        createNotificationChannels();
-//        long goal = dailygoal;
-//        long steps = handleSteps();
-//
-//        Intent notificationIntent = new Intent(this, UserActivity.class);
-//        PendingIntent pendingIntent = PendingIntent.getActivity(this,
-//                0, notificationIntent, 0);
-//
-//
-//
-//            Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
-//                    .setSmallIcon(R.drawable.ic_walk)
-//                    .setContentTitle("Notification from GetMoving")
-//                    .setContentText(String.valueOf(handleSteps()))
-//                    .setPriority(NotificationCompat.PRIORITY_LOW)
-//                    .setCategory(NotificationCompat.CATEGORY_MESSAGE)
-//                    .setContentIntent(pendingIntent)
-//                    .build();
-//
-//            startForeground(1, notification);
 
-        return START_NOT_STICKY;
+        notification_ServiceIsLive();
+        getUserDataFirebase();
+
+        return START_STICKY;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void startMyOwnForeground(){
+        String NOTIFICATION_CHANNEL_ID = "com.example.simpleapp";
+        String channelName = "My Background Service";
+        NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_NONE);
+        chan.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        assert manager != null;
+        manager.createNotificationChannel(chan);
+
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
+        Notification notification = notificationBuilder.setOngoing(true)
+                .setSmallIcon(R.drawable.ic_android_black_24dp)
+                .setContentTitle("GetMoving is counting your steps in the background")
+                .setContentText("Steps today: " + handleSteps())
+                .setPriority(NotificationManager.IMPORTANCE_MIN)
+                .setCategory(Notification.CATEGORY_SERVICE)
+                .build();
+        startForeground(200, notification);
     }
 
     public void createNotificationChannels(){
         if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.O){
             NotificationChannel serviceChannel = new NotificationChannel(
-                    CHANNEL_ID,
-                    GlobalConstants.CHANNEL_NAME,
+                    CHANNEL_ID1,
+                    CHANNEL_NAME1,
                     NotificationManager.IMPORTANCE_DEFAULT
             );
             mNotificationManager = getSystemService(NotificationManager.class);
@@ -195,30 +253,6 @@ public class GetMovingService extends Service {
         }
     }
 
-    private void sendNotification(long steps){
-
-        // use random() to generate random number from current words List
-        // use number to get word from index of List
-        String message = "besked";
-        // use string resources to create greeting on notification. This adds two languages EN and DK
-        String greetingResource = "titel";//getApplicationContext().getString(R.string.notification_greeting);
-        // when notification pressed, go to DetailsActivity. This still needs work
-        Intent intentNotification = new Intent(this, UserActivity.class);
-        // putextra for when i get pending intent to pass data and access detailsActivity when pressed notification
-        //intentNotification.putExtra(RANDOM_WORD,randomWord);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this,
-                0,intentNotification,0);
-
-
-        mNotification = new NotificationCompat.Builder(this,GlobalConstants.CHANNEL_ID)
-                .setContentTitle(greetingResource)// custom greetings title from resources
-                .setContentText(String.valueOf(steps))// random word in notification
-                .setSmallIcon(R.drawable.ic_walk)// custom icon for notification taskbar
-                .setContentIntent(pendingIntent)// pending intent
-                .build();
-
-        startForeground(1,mNotification);
-    }
 
 
     @Override
@@ -230,21 +264,7 @@ public class GetMovingService extends Service {
         Log.v("service", "Stopped");
     }
 
-    public void createNotification(){
 
-//        String dailySteps = String.valueOf(mStepCounter.getSteps());
-//        String goalReached = "You have reached your daily goal of " + dailyGoal + " steps";
-//        if(dailySteps == dailyGoal){
-//            Notification notification = new NotificationCompat.Builder(this, CHANNEL_1_ID)
-//                    .setSmallIcon(R.drawable.ic_walk)
-//                    .setContentTitle("Notification from GetMoving")
-//                    .setContentText(goalReached)
-//                    .setPriority(NotificationCompat.PRIORITY_LOW)
-//                    .setCategory(NotificationCompat.CATEGORY_MESSAGE)
-//                    .build();
-//            notificationManager.notify(1, notification);
-//        }
-    }
 
 
 
@@ -252,9 +272,10 @@ public class GetMovingService extends Service {
         mHandler.removeCallbacks(updateStepsLeaderBoard);
     }
 
-    private void getUserDataFirebase(){
+    private void getUserDataFirebase() {
         DocumentReference documentReference = db.collection(GlobalConstants.FIREBASE_USER_COLLECTION).document(userID);
         documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                 if (e != null) {
@@ -264,39 +285,18 @@ public class GetMovingService extends Service {
 
                 if (documentSnapshot != null && documentSnapshot.exists()) {
                     Log.d("TAG", "Current data: " + documentSnapshot.getData());
-                    long dailySteps =   documentSnapshot.getLong("dailysteps");
-//                    long dailyGoal = documentSnapshot.getLong("dailygoal");
-                    if (dailySteps > 300){
-                        //createNotificationChannels();
-                        mNotification = new NotificationCompat.Builder(GetMovingService.this,GlobalConstants.CHANNEL_ID)
-                                .setContentTitle("GetMoving")// custom greetings title from resources
-                                .setContentText("You reached your daily goal!")// random word in notification
-                                .setSmallIcon(R.drawable.ic_walk)// custom icon for notification taskbar
-                                .build();
+                    long dailySteps = handleSteps();
+                    dailyGoal = documentSnapshot.getLong("dailygoal");
 
-                        startForeground(1,mNotification);
+                    if (dailySteps > dailyGoal) {
+                        sendOnChannel1();
+
                     }
                 } else {
                     Log.d("TAG", "Current data: null");
                 }
             }
         });
-//        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                if (task.isSuccessful()) {
-//                    DocumentSnapshot document = task.getResult();
-//                    if (document.exists()) {
-//                        Log.v("fb", "DocumentSnapshot data: " + document.getData());
-//                        dailygoal = (Integer.parseInt(document.getString("dailygoal")));
-//                    } else {
-//                        Log.d("fb", "No such document");
-//                    }
-//                } else {
-//                    Log.d("fb", "get failed with ", task.getException());
-//                }
-//            }
-//        });
     }
 
 
@@ -306,7 +306,7 @@ public class GetMovingService extends Service {
         public void run() {
 
             broadcastSteps();
-            sendNotification(handleSteps());
+            //sendNotification(handleSteps());
             mHandler.postDelayed(this,10);
         }
     };
@@ -343,9 +343,7 @@ public class GetMovingService extends Service {
                 }
             });
 
-//            Map<String, Object> steps = new HashMap<>();
-//            steps.put("dailysteps", stepValue);
-//            dbRef.document(userID).update(steps);
+
 
     }
 
