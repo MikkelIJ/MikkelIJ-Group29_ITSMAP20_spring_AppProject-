@@ -38,7 +38,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class NewUserActivity extends AppCompatActivity {
-    //Newuser and Useractivity is inspired by  https://www.youtube.com/playlist?list=PLlGT4GXi8_8dDK5Y3KCxuKAPpil9V49rN
+    //Newuser is inspired by https://www.youtube.com/watch?v=tbh9YaWPKKs&list=PLlGT4GXi8_8dDK5Y3KCxuKAPpil9V49rN&index=2&t=0s
+
 
     public static final String TAG = "TAG";
     FirebaseAuth mAuth;
@@ -71,11 +72,10 @@ public class NewUserActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //When user clicks on addphoto the app opens the camararoll
+                // // inspired by https://www.youtube.com/watch?v=nNYLQcmB7AU&list=PLlGT4GXi8_8dDK5Y3KCxuKAPpil9V49rN&index=9&t=0s
                 Intent openCamararollIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(openCamararollIntent, 101);
 
-                //Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                //startActivityForResult(takePicture, 0);
             }
         });
 
@@ -98,7 +98,7 @@ public class NewUserActivity extends AppCompatActivity {
                 final String city = et_city.getText().toString();
                 final long  dailyGoal = Long.parseLong(et_dailySteps.getText().toString());
 
-
+                //setting restrictions
                 if(TextUtils.isEmpty(email)){
                     et_email.setError(getString(R.string.email_required));
                     return;
@@ -122,7 +122,7 @@ public class NewUserActivity extends AppCompatActivity {
                             Toast.makeText(NewUserActivity.this, R.string.user_created, Toast.LENGTH_SHORT).show();
                             //getting the id of the currently logged in user
                             //creating new document and storing the data with hashmap
-                            final String userID = mAuth.getCurrentUser().getUid();
+                            userID = mAuth.getCurrentUser().getUid();
                             DocumentReference documentReference = mStore.collection(GlobalConstants.FIREBASE_USER_COLLECTION).document(userID);
                             Map<String,Object> user = new HashMap<>();
                             user.put("uID",mAuth.getUid());
@@ -176,15 +176,24 @@ public class NewUserActivity extends AppCompatActivity {
 
             }
         }
-        if (resultCode == 0) {
+        if (resultCode == RESULT_CANCELED) {
+
+
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             iv_userImage.setImageBitmap(imageBitmap);
+
         }
+
+
+
+
+
     }
 
     private void uploadImgToFirebase(Uri imageUri) {
         //upload imgage to firbasestorage
+        // inspired by https://www.youtube.com/watch?v=nNYLQcmB7AU&list=PLlGT4GXi8_8dDK5Y3KCxuKAPpil9V49rN&index=9&t=0s
         StorageReference fileRef = storageReference.child("users/"+ mAuth.getUid()+"profile.jpg");
         fileRef.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override

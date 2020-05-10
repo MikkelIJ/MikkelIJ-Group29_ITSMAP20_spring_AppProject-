@@ -33,6 +33,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class EditProfileActivity extends AppCompatActivity {
+    //class is inspired by https://www.youtube.com/watch?v=-dqPdUQPxlQ&list=PLlGT4GXi8_8dDK5Y3KCxuKAPpil9V49rN&index=11
+
     public static final String TAG = "TAG";
     EditText edit_name, edit_email, edit_age, edit_city, edit_steps;
     ImageView iv_profilePicture;
@@ -64,6 +66,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
         initUi();
 
+        //loading the picture from firebase
         StorageReference imgProfile = fbRef.child("users/"+ mAuth.getUid()+"profile.jpg");
         imgProfile.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
@@ -101,7 +104,7 @@ public class EditProfileActivity extends AppCompatActivity {
         btn_update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //if any of the fields are empty
+                //if any of the fields are empty make toast
                 if(edit_name.getText().toString().isEmpty() || edit_age.getText().toString().isEmpty() || edit_city.getText().toString().isEmpty() || edit_steps.getText().toString().isEmpty()){
                     Toast.makeText(EditProfileActivity.this, R.string.missing_fields, Toast.LENGTH_SHORT).show();
                     return;
@@ -152,15 +155,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 uploadImgToFirebase(imageUri);
 
             }
-            /*
-        }
-        if (resultCode == 0) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            iv_userImage.setImageBitmap(imageBitmap);
-        }
 
-             */
     }
     }
 

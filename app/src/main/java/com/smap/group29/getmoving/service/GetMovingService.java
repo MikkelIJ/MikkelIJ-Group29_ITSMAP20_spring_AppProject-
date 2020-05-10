@@ -75,13 +75,8 @@ public class GetMovingService extends Service {
     private String userID;
     //private long dailygoal;
     private CollectionReference dbRef = db.collection(GlobalConstants.FIREBASE_USER_COLLECTION);
-    TextView steps;
-
-    private NotificationManager mNotificationManager;
-    private Notification mNotification;
 
     private Calendar c; // c.get(Calendar.SECOND)
-    //private Notifications mNotifications = new Notifications();
     private DataHelper mDataHelper;
 
     private long milestoneStep;
@@ -175,6 +170,7 @@ public class GetMovingService extends Service {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void notification_YouGotTheLead(){
+        //Setting up notification when user gets the lead on leaderboard
         View v;
         String NOTIFICATION_CHANNEL_ID = "com.example.mikkel3";
 
@@ -187,7 +183,7 @@ public class GetMovingService extends Service {
         Notification notification3 = new NotificationCompat.Builder(this,NOTIFICATION_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_walk)
                 .setContentTitle("GetMoving")
-                .setContentText("You got the lead!")
+                .setContentText(getString(R.string.you_got_the_lead))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                 .build();

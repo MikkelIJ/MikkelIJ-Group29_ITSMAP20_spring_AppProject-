@@ -2,6 +2,7 @@ package com.smap.group29.getmoving.utils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.smap.group29.getmoving.R;
 import com.smap.group29.getmoving.model.weather.OpenWeather;
 import com.smap.group29.getmoving.model.weather.Weather;
 
@@ -22,7 +23,7 @@ public class WeatherJsonParser {
             weatherInfo.add(0,"Temp: " + (mOpenWeather.main.temp.doubleValue())+ "\u2103");
             weatherInfo.add(1,"Feels like: " + (mOpenWeather.main.feels_like.doubleValue())+ "\u2103");
             weatherInfo.add(2,"Humid: " + (mOpenWeather.main.humidity.doubleValue() + "%"));
-            weatherInfo.add(3,"Desciption: " + (mOpenWeather.weather.get(0).description));
+            weatherInfo.add(3,"Description: " + (mOpenWeather.weather.get(0).description));
             weatherInfo.add(4,"https://openweathermap.org/img/wn/" + (mOpenWeather.weather.get(0).icon) + "@2x.png");
             return  weatherInfo;
         } else {

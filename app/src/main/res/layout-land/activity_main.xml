@@ -59,24 +59,22 @@
 
     <TextView
         android:id="@+id/tv_WeatherTemp"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/temp_xy"
         android:textSize="14sp"
         app:autoSizeMinTextSize="14sp"
         app:autoSizeTextType="none"
-        app:layout_constraintEnd_toEndOf="@+id/tv_WeatherFeelsLike"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toBottomOf="@+id/tv_weatherHeader" />
 
     <TextView
         android:id="@+id/tv_WeatherFeelsLike"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="text"
         android:text="Feels like"
         android:textSize="14sp"
-        app:layout_constraintEnd_toStartOf="@+id/iv_weatherIcon"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toBottomOf="@+id/tv_WeatherTemp" />
 
@@ -195,7 +193,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.44" />
+        app:layout_constraintGuide_percent="0.5" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline5"
@@ -238,10 +236,9 @@
 
     <TextView
         android:id="@+id/tv_weatherHumid"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Humid"
-        app:layout_constraintEnd_toStartOf="@+id/iv_weatherIcon"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toBottomOf="@+id/tv_WeatherFeelsLike" />
 
@@ -250,14 +247,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.23" />
+        app:layout_constraintGuide_percent="0.34" />
 
     <TextView
         android:id="@+id/tv_weatherDescription"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/weathermessage"
-        app:layout_constraintEnd_toStartOf="@+id/iv_weatherIcon"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toBottomOf="@+id/tv_weatherHumid" />
 
@@ -278,6 +274,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.56" />
+        app:layout_constraintGuide_percent="0.6" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

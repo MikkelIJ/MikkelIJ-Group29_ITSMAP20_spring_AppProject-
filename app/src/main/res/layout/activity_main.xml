@@ -64,7 +64,7 @@
 
     <TextView
         android:id="@+id/tv_WeatherTemp"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/temp_xy"
         android:textSize="14sp"
@@ -76,7 +76,7 @@
 
     <TextView
         android:id="@+id/tv_WeatherFeelsLike"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="text"
         android:text="@string/feels_like"
@@ -258,7 +258,7 @@
 
     <TextView
         android:id="@+id/tv_weatherHumid"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/humid"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
@@ -273,7 +273,7 @@
 
     <TextView
         android:id="@+id/tv_weatherDescription"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/weathermessage"
         app:layout_constraintBottom_toTopOf="@+id/guideline5"

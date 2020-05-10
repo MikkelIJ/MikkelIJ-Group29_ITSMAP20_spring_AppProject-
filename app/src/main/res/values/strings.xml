@@ -55,4 +55,10 @@
     <string name="goal_reached">"You reached the daily goal of "</string>
     <string name="steps">steps!</string>
     <string name="Service_live">Service is live</string>
+    <string name="permisson_needed">"GetMoving needs your permission to use activity sensor and storage "</string>
+    <string name="photo_permission">Please Grant Permissions to upload profile photo</string>
+    <string name="enable">ENABLE</string>
+    <string name="temp">"Temp: "</string>
+    <string name="description">"Desciption: "</string>
+    <string name="you_got_the_lead">You got the lead!</string>
 </resources>

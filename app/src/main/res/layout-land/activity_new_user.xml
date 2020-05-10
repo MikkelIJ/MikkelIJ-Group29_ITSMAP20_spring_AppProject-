@@ -126,7 +126,7 @@
         android:id="@+id/et_dailygoal"
         android:layout_width="220dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="4dp"
         android:ems="10"
         android:hint="@string/daily_steps"
         android:importantForAutofill="no"

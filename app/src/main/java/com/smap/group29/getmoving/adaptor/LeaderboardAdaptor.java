@@ -86,7 +86,6 @@ public class LeaderboardAdaptor extends FirestoreRecyclerAdapter<NewUser, Leader
         holder.tv_userSteps.setText(String.valueOf(model.getDailysteps()));
 
 
-
         StorageReference imgProfile = fbRef.child("users/"+ model.getuID()+"profile.jpg");
         imgProfile.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
@@ -94,8 +93,6 @@ public class LeaderboardAdaptor extends FirestoreRecyclerAdapter<NewUser, Leader
                 Picasso.get().load(uri).into(holder.iv_userImage);
             }
         });
-
-        //Log.v("user",String.valueOf(position+1) + " " + model.getName() + " " + model.getDailysteps());
 
     }
 
@@ -112,6 +109,8 @@ public class LeaderboardAdaptor extends FirestoreRecyclerAdapter<NewUser, Leader
         }else
             return String.valueOf(position);
     }
+
+
 
 
     @NonNull

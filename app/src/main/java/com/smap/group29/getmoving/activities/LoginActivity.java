@@ -43,6 +43,7 @@ public class LoginActivity extends AppCompatActivity{
         setContentView(R.layout.activity_login);
 
         mAuth = FirebaseAuth.getInstance();
+        // If the current user is logged in already we'll send them to the UserActivity
         if(mAuth.getCurrentUser() != null){
             startActivity(new Intent(getApplicationContext(), UserActivity.class));
             finish();
@@ -52,13 +53,14 @@ public class LoginActivity extends AppCompatActivity{
         setUI();
 
 
-        // If the current user is logged in already we'll send them to the UserActivity
+
 
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        //Permissions doesnt work work for Android Version under 10 so we have commented this bit out
 //        mCheckPermissions = new CheckPermissions();
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 //            mCheckPermissions.checkPermissions(this);
@@ -68,6 +70,7 @@ public class LoginActivity extends AppCompatActivity{
     @Override
     protected void onResume() {
         super.onResume();
+        //Permissions doesnt work work for Android Version under 10 so we have commented this bit out
 //        mCheckPermissions = new CheckPermissions();
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 //            mCheckPermissions.checkPermissions(this);
@@ -90,6 +93,7 @@ public class LoginActivity extends AppCompatActivity{
                 String email = et_email.getText().toString().trim();
                 String password = et_password.getText().toString().trim();
 
+                //Set up requirements
                 if(TextUtils.isEmpty(email)){
                     et_email.setError(getString(R.string.email_required));
                     return;
@@ -121,7 +125,7 @@ public class LoginActivity extends AppCompatActivity{
                     }
                 });
 
-                //firebaseUtil.signIn(email,password);
+
             }
         });
 
