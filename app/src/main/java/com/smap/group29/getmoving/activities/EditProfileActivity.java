@@ -103,7 +103,7 @@ public class EditProfileActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //if any of the fields are empty
                 if(edit_name.getText().toString().isEmpty() || edit_age.getText().toString().isEmpty() || edit_city.getText().toString().isEmpty() || edit_steps.getText().toString().isEmpty()){
-                    Toast.makeText(EditProfileActivity.this, "One or more fields are empty.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditProfileActivity.this, R.string.missing_fields, Toast.LENGTH_SHORT).show();
                     return;
                 }
                 final String email = edit_email.getText().toString();
@@ -122,12 +122,12 @@ public class EditProfileActivity extends AppCompatActivity {
                         documentReference.update(editedUser).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                Toast.makeText(EditProfileActivity.this, "Profile updated", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(EditProfileActivity.this, R.string.profile_updated, Toast.LENGTH_SHORT).show();
                                 startActivity(new Intent(getApplicationContext(), UserActivity.class));
                                 finish();
                             }
                         });
-                        Toast.makeText(EditProfileActivity.this, "User is updated",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EditProfileActivity.this, R.string.user_updated,Toast.LENGTH_SHORT).show();
 
                     }
                 }).addOnFailureListener(new OnFailureListener() {
@@ -173,7 +173,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
-                        Toast.makeText(EditProfileActivity.this, "Image uploaded", Toast.LENGTH_SHORT);
+                        Toast.makeText(EditProfileActivity.this, R.string.img_uploaded, Toast.LENGTH_SHORT);
                         Picasso.get().load(imageUri).into(iv_profilePicture);
                     }
                 });
@@ -181,7 +181,7 @@ public class EditProfileActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(EditProfileActivity.this, "Failed to upload image", Toast.LENGTH_SHORT);
+                Toast.makeText(EditProfileActivity.this, R.string.failed_img_upload, Toast.LENGTH_SHORT);
             }
         });
     }

@@ -16,7 +16,7 @@
     <string name="weather_message">Clear sky</string>
     <string name="btn_leaderboard">LeaderBoards</string>
     <string name="city">City: Aarhus</string>
-    <string name="steps_today">Steps today</string>
+    <string name="steps_today">Steps today:</string>
     <string name="total_steps_1_000_000_000_000_000">Total steps: 1.000.000.000.000.000</string>
     <string name="daily_goal">My daily goal:</string>
     <string name="_10_000">10.000</string>
@@ -35,4 +35,21 @@
     <string name="update">Update</string>
     <string name="newphoto">Add new profile picture</string>
     <string name="bobby_olsen">Bobby Olsen</string>
+    <string name="feels_like">Feels like</string>
+    <string name="humid">Humid</string>
+    <string name="followers_0">Followers: 0</string>
+
+    <string name="missing_fields">One or more fields are empty.</string>
+    <string name="profile_updated">Profile updated</string>
+    <string name="user_updated">User is updated</string>
+    <string name="img_uploaded">Image is uploaded</string>
+    <string name="failed_img_upload">Failed to upload image</string>
+    <string name="total_steps">"Total steps: "</string>
+    <string name="followers">"Followers:  "</string>
+    <string name="wins">"Wins: "</string>
+    <string name="email_required">Email is required</string>
+    <string name="password_required">Password is required</string>
+    <string name="password_length">Password must be >= 6 characters</string>
+    <string name="logged_in_succes">Logged in succesfully</string>
+    <string name="user_created">User Created</string>
 </resources>
