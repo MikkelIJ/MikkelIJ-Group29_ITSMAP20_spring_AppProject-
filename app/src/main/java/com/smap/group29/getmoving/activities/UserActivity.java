@@ -70,6 +70,7 @@ public class UserActivity extends AppCompatActivity {
     private long stepsTotal = 0;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -137,16 +138,15 @@ public class UserActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
+            //setting up options in the settings menu
 
             case R.id.settings:
                 openSettings();
                 break;
 
-
             case R.id.logout:
                 logout();
                 break;
-
 
         }
         return super.onOptionsItemSelected(item);
@@ -183,6 +183,7 @@ public class UserActivity extends AppCompatActivity {
     }
 
     private void openSettings() {
+        //Open settings with values from UserActivty
         Intent intent = new Intent(getApplicationContext(), EditProfileActivity.class);
         intent.putExtra("name", tv_name.getText().toString());
         intent.putExtra("age", tv_age.getText().toString());
@@ -196,6 +197,7 @@ public class UserActivity extends AppCompatActivity {
 
 
     public void logout(){
+        //logging out and removing the service callbacks
         if (mBound){
             mService.GM_removeCallbacks();
             FirebaseAuth.getInstance().signOut();
@@ -226,6 +228,7 @@ public class UserActivity extends AppCompatActivity {
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
+            //binding the service to data
             LocalBinder binder = (LocalBinder) service;
             mService = binder.getService();
             mBound = true;

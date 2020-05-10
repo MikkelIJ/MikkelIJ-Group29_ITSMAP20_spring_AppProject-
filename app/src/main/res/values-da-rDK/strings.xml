@@ -55,5 +55,10 @@
     <string name="goal_reached">"Du har nået dit dagelige mål på "</string>
     <string name="steps">skridt!</string>
     <string name="Service_live">GetMoving service kører!</string>
-    <string name="totalSteps">\"Total: \"</string>
+    <string name="permisson_needed">GetMoving skal bruge din tilladelse til at skridttæller og lagerplads</string>
+    <string name="photo_permission">Giv tilladelse til at GetMoving må uploade billedet</string>
+    <string name="enable">AKTIVERET</string>
+    <string name="temp">"Temperatur: "</string>
+    <string name="description">"Beskrivelse: "</string>
+    <string name="you_got_the_lead">Du har taget føringen!</string>
 </resources>

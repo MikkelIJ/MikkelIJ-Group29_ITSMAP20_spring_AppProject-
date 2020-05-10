@@ -163,6 +163,8 @@ public class LeaderboardActivity extends AppCompatActivity{
 
     private void setupRecyclerView() {
 
+        // Setting recyclerview up with highest value on top
+
         mUserList = findViewById(R.id.rv_leaderboard);
         Query query = collectionReference.orderBy("dailysteps",Query.Direction.DESCENDING);
         FirestoreRecyclerOptions<NewUser> mOptions = new FirestoreRecyclerOptions.Builder<NewUser>().setQuery(query, NewUser.class).build();
@@ -208,6 +210,7 @@ public class LeaderboardActivity extends AppCompatActivity{
 
     // This method is used to reset the Progressbar, it is triggered
     private void timeTilRefresh(){
+        //Refreshing the leaderboard every 30 second
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -231,6 +234,7 @@ public class LeaderboardActivity extends AppCompatActivity{
 
     // this part is for when the phone is in landscape mode
     private void getUserDataFirebase(String userID){
+        //Getting the user and user data from firebase with reference
         DocumentReference documentReference = mStore.collection(GlobalConstants.FIREBASE_USER_COLLECTION).document(userID);
         documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -273,6 +277,7 @@ public class LeaderboardActivity extends AppCompatActivity{
     // this is for setting the profile view in landscape mode
     private void getUserWithMostSteps(){
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            //Targets the user with most steps (Only works in landscape at the moment)
             collectionReference.orderBy("dailysteps",Query.Direction.DESCENDING).limit(1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {

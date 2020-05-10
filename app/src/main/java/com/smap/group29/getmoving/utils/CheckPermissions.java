@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat;
 
 
 import com.google.android.material.snackbar.Snackbar;
+import com.smap.group29.getmoving.R;
 import com.smap.group29.getmoving.activities.LoginActivity;
 
 // heavily inspired by https://stackoverflow.com/questions/34040355/how-to-check-the-multiple-permission-at-single-request-in-android-m
@@ -37,8 +38,8 @@ public class CheckPermissions extends Activity {
                     ActivityCompat.shouldShowRequestPermissionRationale
                             (loginActivity, Manifest.permission.ACTIVITY_RECOGNITION)) {
                 Snackbar.make(loginActivity.findViewById(android.R.id.content),
-                        "GetMoving needs your permission to use activity sensor and storage " + ("\ud83d\ude2f"),
-                        Snackbar.LENGTH_INDEFINITE).setAction("ENABLE",
+                        getString(R.string.permisson_needed) + ("\ud83d\ude2f"),
+                        Snackbar.LENGTH_INDEFINITE).setAction(R.string.enable,
                         new View.OnClickListener() {
                             @RequiresApi(api = Build.VERSION_CODES.M)
                             @Override
@@ -73,8 +74,8 @@ public class CheckPermissions extends Activity {
                         // write your logic here
                     } else {
                         Snackbar.make(this.findViewById(android.R.id.content),
-                                "Please Grant Permissions to upload profile photo",
-                                Snackbar.LENGTH_INDEFINITE).setAction("ENABLE",
+                                R.string.photo_permission,
+                                Snackbar.LENGTH_INDEFINITE).setAction(R.string.enable,
                                 new View.OnClickListener() {
                                     @RequiresApi(api = Build.VERSION_CODES.M)
                                     @Override
