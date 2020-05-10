@@ -32,7 +32,7 @@ public class LeaderBoardAdapter extends RecyclerView.Adapter<LeaderBoardAdapter.
 //        FirebaseUtil.openFirebaseReference("NewUser");
         mFirebaseDatabase = FirebaseUtil.mFirebaseDatabase;
         mDatabaseReference = FirebaseUtil.mDatabaseReference;
-        mNewUserList = FirebaseUtil.mNewUsers; // getting list of new user from Util class and view it here.
+        //mNewUserList = FirebaseUtil.mNewUsers; // getting list of new user from Util class and view it here.
         mChildEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {

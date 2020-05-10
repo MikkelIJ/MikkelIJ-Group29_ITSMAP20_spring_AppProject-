@@ -9,36 +9,28 @@ import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.smap.group29.getmoving.Models.NewUser;
-import com.smap.group29.getmoving.R;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class FirebaseUtil {
 
-    public static FirebaseUtil firebaseUtil;
     public static FirebaseDatabase mFirebaseDatabase;
     public static DatabaseReference mDatabaseReference;
+    private static FirebaseUtil firebaseUtil;
     public static FirebaseAuth mFirebaseAuth;
     public static FirebaseAuth.AuthStateListener mAuthStateListener;
-    public static FirebaseStorage mFirebaseStorage;
-    public static StorageReference mStorageReference;
-
-    public static ArrayList<NewUser> mNewUsers;
 
     private static Activity caller;
 
-    public FirebaseUtil(){}
+    private FirebaseUtil(){} // empty constructor to avoid this klasse being instantiated outside of this class
 
+    // a generic static method, that will open a reference of the child that has passed as a parameter.
     public static void openFirebaseReference(String ref, final Activity callerActivity){
+        // if the instance is null, it will create an instance of itself.
         if (firebaseUtil == null){
             firebaseUtil = new FirebaseUtil();
             mFirebaseDatabase = FirebaseDatabase.getInstance();
-            mNewUsers = new ArrayList<NewUser>();
             mFirebaseAuth = FirebaseAuth.getInstance();
             caller = callerActivity;
 
@@ -50,14 +42,12 @@ public class FirebaseUtil {
                     Toast.makeText(callerActivity.getBaseContext(), "Welcome back!", Toast.LENGTH_LONG).show();
                 }
             };
-            connectToStorage();
         }
+        // opening the path that was passed as parameter.
         mDatabaseReference = mFirebaseDatabase.getReference().child(ref);
     }
 
-
-
-    public static void signIn(){
+    private static void signIn(){
         // Choose authentication providers
         List<AuthUI.IdpConfig> providers = Arrays.asList(
                 new AuthUI.IdpConfig.EmailBuilder().build(),
@@ -78,10 +68,5 @@ public class FirebaseUtil {
 
     public static void detachListener(){
         mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
-    }
-
-    public static void connectToStorage(){
-        mFirebaseStorage = FirebaseStorage.getInstance();
-        mStorageReference = mFirebaseStorage.getReference().child("users_images");
     }
 }
