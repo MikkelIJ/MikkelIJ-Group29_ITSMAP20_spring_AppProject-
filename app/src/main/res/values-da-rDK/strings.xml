@@ -52,4 +52,7 @@
     <string name="logged_in_succes">Log ind: Succes</string>
     <string name="user_created">Bruger oprettet</string>
     <string name="todo">Mangler</string>
+    <string name="goal_reached">"Du har nået dit dagelige mål på "</string>
+    <string name="steps">skridt!</string>
+    <string name="Service_live">GetMoving service kører!</string>
 </resources>

@@ -172,7 +172,7 @@ public class GetMovingService extends Service {
         Notification notification1 = new NotificationCompat.Builder(this,NOTIFICATION_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_walk)
                 .setContentTitle("GetMoving")
-                .setContentText("You reached the daily goal of " + dailyGoal + " steps!")
+                .setContentText(getString(R.string.goal_reached) + dailyGoal + getString(R.string.steps))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                 .build();
@@ -196,7 +196,7 @@ public class GetMovingService extends Service {
         Notification notification2 = new NotificationCompat.Builder(this,NOTIFICATION_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_walk)
                 .setContentTitle("GetMoving")
-                .setContentText("Service is live")
+                .setContentText(getString(R.string.Service_live))
                 .setPriority(NotificationCompat.PRIORITY_LOW)
                 .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                 .setOngoing(false)
