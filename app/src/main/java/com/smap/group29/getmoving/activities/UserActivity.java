@@ -2,18 +2,13 @@ package com.smap.group29.getmoving.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-import androidx.core.content.ContextCompat;
-
-import android.app.Notification;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -26,8 +21,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -38,30 +31,23 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.smap.group29.getmoving.R;
-import com.smap.group29.getmoving.sensor.StepCounter;
 import com.smap.group29.getmoving.service.GetMovingService;
 import com.smap.group29.getmoving.service.GetMovingService.LocalBinder;
 import com.smap.group29.getmoving.onlineAPI.OpenWeatherAPI;
-import com.smap.group29.getmoving.utils.DataHelper;
 import com.smap.group29.getmoving.utils.GlobalConstants;
 import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
 
-import static com.smap.group29.getmoving.service.GetMovingService.BROADCAST_ACTION_STEPS;
-import static com.smap.group29.getmoving.onlineAPI.OpenWeatherAPI.BROADCAST_ACTION_WEATHER;
 
+import static com.smap.group29.getmoving.utils.GlobalConstants.BROADCAST_ACTION_STEPS;
+import static com.smap.group29.getmoving.utils.GlobalConstants.BROADCAST_ACTION_WEATHER;
 
 public class UserActivity extends AppCompatActivity {
 
-    FirebaseAuth mAuth;
-    FirebaseFirestore mStore;
-    StorageReference storageReference = FirebaseStorage.getInstance().getReference();
-    String userID;
-
-
-
-    private static final String LOGD = "userActivity";
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore mStore;
+    private StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+    private String userID;
 
     private Button btn_leaderboard;
     private TextView tv_name, tv_age, tv_city, tv_weatherTemp,tv_weatherFeelsLike, tv_weatherHumid, tv_weatherDescription, tv_stepsToday, tv_stepsTotal, tv_email, tv_dailyGoal;
@@ -84,13 +70,11 @@ public class UserActivity extends AppCompatActivity {
     private long stepsTotal = 0;
 
 
-
-    private StepCounter mStepCounter;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         mAuth = FirebaseAuth.getInstance();
         mStore = FirebaseFirestore.getInstance();
         userID = mAuth.getCurrentUser().getUid();
@@ -100,9 +84,6 @@ public class UserActivity extends AppCompatActivity {
         loadPic();
         initUI();
         getUserDataFirebase();
-
-
-
 
         registerIntentFilters();
         mOpenWeatherAPI = new OpenWeatherAPI(this,2624652);
@@ -144,7 +125,6 @@ public class UserActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         initService();
-
     }
 
     @Override
@@ -216,11 +196,12 @@ public class UserActivity extends AppCompatActivity {
 
 
     public void logout(){
-        mService.GM_removeCallbacks();
-        FirebaseAuth.getInstance().signOut();
-        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-        finish();
-
+        if (mBound){
+            mService.GM_removeCallbacks();
+            FirebaseAuth.getInstance().signOut();
+            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+            finish();
+        }
     }
 
 
@@ -228,8 +209,9 @@ public class UserActivity extends AppCompatActivity {
 
         // Binds ListActivity to the WordlearnerService.
         stepIntent = new Intent(this,GetMovingService.class);
-        startService(stepIntent); //startservice() is needed for the app to run forever. Though bindService() should call startService() i can not get it to work otherwise
-        bindService(stepIntent,serviceConnection,Context.BIND_AUTO_CREATE); // bindService() makes it posible to use mService and use it to execute methods in the service
+
+        //startService(stepIntent);
+        bindService(stepIntent,serviceConnection,Context.BIND_AUTO_CREATE);
     }
 
     private void registerIntentFilters(){
@@ -277,43 +259,25 @@ public class UserActivity extends AppCompatActivity {
         iv_weatherIcon        = findViewById(R.id.iv_weatherIcon);
         btn_leaderboard       = findViewById(R.id.btn_user_leaderboard);
         tv_email              = findViewById(R.id.tv_userEmail);
-
     }
 
-/*
-    public void createNotification(){
-        String dailySteps = (tv_stepsToday.getText().toString());
-        String dailyGoal = (tv_dailyGoal.getText().toString());
-
-
-        Intent serviceIntent = new Intent(this, UserActivity.class);
-        serviceIntent.putExtra("dailySteps", dailySteps);
-        serviceIntent.putExtra("dailyGoal", dailyGoal);
-
-        ContextCompat.startForegroundService(this, serviceIntent);
-
-    }
-
- */
-
-
+    // this broadcast receiver gets the current stepvalue from GetMovingService
     private BroadcastReceiver broadcastReceiverSteps = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             stepsCounted = intent.getLongExtra("counted_steps",0);
 
-            Log.v("bc","steps counted:" + stepsCounted);
+            //Log.v("bc","steps counted:" + stepsCounted);
             tv_stepsToday.setText(String.valueOf(stepsCounted));
             if (stepsCounted > prevStepsCounted){
                 stepsTotal = stepsTotal + stepsCounted - prevStepsCounted;
-                tv_stepsTotal.setText(String.valueOf(stepsTotal));
+                tv_stepsTotal.setText("Total: " + String.valueOf(stepsTotal));
                 prevStepsCounted = stepsCounted;
             }
-
-
         }
     };
 
+    // this broadcastreceiver gets the weather forecast from GetMovingService
     private BroadcastReceiver broadcastReceiverWeather = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -348,10 +312,10 @@ public class UserActivity extends AppCompatActivity {
                     tv_city.setText(document.getString("city"));
                     tv_dailyGoal.setText(String.valueOf(document.getLong("dailygoal")));
                     } else {
-                        Log.d("fb", "No such document");
+                        //Log.d("fb", "No such document");
                     }
                 } else {
-                    Log.d("fb", "get failed with ", task.getException());
+                    //Log.d("fb", "get failed with ", task.getException());
                 }
             }
         });

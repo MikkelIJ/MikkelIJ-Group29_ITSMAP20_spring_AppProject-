@@ -55,4 +55,5 @@
     <string name="goal_reached">"Du har nået dit dagelige mål på "</string>
     <string name="steps">skridt!</string>
     <string name="Service_live">GetMoving service kører!</string>
+    <string name="totalSteps">\"Total: \"</string>
 </resources>

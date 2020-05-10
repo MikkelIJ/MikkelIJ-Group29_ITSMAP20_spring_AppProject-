@@ -18,27 +18,20 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -51,7 +44,7 @@ import com.smap.group29.getmoving.service.GetMovingService;
 import com.smap.group29.getmoving.utils.GlobalConstants;
 import com.squareup.picasso.Picasso;
 
-import java.util.Collections;
+import static com.smap.group29.getmoving.utils.GlobalConstants.TIMER;
 
 
 // Firebase recyclerview inspired by https://github.com/firebase/FirebaseUI-Android/blob/master/database/README.md#using-the-firebaserecycleradapter
@@ -100,7 +93,7 @@ public class LeaderboardActivity extends AppCompatActivity{
         documentReference = mStore.collection(GlobalConstants.FIREBASE_USER_COLLECTION).document(userID);
         storageReference = FirebaseStorage.getInstance().getReference();
 
-        getTimerFlagFilter.addAction("TIMER");
+        getTimerFlagFilter.addAction(TIMER);
         registerReceiver(broadcastReceiver,getTimerFlagFilter);
 
         getUserWithMostSteps();
@@ -113,7 +106,7 @@ public class LeaderboardActivity extends AppCompatActivity{
             Log.v("sec","broadcastReceiver activated");
             int x = intent.getIntExtra("startprogressbar",0);
             if (x == 1){
-                timeTilRefresh();
+                timeTilRefresh();  //<--- reset progressbar
                 x = 0;
             }
         }
@@ -138,9 +131,7 @@ public class LeaderboardActivity extends AppCompatActivity{
             mService.GM_removeCallbacks();
             mService.updateBroadcastData.run();
             mService.updateStepsLeaderBoard.run();
-
         }
-
         @Override
         public void onServiceDisconnected(ComponentName name) {
             mBound = false;
@@ -171,7 +162,6 @@ public class LeaderboardActivity extends AppCompatActivity{
 
 
     private void setupRecyclerView() {
-
 
         mUserList = findViewById(R.id.rv_leaderboard);
         Query query = collectionReference.orderBy("dailysteps",Query.Direction.DESCENDING);
@@ -211,12 +201,12 @@ public class LeaderboardActivity extends AppCompatActivity{
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 finish();
             }
         });
     }
 
+    // This method is used to reset the Progressbar, it is triggered
     private void timeTilRefresh(){
         Runnable runnable = new Runnable() {
             @Override
@@ -239,6 +229,7 @@ public class LeaderboardActivity extends AppCompatActivity{
 
 
 
+    // this part is for when the phone is in landscape mode
     private void getUserDataFirebase(String userID){
         DocumentReference documentReference = mStore.collection(GlobalConstants.FIREBASE_USER_COLLECTION).document(userID);
         documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -261,8 +252,8 @@ public class LeaderboardActivity extends AppCompatActivity{
         });
     }
 
+    //Waiting one second with loading the picture to make sure the picture is on firebase before trying to load it into the imageview
     public void loadPic(final String userID){
-        //Waiting one second with loading the picture to make sure the picture is on firebase before trying to load it into the imageview
 
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -279,6 +270,7 @@ public class LeaderboardActivity extends AppCompatActivity{
 
     }
 
+    // this is for setting the profile view in landscape mode
     private void getUserWithMostSteps(){
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
             collectionReference.orderBy("dailysteps",Query.Direction.DESCENDING).limit(1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -290,12 +282,9 @@ public class LeaderboardActivity extends AppCompatActivity{
                             loadPic(userID);
                             getUserDataFirebase(userID);
                         }
-
-
                     }
                 }
             });
-
             getUserDataFirebase(userID);
             loadPic(userID);
         }

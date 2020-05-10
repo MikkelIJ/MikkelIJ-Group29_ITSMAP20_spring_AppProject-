@@ -20,7 +20,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.smap.group29.getmoving.R;
 import com.smap.group29.getmoving.utils.CheckPermissions;
-import com.smap.group29.getmoving.utils.FirebaseUtil;
 
 public class LoginActivity extends AppCompatActivity{
 
@@ -30,7 +29,7 @@ public class LoginActivity extends AppCompatActivity{
     private TextView tv_login, tv_createUser;
     private FirebaseAuth mAuth;
     private ProgressBar progressBar;
-   // private CheckPermissions mCheckPermissions;
+    private CheckPermissions mCheckPermissions;
 
 
 
@@ -47,31 +46,31 @@ public class LoginActivity extends AppCompatActivity{
             startActivity(new Intent(getApplicationContext(), UserActivity.class));
             finish();
         }
-        
         initUI();
         setUI();
-
-
         // If the current user is logged in already we'll send them to the UserActivity
-
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-//        mCheckPermissions = new CheckPermissions();
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//            mCheckPermissions.checkPermissions(this);
-//        }
+
+        // The CheckPermissions method has an issue that does not allow it to run on android versions < android 10
+        // this might be due to the use of Snackbar.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        mCheckPermissions = new CheckPermissions();
+            mCheckPermissions.checkPermissions(this);
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-//        mCheckPermissions = new CheckPermissions();
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//            mCheckPermissions.checkPermissions(this);
-//        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            mCheckPermissions = new CheckPermissions();
+            mCheckPermissions.checkPermissions(this);
+        }
 
     }
 
@@ -131,8 +130,6 @@ public class LoginActivity extends AppCompatActivity{
             public void onClick(View v) {
                 Intent intent = new Intent(LoginActivity.this, NewUserActivity.class);
                 startActivity(intent);
-
-
             }
 
         });

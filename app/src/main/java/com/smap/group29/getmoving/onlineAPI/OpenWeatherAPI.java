@@ -16,12 +16,16 @@ import com.smap.group29.getmoving.utils.WeatherJsonParser;
 
 import java.util.ArrayList;
 
+import static com.smap.group29.getmoving.utils.GlobalConstants.BROADCAST_ACTION_WEATHER;
+
 public class OpenWeatherAPI {
 
     private static final String LOGD = "openweatherapi";
 
-    public static final String BROADCAST_ACTION_WEATHER = "com.smap.group29.getmoving.service.openweatherapi_broadcast";
-
+    // Source https://openweathermap.org/current
+    // Important notation
+    // Due to the deadline, this method only displays weather from Aarhus,
+    // however, we wanted to implement weather forecast based on GPS, the model for handling Json objects is in .model/weather
 
     //for Volley
     RequestQueue queue;
@@ -64,14 +68,14 @@ public class OpenWeatherAPI {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.v("onErrorResponse",String.valueOf(error));
+                //Log.v("onErrorResponse",String.valueOf(error));
             }
         });
         queue.add(stringRequest);
     }
 
     private void broadcastWeather(ArrayList<String> weather){
-        Log.d(LOGD, "broadcasting weather temp and city");
+        //Log.d(LOGD, "broadcasting weather temp and city");
         weatherIntent.putExtra("temp",weather);
         mUserActivity.sendBroadcast(weatherIntent);
     }

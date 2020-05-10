@@ -23,36 +23,40 @@
 
     <TextView
         android:id="@+id/tv_userActivityName"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="@string/user_name"
         android:textSize="18sp"
         android:textStyle="bold"
         app:autoSizeTextType="uniform"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_profileHeader" />
 
     <TextView
         android:id="@+id/tv_userEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:text="@string/email"
         android:textSize="18sp"
         android:textStyle="bold"
         app:autoSizeTextType="uniform"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_userActivityName" />
 
 
     <TextView
         android:id="@+id/tv_userAge"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:text="@string/age"
         android:textSize="18sp"
         android:textStyle="bold"
         app:autoSizeTextType="uniform"
+        app:layout_constraintEnd_toStartOf="@+id/tv_weatherHumid"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_userEmail" />
 
@@ -156,12 +160,14 @@
 
     <TextView
         android:id="@+id/tv_userCity"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/city"
         android:textSize="18sp"
         android:textStyle="bold"
         app:autoSizeTextType="uniform"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_userAge" />
 
@@ -174,10 +180,11 @@
         android:gravity="center"
         android:hint="@string/_10_000"
         android:inputType="number"
-        android:textSize="14sp"
+        android:textSize="40sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline8"
         app:layout_constraintEnd_toStartOf="@+id/guideline9"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintTop_toTopOf="@+id/guideline6" />
 
     <TextView
         android:id="@+id/tv_stepsTotal"
@@ -231,10 +238,11 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/daily_goal"
-        android:textSize="12sp"
+        android:textSize="28sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline6"
         app:layout_constraintEnd_toStartOf="@+id/guideline9"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toTopOf="@+id/guideline4" />
+        app:layout_constraintTop_toTopOf="@+id/guideline5" />
 
     <TextView
         android:id="@+id/tv_weatherHumid"
@@ -263,12 +271,14 @@
 
     <TextView
         android:id="@+id/tv_userActivity_followers"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Followers: 0"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/guideline4"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_userCity"
         app:layout_constraintVertical_bias="0.0" />

@@ -2,23 +2,19 @@ package com.smap.group29.getmoving.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.View;
-import android.widget.Toast;
-
-import com.smap.group29.getmoving.sensor.StepCounter;
-
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import static com.smap.group29.getmoving.utils.GlobalConstants.FILE_NAME;
-import static java.lang.Integer.parseInt;
+
 
 // this class helps to preserve current steps value to make the app work offline
+// though SharedPreferences has taken over the purpose of this class
 
 public class DataHelper extends Activity{
 

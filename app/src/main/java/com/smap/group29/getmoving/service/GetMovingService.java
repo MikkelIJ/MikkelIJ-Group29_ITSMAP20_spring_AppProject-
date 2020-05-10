@@ -50,20 +50,16 @@ import java.util.Calendar;
 import java.util.List;
 
 
+import static com.smap.group29.getmoving.utils.GlobalConstants.BROADCAST_ACTION_STEPS;
 import static com.smap.group29.getmoving.utils.GlobalConstants.CHANNEL_NAME1;
 import static com.smap.group29.getmoving.utils.GlobalConstants.CHANNEL_NAME2;
 import static com.smap.group29.getmoving.utils.GlobalConstants.CHANNEL_NAME3;
+import static com.smap.group29.getmoving.utils.GlobalConstants.TIMER;
 
 
 public class GetMovingService extends Service {
 
     // inspired by https://github.com/SenSaa/Pedometer/blob/master/app/src/main/java/com/example/yusuf/pedometer/StepCountingService.java
-
-    public static final String SHARED_PREFS = "sharedPrefs";
-    public static final String TEXT = "currentsteps";
-
-    private static final String LOGD = "getmovingservice";
-    public static final String BROADCAST_ACTION_STEPS = "com.smap.group29.getmoving.service.getmovingservice_broadcast";
 
     private StepCounter mStepCounter;
     private OpenWeatherAPI mOpenWeatherAPI;
@@ -73,20 +69,11 @@ public class GetMovingService extends Service {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private StorageReference storageReference = FirebaseStorage.getInstance().getReference();
     private String userID;
-    //private long dailygoal;
     private CollectionReference dbRef = db.collection(GlobalConstants.FIREBASE_USER_COLLECTION);
-    TextView steps;
-
-    private NotificationManager mNotificationManager;
-    private Notification mNotification;
-
-    private Calendar c; // c.get(Calendar.SECOND)
-    //private Notifications mNotifications = new Notifications();
     private DataHelper mDataHelper;
 
     private long milestoneStep;
     private long currentSteps;
-    private long totalStepsSinceReboot;
     private long today;
     private long additionStep;
     private long dailyGoal;
@@ -123,14 +110,14 @@ public class GetMovingService extends Service {
         return binder;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onCreate() {
         super.onCreate();
 
         // declares global broadcast
         stepIntent = new Intent(BROADCAST_ACTION_STEPS);
-        timerIntent = new Intent("TIMER");
+        timerIntent = new Intent(TIMER);
 
         mStepCounter = new StepCounter(this);
         mOpenWeatherAPI = new OpenWeatherAPI(this);
@@ -147,6 +134,10 @@ public class GetMovingService extends Service {
         notificationManager = NotificationManagerCompat.from(this);
         //getValFirebase();
         mDataHelper = new DataHelper(this);
+
+        notification_ServiceIsLive();
+        getUserDataFirebase();
+        getUserWithMostSteps();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -164,7 +155,7 @@ public class GetMovingService extends Service {
         Notification notification1 = new NotificationCompat.Builder(this,NOTIFICATION_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_walk)
                 .setContentTitle("GetMoving")
-                .setContentText(getString(R.string.goal_reached) + dailyGoal + getString(R.string.steps))
+                .setContentText(getString(R.string.goal_reached) + " " + dailyGoal + getString(R.string.steps))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                 .build();
@@ -227,9 +218,9 @@ public class GetMovingService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
     //    service is killed by android system after 1 minute if this notification is not set
 
-        notification_ServiceIsLive();
-        getUserDataFirebase();
-        getUserWithMostSteps();
+//        notification_ServiceIsLive();
+//        getUserDataFirebase();
+//        getUserWithMostSteps();
 
         return START_STICKY;
     }
@@ -403,7 +394,7 @@ public class GetMovingService extends Service {
 
 
     private long handleSteps(){
-        totalStepsSinceReboot = mStepCounter.getSteps();
+        long totalStepsSinceReboot = mStepCounter.getSteps();
 
         Log.d("skridt1",String.valueOf("totalStepsSinceReboot" + totalStepsSinceReboot));
 
