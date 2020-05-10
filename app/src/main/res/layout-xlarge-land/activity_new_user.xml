@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
+    android:padding="8dp"
     android:background="@drawable/getmoving_background_blank"
     tools:context=".activities.NewUserActivity">
 
@@ -28,97 +28,91 @@
 
     <EditText
         android:id="@+id/et_email"
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:hint="@string/email"
         android:importantForAutofill="no"
         android:inputType="textEmailAddress"
         app:layout_constraintBottom_toTopOf="@+id/et_password"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/iv_newUserImage"
         />
 
     <EditText
         android:id="@+id/et_password"
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:hint="@string/password"
         android:importantForAutofill="no"
         android:inputType="textPassword"
         app:layout_constraintBottom_toTopOf="@+id/et_name"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/iv_newUserImage"
 
-        />
-
+        tools:layout_editor_absoluteX="8dp" />
 
 
     <EditText
         android:id="@+id/et_name"
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:hint="@string/user_name"
         android:importantForAutofill="no"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/et_age"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toEndOf="@id/iv_newUserImage"
+        tools:layout_editor_absoluteX="8dp" />
 
     <EditText
         android:id="@+id/et_age"
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:hint="@string/age"
         android:importantForAutofill="no"
         android:inputType="number"
         app:layout_constraintBottom_toTopOf="@+id/et_city"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toEndOf="@id/iv_newUserImage"
+        tools:layout_editor_absoluteX="8dp" />
 
 
     <Button
         android:id="@+id/btn_addPhoto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="96dp"
         android:text="@string/add_photo"
-        app:layout_constraintBottom_toTopOf="@+id/et_name"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toStartOf="@+id/et_email"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_newUserImage" />
 
     <ImageView
         android:id="@+id/iv_newUserImage"
-        android:layout_width="365dp"
-        android:layout_height="0dp"
+        android:layout_width="400dp"
+        android:layout_height="400dp"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
         android:contentDescription="@string/user_profile_picture"
         android:scaleType="fitCenter"
-        app:layout_constraintBottom_toTopOf="@+id/btn_addPhoto"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_createUser"
-        app:layout_constraintVertical_bias="0.0"
         tools:srcCompat="@tools:sample/avatars" />
 
     <EditText
         android:id="@+id/et_city"
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:hint="@string/city"
         android:importantForAutofill="no"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/et_dailygoal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toEndOf="@id/iv_newUserImage"
+        tools:layout_editor_absoluteX="8dp" />
 
     <Button
         android:id="@+id/btn_save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         android:text="@string/save"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/btn_cancel" />
 
     <Button
         android:id="@+id/btn_cancel"
@@ -130,16 +124,16 @@
 
     <EditText
         android:id="@+id/et_dailygoal"
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="8dp"
         android:ems="10"
         android:hint="@string/daily_steps"
         android:importantForAutofill="no"
         android:inputType="number"
         app:layout_constraintBottom_toTopOf="@+id/btn_save"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toEndOf="@id/iv_newUserImage"
+        tools:layout_editor_absoluteX="8dp" />
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -152,4 +146,11 @@
         app:layout_constraintStart_toEndOf="@+id/btn_cancel"
         app:layout_constraintTop_toBottomOf="@+id/et_dailygoal"
         tools:visibility="invisible" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.50" />
 </androidx.constraintlayout.widget.ConstraintLayout>

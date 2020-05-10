@@ -25,15 +25,12 @@
         android:id="@+id/edit_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:hint="@string/email"
         android:importantForAutofill="no"
         android:inputType="textEmailAddress"
-        app:layout_constraintBottom_toTopOf="@+id/edit_name"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        />
-
-
+        app:layout_constraintTop_toBottomOf="@+id/iv_newUserImage" />
 
 
     <EditText
@@ -43,9 +40,9 @@
         android:hint="@string/user_name"
         android:importantForAutofill="no"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/edit_age"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_email" />
 
     <EditText
         android:id="@+id/edit_age"
@@ -54,34 +51,28 @@
         android:hint="@string/age"
         android:importantForAutofill="no"
         android:inputType="number"
-        app:layout_constraintBottom_toTopOf="@+id/edit_city"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_name" />
 
 
     <Button
         android:id="@+id/btn_changePhoto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:text="@string/newphoto"
-        app:layout_constraintBottom_toTopOf="@+id/edit_email"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <ImageView
         android:id="@+id/iv_newUserImage"
-        android:layout_width="365dp"
-        android:layout_height="0dp"
+        android:layout_width="369dp"
+        android:layout_height="231dp"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
         android:contentDescription="@string/user_profile_picture"
         android:scaleType="fitCenter"
-        app:layout_constraintBottom_toTopOf="@+id/btn_changePhoto"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_editUser"
-        app:layout_constraintVertical_bias="0.0"
         tools:srcCompat="@tools:sample/avatars" />
 
     <EditText
@@ -91,9 +82,8 @@
         android:hint="@string/city"
         android:importantForAutofill="no"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/edit_dailygoal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_age" />
 
     <Button
         android:id="@+id/btn_update"
@@ -101,32 +91,30 @@
         android:layout_height="wrap_content"
         android:text="@string/update"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/edit_dailygoal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
         android:ems="10"
         android:hint="@string/daily_steps"
         android:importantForAutofill="no"
         android:inputType="number"
-        app:layout_constraintBottom_toTopOf="@+id/btn_update"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_city" />
 
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+
+        android:layout_marginRight="8dp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
-
-        app:layout_constraintEnd_toStartOf="@+id/btn_update"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_dailygoal"
+        app:layout_constraintEnd_toStartOf="@+id/btn_changePhoto"
+        app:layout_constraintStart_toEndOf="@+id/btn_update"
         tools:visibility="invisible" />
 </androidx.constraintlayout.widget.ConstraintLayout>

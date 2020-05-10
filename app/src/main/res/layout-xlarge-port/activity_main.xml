@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/getmoving_background_blank"
+    android:padding="16dp"
+    tools:context=".activities.UserActivity">
+
+    <TextView
+        android:id="@+id/tv_profileHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/profileHeader"
+        android:textSize="30sp"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintBottom_toTopOf="@+id/guideline7"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_userActivityName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/user_name"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintEnd_toStartOf="@+id/guideline3"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_profileHeader" />
+
+    <TextView
+        android:id="@+id/tv_userEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/email"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintEnd_toStartOf="@+id/guideline3"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_userActivityName" />
+
+
+    <TextView
+        android:id="@+id/tv_userAge"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:text="@string/age"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintEnd_toStartOf="@+id/guideline3"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_userEmail" />
+
+    <TextView
+        android:id="@+id/tv_WeatherTemp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/temp_xy"
+        android:textSize="25sp"
+        app:layout_constraintStart_toStartOf="@+id/guideline3"
+        app:layout_constraintTop_toBottomOf="@+id/tv_weatherHeader" />
+
+
+    <TextView
+        android:id="@+id/tv_WeatherFeelsLike"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:text="@string/feels_like"
+        android:textSize="25sp"
+        app:layout_constraintStart_toStartOf="@+id/guideline3"
+        app:layout_constraintTop_toBottomOf="@+id/tv_WeatherTemp" />
+
+    <ImageView
+        android:id="@+id/iv_userProfilePic"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:contentDescription="@string/user_profile_picture"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toTopOf="@+id/textView3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline3"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@tools:sample/avatars[9]" />
+
+    <ImageView
+        android:id="@+id/iv_weatherIcon"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="@string/todo"
+        app:layout_constraintBottom_toTopOf="@+id/guideline5"
+        app:layout_constraintEnd_toStartOf="@+id/guideline3"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        app:layout_constraintTop_toBottomOf="@+id/tv_weatherHeader"
+        tools:src="@drawable/partlycloudyday" />
+
+    <TextView
+        android:id="@+id/tv_weatherHeader"
+        android:layout_width="766dp"
+        android:layout_height="37dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center_horizontal"
+        android:text="@string/weather_forecast"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline4" />
+
+    <Button
+        android:id="@+id/btn_user_leaderboard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:text="@string/btn_leaderboard"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_StepsToday_header"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:text="@string/steps_today"
+        android:textSize="40sp"
+        app:autoSizeMaxTextSize="40sp"
+        app:autoSizeMinTextSize="24sp"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintBottom_toTopOf="@+id/guideline6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline5" />
+
+    <TextView
+        android:id="@+id/tv_steps_today"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:text="@string/_1000000"
+        app:autoSizeMaxTextSize="100sp"
+        app:autoSizeMinTextSize="14sp"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintBottom_toTopOf="@+id/guideline8"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.531"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_StepsToday_header"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/tv_userCity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/city"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintEnd_toStartOf="@+id/guideline3"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_userAge" />
+
+    <TextView
+        android:id="@+id/et_dailygoal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:autofillHints=""
+        android:ems="0"
+        android:gravity="center"
+        android:hint="@string/_10_000"
+        android:inputType="number"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline3" />
+
+    <TextView
+        android:id="@+id/tv_stepsTotal"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:text="@string/total_steps_1_000_000_000_000_000"
+        app:layout_constraintBottom_toTopOf="@+id/btn_user_leaderboard"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_steps_today" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.38" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.60" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.70" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.06" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="72dp" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/daily_goal"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/et_dailygoal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline3" />
+
+    <TextView
+        android:id="@+id/tv_weatherHumid"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/humid"
+        android:textSize="25sp"
+        app:layout_constraintStart_toStartOf="@+id/guideline3"
+        app:layout_constraintTop_toBottomOf="@+id/tv_WeatherFeelsLike" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.12" />
+
+    <TextView
+        android:id="@+id/tv_weatherDescription"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/weathermessage"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline5"
+        app:layout_constraintStart_toStartOf="@+id/guideline3"
+        app:layout_constraintTop_toBottomOf="@+id/tv_weatherHumid"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/tv_userActivity_followers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/followers_0"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/guideline4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_userCity"
+        app:layout_constraintVertical_bias="0.0" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
