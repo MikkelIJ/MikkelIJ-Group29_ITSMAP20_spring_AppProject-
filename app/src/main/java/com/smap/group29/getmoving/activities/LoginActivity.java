@@ -91,15 +91,15 @@ public class LoginActivity extends AppCompatActivity{
                 String password = et_password.getText().toString().trim();
 
                 if(TextUtils.isEmpty(email)){
-                    et_email.setError("Email is required");
+                    et_email.setError(getString(R.string.email_required));
                     return;
                 }
                 if(TextUtils.isEmpty(password)){
-                    et_password.setError("Password is required");
+                    et_password.setError(getString(R.string.password_required));
                     return;
                 }
                 if(password.length() < 6){
-                    et_password.setError("Password must be >= 6 characters");
+                    et_password.setError(getString(R.string.password_length));
                     return;
                 }
 
@@ -111,7 +111,7 @@ public class LoginActivity extends AppCompatActivity{
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
-                            Toast.makeText(LoginActivity.this, "Logged in succesfully", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, R.string.logged_in_succes, Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(getApplicationContext(), UserActivity.class));
 
                         }else{

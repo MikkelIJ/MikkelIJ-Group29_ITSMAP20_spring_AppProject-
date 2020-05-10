@@ -124,7 +124,8 @@
         android:layout_height="wrap_content"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
-
+        app:layout_constraintEnd_toStartOf="@+id/btn_update"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_dailygoal"
         tools:visibility="invisible" />
 </androidx.constraintlayout.widget.ConstraintLayout>

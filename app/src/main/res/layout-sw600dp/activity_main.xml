@@ -143,13 +143,12 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/steps_today"
-        android:textSize="30sp"
-        app:autoSizeMaxTextSize="40sp"
+        android:textSize="25sp"
+        app:autoSizeMaxTextSize="30sp"
         app:autoSizeMinTextSize="24sp"
         app:autoSizeTextType="uniform"
         app:layout_constraintBottom_toTopOf="@+id/guideline6"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline5" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/tv_steps_today"
@@ -157,8 +156,8 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/_1000000"
-        android:textSize="80dp"
-        app:autoSizeMaxTextSize="100sp"
+        android:textSize="60dp"
+        app:autoSizeMaxTextSize="60sp"
         app:autoSizeMinTextSize="14sp"
 
         app:autoSizeTextType="uniform"
@@ -199,10 +198,10 @@
         android:layout_height="0dp"
         android:gravity="center"
         android:text="@string/total_steps_1_000_000_000_000_000"
-        app:layout_constraintBottom_toTopOf="@+id/btn_user_leaderboard"
+        app:layout_constraintBottom_toTopOf="@+id/guideline8"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_steps_today" />
+        app:layout_constraintStart_toEndOf="@+id/tv_steps_today"
+        app:layout_constraintTop_toTopOf="@+id/guideline6" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline3"

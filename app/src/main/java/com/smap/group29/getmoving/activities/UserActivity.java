@@ -331,6 +331,7 @@ public class UserActivity extends AppCompatActivity {
 
 
     private void getUserDataFirebase(){
+        //getting document refenrence and setting views from the data on firebase
         DocumentReference documentReference = mStore.collection(GlobalConstants.FIREBASE_USER_COLLECTION).document(userID);
         documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override

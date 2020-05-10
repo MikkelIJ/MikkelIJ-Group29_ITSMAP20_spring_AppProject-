@@ -100,15 +100,15 @@ public class NewUserActivity extends AppCompatActivity {
 
 
                 if(TextUtils.isEmpty(email)){
-                    et_email.setError("Email is required");
+                    et_email.setError(getString(R.string.email_required));
                     return;
                 }
                 if(TextUtils.isEmpty(password)){
-                    et_password.setError("Password is required");
+                    et_password.setError(getString(R.string.password_required));
                     return;
                 }
                 if(password.length() < 6){
-                    et_password.setError("Password must be >= 6 characters");
+                    et_password.setError(getString(R.string.password_length));
                     return;
                 }
 
@@ -119,7 +119,7 @@ public class NewUserActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
-                            Toast.makeText(NewUserActivity.this, "User Created", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(NewUserActivity.this, R.string.user_created, Toast.LENGTH_SHORT).show();
                             //getting the id of the currently logged in user
                             //creating new document and storing the data with hashmap
                             final String userID = mAuth.getCurrentUser().getUid();
@@ -189,13 +189,13 @@ public class NewUserActivity extends AppCompatActivity {
         fileRef.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Toast.makeText(NewUserActivity.this, "Image uploaded", Toast.LENGTH_SHORT);
+                Toast.makeText(NewUserActivity.this, R.string.img_uploaded, Toast.LENGTH_SHORT);
 
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(NewUserActivity.this, "Failed to upload image", Toast.LENGTH_SHORT);
+                Toast.makeText(NewUserActivity.this, R.string.failed_img_upload, Toast.LENGTH_SHORT);
             }
         });
     }

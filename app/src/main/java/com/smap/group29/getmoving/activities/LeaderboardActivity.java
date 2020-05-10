@@ -248,9 +248,9 @@ public class LeaderboardActivity extends AppCompatActivity{
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         Log.v("fb", "DocumentSnapshot data: " + document.getData());
-                        tv_totalSteps.setText("Total steps: "+document.getString("stepstotal"));
-                        tv_followers.setText("Followers: "+document.getString("followers"));
-                        tv_wins.setText("Wins: "+document.getString("wins"));
+                        tv_totalSteps.setText(getString(R.string.total_steps)+document.getString("stepstotal"));
+                        tv_followers.setText(getString(R.string.followers)+document.getString("followers"));
+                        tv_wins.setText(getString(R.string.wins)+document.getString("wins"));
                     } else {
                         Log.d("fb", "No such document");
                     }

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item android:id="@+id/settings"
-        android:title="@string/settings"
+        android:title="@string/edit_user_profil"
         app:showAsAction="never"/>
 
     <item android:id="@+id/logout"

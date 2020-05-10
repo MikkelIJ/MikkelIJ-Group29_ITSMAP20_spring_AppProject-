@@ -79,7 +79,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:inputType="text"
-        android:text="Feels like"
+        android:text="@string/feels_like"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
         app:layout_constraintTop_toBottomOf="@+id/tv_WeatherTemp" />
@@ -260,7 +260,7 @@
         android:id="@+id/tv_weatherHumid"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Humid"
+        android:text="@string/humid"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
         app:layout_constraintTop_toBottomOf="@+id/tv_WeatherFeelsLike" />
 
@@ -285,7 +285,7 @@
         android:id="@+id/tv_userActivity_followers"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Followers: 0"
+        android:text="@string/followers_0"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/guideline4"
